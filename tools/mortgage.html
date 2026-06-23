@@ -12,19 +12,11 @@
       <a class="logo" href="/">nicodimaano.com</a>
       <ul class="nav-links">
         <li><a href="/tools/">Tools</a></li>
-        <li class="has-sub">
-          <a href="/diary/">Diary</a>
-          <ul class="submenu">
-            <li><a href="/diary/trips.html">Trips</a></li>
-            <li><a href="/diary/expedition.html">Expedition</a></li>
-            <li><a href="/diary/gaming.html">GAMING</a></li>
-          </ul>
-        </li>
+        <li><a href="/diary/">Diary</a></li>
         <li><a href="/store/">Support Me</a></li>
       </ul>
       <a class="donate" href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer">Donate</a>
-    </nav>
-    
+    </nav>    
   </header>
 
   <main>
@@ -98,12 +90,15 @@
           }catch(e){}
         });
 
-        const subLinks = document.querySelectorAll('.nav-links li.has-sub > a');
-        subLinks.forEach(a=>{
+        // bind submenu behavior only for list items that actually contain a .submenu
+        document.querySelectorAll('.nav-links li').forEach(li=>{
+          const submenu = li.querySelector('.submenu');
+          if(!submenu) return;
+          const a = li.querySelector('a');
+          if(!a) return;
           a.setAttribute('aria-haspopup','true');
           a.setAttribute('aria-expanded','false');
           a.addEventListener('click', function(e){
-            const li = a.parentElement;
             const isOpen = li.classList.contains('open');
             if(!isOpen){
               li.classList.add('open');
@@ -114,7 +109,7 @@
         });
         document.addEventListener('click', function(e){
           if(!e.target.closest('.nav-links')){
-            document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+            document.querySelectorAll('.nav-links li.open').forEach(li=>{
               li.classList.remove('open');
               const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
             });
@@ -122,7 +117,7 @@
         });
         document.addEventListener('keydown', function(e){
           if(e.key === 'Escape'){
-            document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+            document.querySelectorAll('.nav-links li.open').forEach(li=>{
               li.classList.remove('open');
               const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
             });
@@ -158,13 +153,13 @@
       homePrice.addEventListener('input', updateDerived);
       updateDerived();
 
-      let chart = null;
+      let myChart = null;
 
       function calculate(){
         const {loan} = updateDerived();
         const principal = loan;
         const annual = parseFloat(annualRate.value) || 0;
-        const months = (parseInt(termYears.value)||0)*12;
+        const months = Math.max(1, (parseInt(termYears.value)||0)*12);
         const r = annual/100/12;
         let monthly = 0;
         if(r>0){ monthly = principal * (r / (1 - Math.pow(1+r,-months))); }
@@ -188,11 +183,16 @@
         };
         const options = {responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,ticks:{beginAtZero:true}}}};
 
-        if(chart) chart.destroy();
-        chart = new Chart(ctx,{type:'bar',data,options});
+        if(myChart) myChart.destroy();
+        myChart = new Chart(ctx,{type:'bar',data,options});
       }
 
-      calcBtn.addEventListener('click',calculate);
+      // live updates: slider and inputs
+      downPercent.addEventListener('input', calculate);
+      homePrice.addEventListener('input', calculate);
+      annualRate.addEventListener('input', calculate);
+      termYears.addEventListener('input', calculate);
+      calcBtn.addEventListener('click', calculate);
     </script>
   </main>
 

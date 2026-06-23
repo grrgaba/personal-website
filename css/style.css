@@ -104,8 +104,7 @@ main, .site-header, .site-footer, .container{position:relative;z-index:1}
 .nav-links .submenu li{margin:0}
 .nav-links .submenu a{display:block;padding:0.4rem 0.6rem;color:var(--muted);text-decoration:none;border-radius:6px}
 .nav-links .submenu a:hover{background:rgba(11,17,32,0.04);color:var(--text)}
-.nav-links li.has-sub:hover .submenu,.nav-links li.has-sub:focus-within .submenu,.nav-links li.has-sub.open .submenu{display:block}
-.nav-links li.has-sub{}
+.nav-links li:hover .submenu,.nav-links li:focus-within .submenu,.nav-links li.open .submenu{display:block}
 @media (max-width:600px){
   .nav-links .submenu{display:none !important}
 }

@@ -9,21 +9,14 @@
 <body>
   <header class="site-header">
     <nav class="nav container">
-      <a class="logo" href="/">nicodimaano.com</a>
+      <a class="logo" href="#">nicodimaano.com</a>
       <ul class="nav-links">
         <li><a href="/tools/">Tools</a></li>
-        <li class="has-sub">
-          <a href="/diary/">Diary</a>
-          <ul class="submenu">
-            <li><a href="/diary/trips.html">Trips</a></li>
-            <li><a href="/diary/expedition.html">Expedition</a></li>
-            <li><a href="/diary/gaming.html">GAMING</a></li>
-          </ul>
-        </li>
+        <li><a href="/diary/">Diary</a></li>
         <li><a href="/store/">Support Me</a></li>
       </ul>
       <a class="donate" href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer">Donate</a>
-    </nav>
+    </nav>    
   </header>
 
   <main>
@@ -54,12 +47,15 @@
   </script>
   <script>
     (function(){
-      const subLinks = document.querySelectorAll('.nav-links li.has-sub > a');
-      subLinks.forEach(a=>{
+      // bind submenu behavior only for list items that actually contain a .submenu
+      document.querySelectorAll('.nav-links li').forEach(li=>{
+        const submenu = li.querySelector('.submenu');
+        if(!submenu) return;
+        const a = li.querySelector('a');
+        if(!a) return;
         a.setAttribute('aria-haspopup','true');
         a.setAttribute('aria-expanded','false');
         a.addEventListener('click', function(e){
-          const li = a.parentElement;
           const isOpen = li.classList.contains('open');
           if(!isOpen){
             li.classList.add('open');
@@ -70,7 +66,7 @@
       });
       document.addEventListener('click', function(e){
         if(!e.target.closest('.nav-links')){
-          document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+          document.querySelectorAll('.nav-links li.open').forEach(li=>{
             li.classList.remove('open');
             const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
           });
@@ -78,7 +74,7 @@
       });
       document.addEventListener('keydown', function(e){
         if(e.key === 'Escape'){
-          document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+          document.querySelectorAll('.nav-links li.open').forEach(li=>{
             li.classList.remove('open');
             const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
           });
