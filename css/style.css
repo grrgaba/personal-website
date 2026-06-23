@@ -26,6 +26,7 @@ body{
 .donate{background:#FFD54F;color:var(--text);padding:0.35rem 0.6rem;border-radius:8px;font-weight:700;text-decoration:none;margin-right:0.6rem;border:1px solid rgba(0,0,0,0.06)}
 .donate:hover{filter:brightness(0.98);box-shadow:0 6px 18px rgba(11,17,32,0.06)}
 .donate.large{padding:0.6rem 1rem;font-size:1rem}
+.nav > .donate{margin-left:auto}
 .nav-links{list-style:none;display:flex;gap:2rem;margin:0;padding:0;position:static;margin-left:auto;margin-right:auto}
 .nav-links a{text-decoration:none;color:var(--muted);font-weight:600;font-size:1.1rem;padding:0.4rem 0.6rem}
 .nav-links a{text-decoration:none;color:var(--muted);font-weight:600;font-size:1.1rem;padding:0.4rem 0.6rem;display:inline-flex;align-items:center;height:56px}
@@ -104,7 +105,7 @@ main, .site-header, .site-footer, .container{position:relative;z-index:1}
 .nav-links .submenu a{display:block;padding:0.4rem 0.6rem;color:var(--muted);text-decoration:none;border-radius:6px}
 .nav-links .submenu a:hover{background:rgba(11,17,32,0.04);color:var(--text)}
 .nav-links li.has-sub:hover .submenu,.nav-links li.has-sub:focus-within .submenu,.nav-links li.has-sub.open .submenu{display:block}
-.nav-links li.has-sub{padding-bottom:14px}
+.nav-links li.has-sub{}
 @media (max-width:600px){
   .nav-links .submenu{display:none !important}
 }

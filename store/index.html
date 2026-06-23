@@ -11,13 +11,7 @@
     <nav class="nav container">
       <a class="logo" href="/">nicodimaano.com</a>
       <ul class="nav-links">
-        <li class="has-sub">
-          <a href="/tools/">Tools</a>
-          <ul class="submenu">
-            <li><a href="/tools/mortgage.html">Mortgage Calculator</a></li>
-            <li><a href="/tools/deadlock.html">Deadlock Calculator</a></li>
-          </ul>
-        </li>
+        <li><a href="/tools/">Tools</a></li>
         <li class="has-sub">
           <a href="/diary/">Diary</a>
           <ul class="submenu">
@@ -28,6 +22,7 @@
         </li>
         <li><a href="/store/">Support Me</a></li>
       </ul>
+      <a class="donate" href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer">Donate</a>
     </nav>
     
   </header>
@@ -80,9 +75,12 @@
         a.setAttribute('aria-expanded','false');
         a.addEventListener('click', function(e){
           const li = a.parentElement;
-          const isOpen = li.classList.toggle('open');
-          a.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          e.preventDefault();
+          const isOpen = li.classList.contains('open');
+          if(!isOpen){
+            li.classList.add('open');
+            a.setAttribute('aria-expanded','true');
+            e.preventDefault();
+          }
         });
       });
       document.addEventListener('click', function(e){
