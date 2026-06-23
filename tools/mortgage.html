@@ -11,11 +11,25 @@
     <nav class="nav container">
       <a class="logo" href="/">nicodimaano.com</a>
       <ul class="nav-links">
-        <li><a href="/tools/">Tools</a></li>
-        <li><a href="/diary/">Diary</a></li>
-        <li><a href="/store/">Store</a></li>
+        <li class="has-sub">
+          <a href="/tools/">Tools</a>
+          <ul class="submenu">
+            <li><a href="/tools/mortgage.html">Mortgage Calculator</a></li>
+            <li><a href="/tools/deadlock.html">Deadlock Calculator</a></li>
+          </ul>
+        </li>
+        <li class="has-sub">
+          <a href="/diary/">Diary</a>
+          <ul class="submenu">
+            <li><a href="/diary/trips.html">Trips</a></li>
+            <li><a href="/diary/expedition.html">Expedition</a></li>
+            <li><a href="/diary/gaming.html">GAMING</a></li>
+          </ul>
+        </li>
+        <li><a href="/store/">Support Me</a></li>
       </ul>
     </nav>
+    
   </header>
 
   <main>
@@ -25,8 +39,163 @@
     </section>
 
     <section class="container">
-      <p class="muted">Coming soon — calculator UI and results.</p>
+      <div class="calc-grid">
+        <div class="card">
+          <h3>Mortgage Inputs</h3>
+          <label>Home Price
+            <input id="homePrice" type="number" min="0" step="100" value="300000">
+          </label>
+
+          <label>Down Payment <span id="dpPercentText">20%</span>
+            <input id="downPercent" type="range" min="0" max="100" value="20">
+          </label>
+          <div class="dp-row">
+            <input id="downDollar" type="text" readonly>
+            <input id="loanAmount" type="text" readonly>
+          </div>
+
+          <label>Annual Interest Rate (%)
+            <input id="annualRate" type="number" min="0" step="0.01" value="3.5">
+          </label>
+
+          <label>Loan Term (Years)
+            <input id="termYears" type="number" min="1" step="1" value="30">
+          </label>
+
+          <button id="calcBtn" class="cta">Calculate Mortgage</button>
+        </div>
+
+        <div>
+          <div class="card results" id="resultsCard">
+            <h3>Results</h3>
+            <p><strong>Monthly Payment:</strong> <span id="monthly">—</span></p>
+            <p><strong>Total Principal Paid:</strong> <span id="principal">—</span></p>
+            <p><strong>Total Interest Paid:</strong> <span id="interest">—</span></p>
+            <p><strong>Estimated Total Payment:</strong> <span id="totalPay">—</span></p>
+          </div>
+
+          <div class="card">
+            <h3>Breakdown</h3>
+            <canvas id="breakdownChart" height="150"></canvas>
+          </div>
+        </div>
+      </div>
     </section>
+
+    <style>
+      .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+      .calc-grid .card label{display:block;margin:0.5rem 0;font-weight:600}
+      .calc-grid .card input[type=number],.calc-grid .card input[type=text]{width:100%;padding:0.5rem;border:1px solid #e6eef7;border-radius:6px}
+      .dp-row{display:flex;gap:0.5rem;margin-bottom:0.5rem}
+      .dp-row input{flex:1}
+      @media(max-width:800px){.calc-grid{grid-template-columns:1fr}}
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // header dropdown active link highlight + submenu toggle
+      (function(){
+        const path = location.pathname.replace(/\/+$/,'') || '/';
+        document.querySelectorAll('.nav-links a').forEach(a=>{
+          try{
+            const href = new URL(a.href).pathname.replace(/\/+$/,'') || '/';
+            if(path === href || path.startsWith(href)) a.classList.add('active');
+          }catch(e){}
+        });
+
+        const subLinks = document.querySelectorAll('.nav-links li.has-sub > a');
+        subLinks.forEach(a=>{
+          a.setAttribute('aria-haspopup','true');
+          a.setAttribute('aria-expanded','false');
+          a.addEventListener('click', function(e){
+            const li = a.parentElement;
+            const isOpen = li.classList.toggle('open');
+            a.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            e.preventDefault();
+          });
+        });
+        document.addEventListener('click', function(e){
+          if(!e.target.closest('.nav-links')){
+            document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+              li.classList.remove('open');
+              const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
+            });
+          }
+        });
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape'){
+            document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+              li.classList.remove('open');
+              const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
+            });
+          }
+        });
+      })();
+
+      // Mortgage calculator logic
+      const $ = id=>document.getElementById(id);
+      const homePrice = $('homePrice');
+      const downPercent = $('downPercent');
+      const dpPercentText = $('dpPercentText');
+      const downDollar = $('downDollar');
+      const loanAmount = $('loanAmount');
+      const annualRate = $('annualRate');
+      const termYears = $('termYears');
+      const calcBtn = $('calcBtn');
+
+      function formatCurrency(v){ return v.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:2}); }
+
+      function updateDerived(){
+        const price = Number(homePrice.value) || 0;
+        const pct = Number(downPercent.value) || 0;
+        dpPercentText.textContent = pct + '%';
+        const down = Math.round(price * pct/100);
+        downDollar.value = formatCurrency(down);
+        const loan = Math.max(0, price - down);
+        loanAmount.value = formatCurrency(loan);
+        return {price,down,loan};
+      }
+
+      downPercent.addEventListener('input', updateDerived);
+      homePrice.addEventListener('input', updateDerived);
+      updateDerived();
+
+      let chart = null;
+
+      function calculate(){
+        const {loan} = updateDerived();
+        const principal = loan;
+        const annual = parseFloat(annualRate.value) || 0;
+        const months = (parseInt(termYears.value)||0)*12;
+        const r = annual/100/12;
+        let monthly = 0;
+        if(r>0){ monthly = principal * (r / (1 - Math.pow(1+r,-months))); }
+        else{ monthly = principal / months; }
+        const totalPayment = monthly * months;
+        const totalInterest = totalPayment - principal;
+
+        $('monthly').textContent = formatCurrency(monthly);
+        $('principal').textContent = formatCurrency(principal);
+        $('interest').textContent = formatCurrency(totalInterest);
+        $('totalPay').textContent = formatCurrency(totalPayment);
+
+        // update chart: single stacked bar
+        const ctx = document.getElementById('breakdownChart').getContext('2d');
+        const data = {
+          labels:['Total'],
+          datasets:[
+            {label:'Principal',data:[principal],backgroundColor:'#0b5fff'},
+            {label:'Interest',data:[totalInterest],backgroundColor:'#6b7280'}
+          ]
+        };
+        const options = {responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,ticks:{beginAtZero:true}}}};
+
+        if(chart) chart.destroy();
+        chart = new Chart(ctx,{type:'bar',data,options});
+      }
+
+      calcBtn.addEventListener('click',calculate);
+    </script>
   </main>
 
   <footer class="site-footer">

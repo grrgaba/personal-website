@@ -20,11 +20,19 @@ body{
 .container{max-width:1100px;margin:0 auto;padding:1rem}
 .site-header{z-index:10}
 .site-header{border-bottom:1px solid #eef2f7}
-.nav{display:flex;align-items:center;position:relative;padding:0.5rem 0}
+.nav{display:flex;align-items:center;position:relative;padding:0.6rem 0;height:56px}
 .logo{font-weight:700;color:var(--text);text-decoration:none;position:relative;z-index:20}
-.nav-links{list-style:none;display:flex;gap:1rem;margin:0;padding:0;position:absolute;left:50%;transform:translateX(-50%)}
-.nav-links a{text-decoration:none;color:var(--muted);font-weight:600}
-.hero{padding:6rem 0;text-align:left}
+/* Donate button shown top-left */
+.donate{background:#FFD54F;color:var(--text);padding:0.35rem 0.6rem;border-radius:8px;font-weight:700;text-decoration:none;margin-right:0.6rem;border:1px solid rgba(0,0,0,0.06)}
+.donate:hover{filter:brightness(0.98);box-shadow:0 6px 18px rgba(11,17,32,0.06)}
+.donate.large{padding:0.6rem 1rem;font-size:1rem}
+.nav-links{list-style:none;display:flex;gap:2rem;margin:0;padding:0;position:static;margin-left:auto;margin-right:auto}
+.nav-links a{text-decoration:none;color:var(--muted);font-weight:600;font-size:1.1rem;padding:0.4rem 0.6rem}
+.nav-links a{text-decoration:none;color:var(--muted);font-weight:600;font-size:1.1rem;padding:0.4rem 0.6rem;display:inline-flex;align-items:center;height:56px}
+.logo{font-weight:700;color:var(--text);text-decoration:none;position:relative;z-index:20;display:inline-flex;align-items:center;height:56px}
+.donate{display:inline-flex;align-items:center}
+.nav-links li{min-width:140px;display:flex;align-items:center;justify-content:center}
+.hero{padding:8rem 0 3.5rem;text-align:left}
 .name{font-size:clamp(2rem,4vw,3rem);margin:0 0 0.5rem}
 .bio{color:var(--muted);font-size:1.125rem;margin:0 0 1.25rem}
 .cta{display:inline-block;padding:0.6rem 1rem;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none}
@@ -40,7 +48,7 @@ main{flex:1}
 .product-name{font-weight:700;margin-bottom:0.5rem}
 .product-desc{color:var(--muted);font-size:0.95rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;align-items:start;margin-top:1rem}
-.card{display:block;padding:1.25rem;border:1px solid #eef2f7;border-radius:10px;background:#fff;color:var(--text);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+.card{display:flex;flex-direction:column;justify-content:center;padding:1.25rem;border:1px solid #eef2f7;border-radius:10px;background:#fff;color:var(--text);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease;min-height:160px}
 .card h3{margin:0 0 0.5rem}
 .card p{margin:0;color:var(--muted)}
 .card:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(11,17,32,0.06)}
@@ -60,9 +68,46 @@ main{flex:1}
 .grid-button p{color: rgba(248,250,252,0.85)}
 .grid-button:focus{outline:3px solid rgba(255,255,255,0.12);outline-offset:3px}
 .grid-button:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(11,17,32,0.12)}
+
+/* Ensure grid items stretch to same height */
+.grid{align-items:stretch}
+.grid .card{min-height:160px}
+
+/* Subtle background pattern to reduce visual confusion */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  /* Lighter overlay for better visibility */
+  background-image:linear-gradient(rgba(6,10,15,0.18),rgba(6,10,15,0.12)), url('/assets/bg.jpg');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:1;
+  z-index:0;
+}
+
+/* Ensure main content sits above background */
+main, .site-header, .site-footer, .container{position:relative;z-index:1}
 @media (max-width:600px){
   .nav-links{display:none}
   .hero{padding:3rem 0;text-align:center}
   .container{padding:1rem}
   .logo{font-size:0.95rem}
 }
+
+/* Per-item submenu for nav (shows when hovering the parent item) */
+.nav-links li{position:relative}
+.nav-links .submenu{position:absolute;top:100%;left:50%;transform:translateX(-50%);display:none;min-width:180px;background:#fff;border:1px solid #eef2f7;border-radius:8px;padding:0.5rem;box-shadow:0 8px 30px rgba(11,17,32,0.06);z-index:30}
+.nav-links .submenu li{margin:0}
+.nav-links .submenu a{display:block;padding:0.4rem 0.6rem;color:var(--muted);text-decoration:none;border-radius:6px}
+.nav-links .submenu a:hover{background:rgba(11,17,32,0.04);color:var(--text)}
+.nav-links li.has-sub:hover .submenu,.nav-links li.has-sub:focus-within .submenu,.nav-links li.has-sub.open .submenu{display:block}
+.nav-links li.has-sub{padding-bottom:14px}
+@media (max-width:600px){
+  .nav-links .submenu{display:none !important}
+}
+
+/* Prevent submenu disappearing when moving mouse from parent to submenu: add small top padding to nav area */
+.nav{padding-top:0.6rem;min-height:56px}

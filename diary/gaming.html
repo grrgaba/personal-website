@@ -3,14 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>nicodimaano.com — Nico Dimaano</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>GAMING — Diary — nicodimaano.com</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <header class="site-header">
     <nav class="nav container">
-      <a class="donate" href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer">Donate</a>
-      <a class="logo" href="#">nicodimaano.com</a>
+      <a class="logo" href="/">nicodimaano.com</a>
       <ul class="nav-links">
         <li class="has-sub">
           <a href="/tools/">Tools</a>
@@ -30,31 +29,36 @@
         <li><a href="/store/">Support Me</a></li>
       </ul>
     </nav>
-    
   </header>
 
   <main>
     <section class="hero container">
-      <h1 class="name">Welcome to Nico Dimaano's Website</h1>
-      <p class="bio">Hello Visitor, Welcome to my website. Here are some interesting stuff about me and please feel free to enjoy the personal tools I made.</p>
+      <h1 class="name">GAMING</h1>
+      <p class="bio">Gaming session notes and highlights.</p>
+    </section>
+
+    <section class="container">
+      <div class="grid">
+        <p class="muted">No gaming entries yet.</p>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 Nico Dimaano</p>
+      <p>© 2026 nicodimaano.com</p>
     </div>
   </footer>
   <script>
     (function(){
       const path = location.pathname.replace(/\/+$/,'') || '/';
       document.querySelectorAll('.nav-links a').forEach(a=>{
-        try{
-          const href = new URL(a.href).pathname.replace(/\/+$/,'') || '/';
-          if(path === href || path.startsWith(href)) a.classList.add('active');
-        }catch(e){}
+        try{ const href = new URL(a.href).pathname.replace(/\/+$/,'')|| '/'; if(path===href||path.startsWith(href)) a.classList.add('active')}catch(e){}
       });
-
+    })();
+  </script>
+  <script>
+    (function(){
       const subLinks = document.querySelectorAll('.nav-links li.has-sub > a');
       subLinks.forEach(a=>{
         a.setAttribute('aria-haspopup','true');

@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Store — nicodimaano.com</title>
+  <title>Support Me — nicodimaano.com</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -11,22 +11,47 @@
     <nav class="nav container">
       <a class="logo" href="/">nicodimaano.com</a>
       <ul class="nav-links">
-        <li><a href="/tools/">Tools</a></li>
-        <li><a href="/diary/">Diary</a></li>
-        <li><a href="/store/">Store</a></li>
+        <li class="has-sub">
+          <a href="/tools/">Tools</a>
+          <ul class="submenu">
+            <li><a href="/tools/mortgage.html">Mortgage Calculator</a></li>
+            <li><a href="/tools/deadlock.html">Deadlock Calculator</a></li>
+          </ul>
+        </li>
+        <li class="has-sub">
+          <a href="/diary/">Diary</a>
+          <ul class="submenu">
+            <li><a href="/diary/trips.html">Trips</a></li>
+            <li><a href="/diary/expedition.html">Expedition</a></li>
+            <li><a href="/diary/gaming.html">GAMING</a></li>
+          </ul>
+        </li>
+        <li><a href="/store/">Support Me</a></li>
       </ul>
     </nav>
+    
   </header>
 
   <main>
     <section class="hero container">
-      <h1 class="name">Store</h1>
-      <p class="bio">Currently empty.</p>
+      <h1 class="name">Support Me</h1>
+      <p class="bio">Support my projects — thank you.</p>
     </section>
 
     <section class="container">
       <div class="grid">
-        <!-- empty store grid -->
+        <a class="card grid-button" href="sarjlab.html">
+          <h3>SarjLab</h3>
+          <p class="muted">Sajista Productions — SarjLab offerings.</p>
+        </a>
+        <a class="card grid-button" href="sarjlab.html">
+          <h3>Store</h3>
+          <p class="muted">Visit the store for merch and releases.</p>
+        </a>
+        <a class="card" href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer" style="background:#FFD54F;color:var(--text);display:flex;flex-direction:column;justify-content:center;text-decoration:none;">
+          <h3>Donate — PayPal</h3>
+          <p class="muted">Support me directly via PayPal.</p>
+        </a>
       </div>
     </section>
   </main>
@@ -36,5 +61,47 @@
       <p>© 2026 nicodimaano.com</p>
     </div>
   </footer>
+  <script>
+    (function(){
+      const path = location.pathname.replace(/\/+$/,'') || '/';
+      document.querySelectorAll('.nav-links a').forEach(a=>{
+        try{
+          const href = new URL(a.href).pathname.replace(/\/+$/,'') || '/';
+          if(path === href || path.startsWith(href)) a.classList.add('active');
+        }catch(e){}
+      });
+    })();
+  </script>
+  <script>
+    (function(){
+      const subLinks = document.querySelectorAll('.nav-links li.has-sub > a');
+      subLinks.forEach(a=>{
+        a.setAttribute('aria-haspopup','true');
+        a.setAttribute('aria-expanded','false');
+        a.addEventListener('click', function(e){
+          const li = a.parentElement;
+          const isOpen = li.classList.toggle('open');
+          a.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          e.preventDefault();
+        });
+      });
+      document.addEventListener('click', function(e){
+        if(!e.target.closest('.nav-links')){
+          document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+            li.classList.remove('open');
+            const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
+          });
+        }
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){
+          document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
+            li.classList.remove('open');
+            const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
+          });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
