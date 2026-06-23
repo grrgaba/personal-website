@@ -75,6 +75,8 @@
       .calc-grid .card input[type=number],.calc-grid .card input[type=text]{width:100%;padding:0.5rem;border:1px solid #e6eef7;border-radius:6px}
       .dp-row{display:flex;gap:0.5rem;margin-bottom:0.5rem}
       .dp-row input{flex:1}
+      /* constrain chart size so it doesn't grow beyond the template */
+      #breakdownChart{max-height:150px;height:150px;display:block;width:100%;}
       @media(max-width:800px){.calc-grid{grid-template-columns:1fr}}
     </style>
 
@@ -181,7 +183,8 @@
             {label:'Interest',data:[totalInterest],backgroundColor:'#6b7280'}
           ]
         };
-        const options = {responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,ticks:{beginAtZero:true}}}};
+        // keep the chart within its template area
+        const options = {responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,ticks:{beginAtZero:true}}}};
 
         if(myChart) myChart.destroy();
         myChart = new Chart(ctx,{type:'bar',data,options});

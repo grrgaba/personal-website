@@ -27,7 +27,7 @@
 
     <section class="container">
       <div class="grid">
-        <p class="muted">No gaming entries yet.</p>
+        <p class="muted">I hate to admit but I do like video games.</p>
       </div>
     </section>
   </main>
@@ -37,50 +37,5 @@
       <p>© 2026 nicodimaano.com</p>
     </div>
   </footer>
-  <script>
-    (function(){
-      const path = location.pathname.replace(/\/+$/,'') || '/';
-      document.querySelectorAll('.nav-links a').forEach(a=>{
-        try{ const href = new URL(a.href).pathname.replace(/\/+$/,'')|| '/'; if(path===href||path.startsWith(href)) a.classList.add('active')}catch(e){}
-      });
-    })();
-  </script>
-  <script>
-    (function(){
-      // bind submenu behavior only for list items that actually contain a .submenu
-      document.querySelectorAll('.nav-links li').forEach(li=>{
-        const submenu = li.querySelector('.submenu');
-        if(!submenu) return;
-        const a = li.querySelector('a');
-        if(!a) return;
-        a.setAttribute('aria-haspopup','true');
-        a.setAttribute('aria-expanded','false');
-        a.addEventListener('click', function(e){
-          const isOpen = li.classList.contains('open');
-          if(!isOpen){
-            li.classList.add('open');
-            a.setAttribute('aria-expanded','true');
-            e.preventDefault();
-          }
-        });
-      });
-      document.addEventListener('click', function(e){
-        if(!e.target.closest('.nav-links')){
-          document.querySelectorAll('.nav-links li.open').forEach(li=>{
-            li.classList.remove('open');
-            const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
-          });
-        }
-      });
-      document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape'){
-          document.querySelectorAll('.nav-links li.open').forEach(li=>{
-            li.classList.remove('open');
-            const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
-          });
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
