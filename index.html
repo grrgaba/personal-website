@@ -13,18 +13,9 @@
       <ul class="nav-links">
         <li class="has-sub">
           <a href="/tools/">Tools</a>
-          <ul class="submenu">
-            <li><a href="/tools/mortgage.html">Mortgage Calculator</a></li>
-            <li><a href="/tools/deadlock.html">Deadlock Calculator</a></li>
-          </ul>
         </li>
         <li class="has-sub">
           <a href="/diary/">Diary</a>
-          <ul class="submenu">
-            <li><a href="/diary/trips.html">Trips</a></li>
-            <li><a href="/diary/expedition.html">Expedition</a></li>
-            <li><a href="/diary/gaming.html">GAMING</a></li>
-          </ul>
         </li>
         <li><a href="/store/">Support Me</a></li>
       </ul>
@@ -45,49 +36,5 @@
       <p>© 2026 Nico Dimaano</p>
     </div>
   </footer>
-  <script>
-    (function(){
-      const path = location.pathname.replace(/\/+$/,'') || '/';
-      document.querySelectorAll('.nav-links a').forEach(a=>{
-        try{
-          const href = new URL(a.href).pathname.replace(/\/+$/,'') || '/';
-          if(path === href || path.startsWith(href)) a.classList.add('active');
-        }catch(e){}
-      });
-
-      const subLinks = document.querySelectorAll('.nav-links li.has-sub > a');
-      subLinks.forEach(a=>{
-        a.setAttribute('aria-haspopup','true');
-        a.setAttribute('aria-expanded','false');
-        a.addEventListener('click', function(e){
-          const li = a.parentElement;
-          const isOpen = li.classList.contains('open');
-          if(!isOpen){
-            li.classList.add('open');
-            a.setAttribute('aria-expanded','true');
-            e.preventDefault(); // first click opens menu, don't navigate
-          } else {
-            // already open — allow the click to follow the link (navigate)
-          }
-        });
-      });
-      document.addEventListener('click', function(e){
-        if(!e.target.closest('.nav-links')){
-          document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
-            li.classList.remove('open');
-            const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
-          });
-        }
-      });
-      document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape'){
-          document.querySelectorAll('.nav-links li.has-sub.open').forEach(li=>{
-            li.classList.remove('open');
-            const link = li.querySelector('a'); if(link) link.setAttribute('aria-expanded','false');
-          });
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
