@@ -12,3 +12,6 @@ Files
 
 - index.html — landing page
 - css/style.css — base styles
+- pages/diary/index.html — Diary landing page
+- pages/tools/index.html — Tools landing page
+- pages/store/index.html — Empty Store landing page
