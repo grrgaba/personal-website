@@ -204,21 +204,25 @@
         const years = Math.max(0, parseInt(termYears.value)||0);
         const periodsPerYear = interval === 'biweekly' ? 26 : 12;
         const periods = Math.max(1, years * periodsPerYear);
-        // For accelerated bi-weekly: take the regular monthly payment and divide by 2
-        // then apply that amount every two weeks (26 payments/year).
-        let r = 0; // periodic interest rate
+        // Convert nominal annual rate (semi-annual compounding) to effective rates
+        const nominal = annual/100;
+        const effAnnual = Math.pow(1 + nominal/2, 2) - 1; // effective annual rate
+        const r_month = Math.pow(1 + nominal/2, 2/12) - 1; // effective monthly rate
+        let r = 0; // periodic interest rate for simulation
         let payment = 0;
         if(interval === 'biweekly'){
+          // accurate monthly payment using semi-annual compounding -> accelerated bi-weekly = monthly/2
           const months = Math.max(1, years * 12);
-          const r_month = annual/100/12;
           let monthlyPayment = 0;
-          if(r_month > 0) monthlyPayment = principal * (r_month / (1 - Math.pow(1+r_month, -months)));
+          if(r_month > 0) monthlyPayment = principal * (r_month / (1 - Math.pow(1 + r_month, -months)));
           else monthlyPayment = principal / months;
           payment = monthlyPayment / 2; // accelerated bi-weekly payment
-          r = annual/100/26; // interest per bi-weekly period
+          // derive bi-weekly periodic rate from effective annual rate
+          r = Math.pow(1 + effAnnual, 1/26) - 1;
         } else {
-          r = annual/100/12; // monthly rate
-          if(r>0){ payment = principal * (r / (1 - Math.pow(1+r,-periods))); }
+          // monthly case: use effective monthly rate
+          r = r_month;
+          if(r>0){ payment = principal * (r / (1 - Math.pow(1 + r, -periods))); }
           else{ payment = principal / periods; }
         }
         const totalPayment = payment * periods;
