@@ -9,6 +9,7 @@
     .calculator { max-width:600px; margin:2rem auto; padding:1rem; }
     .calculator label { display:block; margin:0.5rem 0 0.25rem; }
     .calculator input { width:100%; padding:0.5rem; }
+    .helper-text { margin:0.35rem 0 0; font-size:0.92rem; color:#666; }
     .result { margin-top:1rem; font-weight:600; }
     .arrow-wrap { text-align:center; margin:1.5rem 0; }
     .arrow-svg { width:120px; height:40px; display:inline-block; }
@@ -44,7 +45,8 @@
       <div class="input-row">
         <div class="col">
           <label for="airport"><strong>Airport</strong></label>
-          <input id="airport" class="airport-input" type="text" placeholder="e.g. YVR - Vancouver International">
+          <input id="airport" class="airport-input" type="text" list="airport-options" autocomplete="off" placeholder="Start typing an IATA code or airport name">
+          <datalist id="airport-options"></datalist>
         </div>
 
         to
@@ -61,7 +63,82 @@
     </section>
   </main>
 
+  <script src="../assets/airports-data.js"></script>
   <script>
+    function formatAirportOption(airport) {
+      var pieces = [airport.iata, airport.name].filter(Boolean);
+      if (airport.city) {
+        pieces.push(airport.city);
+      }
+      return pieces.join(' - ');
+    }
+
+    var airportCatalog = Object.keys(window.AIRPORT_DATA || {}).map(function(key) {
+      return window.AIRPORT_DATA[key];
+    }).filter(function(airport) {
+      return airport && airport.iata && airport.iata.length === 3;
+    }).sort(function(left, right) {
+      return left.iata.localeCompare(right.iata);
+    });
+
+    function airportScore(airport, query) {
+      if (!query) {
+        return 4;
+      }
+
+      if (airport.iata.toLowerCase().indexOf(query) === 0) {
+        return 0;
+      }
+
+      if (airport.name.toLowerCase().indexOf(query) === 0) {
+        return 1;
+      }
+
+      if (airport.city && airport.city.toLowerCase().indexOf(query) === 0) {
+        return 2;
+      }
+
+      return 3;
+    }
+
+    function renderAirportOptions(query) {
+      var list = document.getElementById('airport-options');
+      var normalizedQuery = query.trim().toLowerCase();
+      var matches = airportCatalog.filter(function(airport) {
+        if (!normalizedQuery) {
+          return true;
+        }
+
+        return airport.iata.toLowerCase().indexOf(normalizedQuery) === 0 ||
+          airport.name.toLowerCase().indexOf(normalizedQuery) !== -1 ||
+          (airport.city && airport.city.toLowerCase().indexOf(normalizedQuery) !== -1);
+      }).sort(function(left, right) {
+        var leftScore = airportScore(left, normalizedQuery);
+        var rightScore = airportScore(right, normalizedQuery);
+
+        if (leftScore !== rightScore) {
+          return leftScore - rightScore;
+        }
+
+        return left.iata.localeCompare(right.iata);
+      }).slice(0, 12);
+
+      list.innerHTML = '';
+
+      matches.forEach(function(airport) {
+        var option = document.createElement('option');
+        option.value = formatAirportOption(airport);
+        list.appendChild(option);
+      });
+    }
+
+    var airportInput = document.getElementById('airport');
+    airportInput.addEventListener('input', function() {
+      renderAirportOptions(airportInput.value);
+    });
+
+    renderAirportOptions('');
+
     document.getElementById('calculate').addEventListener('click', function(){
       var a = document.getElementById('airport').value.trim();
       var r = document.getElementById('resort').value.trim();
