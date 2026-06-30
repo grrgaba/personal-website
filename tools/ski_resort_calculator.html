@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ski Resort Calculator — nicodimaano.com</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .calculator { max-width:600px; margin:2rem auto; padding:1rem; }
+    .calculator label { display:block; margin:0.5rem 0 0.25rem; }
+    .calculator input { width:100%; padding:0.5rem; }
+    .result { margin-top:1rem; font-weight:600; }
+    .arrow-wrap { text-align:center; margin:1.5rem 0; }
+    .arrow-svg { width:120px; height:40px; display:inline-block; }
+    .airport-input, .resort-input { font-size:1rem; }
+    .input-row { display:flex; align-items:center; gap:2.5rem; justify-content:center; }
+    .input-row .col { flex:1; max-width:44%; }
+    .arrow-wrap { flex:0 0 180px; margin:0; }
+    @media (max-width:640px) {
+      .input-row { flex-direction:column; gap:1rem; }
+      .input-row .col { max-width:100%; }
+      .arrow-wrap { flex:0 0 auto; }
+    }
+    .calc-btn { display:block; width:100%; padding:0.85rem; margin-top:1rem; background:linear-gradient(90deg,#4facfe,#00f2fe); color:#fff; border:0; border-radius:6px; font-size:1.05rem; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="logo" href="/">nicodimaano.com</a>
+      <ul class="nav-links">
+        <li><a href="/tools/tools.html">Tools</a></li>
+        <li><a href="/diary/diary.html">Diary</a></li>
+        <li><a href="/SupportMe/SupportMe.html">Support Me</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="container calculator">
+      <h1>Ski Resort Calculator</h1>
+      <p class="muted">Utility Tool to help you get to your ski resort.</p>
+
+      <div class="input-row">
+        <div class="col">
+          <label for="airport"><strong>Airport</strong></label>
+          <input id="airport" class="airport-input" type="text" placeholder="e.g. YVR - Vancouver International">
+        </div>
+
+        to
+
+        <div class="col">
+          <label for="resort"><strong>Ski Resort</strong></label>
+          <input id="resort" class="resort-input" type="text" placeholder="Enter here">
+        </div>
+      </div>
+
+      <button id="calculate" class="calc-btn">Calculate</button>
+
+      <p class="result" id="result"></p>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('calculate').addEventListener('click', function(){
+      var a = document.getElementById('airport').value.trim();
+      var r = document.getElementById('resort').value.trim();
+      var out = document.getElementById('result');
+      if (!a || !r) { out.textContent = 'Please enter both airport and resort name.'; return; }
+      out.textContent = a + ' → ' + r;
+    });
+  </script>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 nicodimaano.com</p>
+    </div>
+  </footer>
+</body>
+</html>
