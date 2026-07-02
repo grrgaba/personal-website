@@ -85,7 +85,7 @@ body::before{
   inset:0;
   pointer-events:none;
   /* Lighter overlay for better visibility */
-  /* background-image:linear-gradient(rgba(6,10,15,0.18),rgba(6,10,15,0.12)), url('/assets/bg.jpg');*/
+  background-image:linear-gradient(rgba(6,10,15,0.18),rgba(6,10,15,0.12));
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
