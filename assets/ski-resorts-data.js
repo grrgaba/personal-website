@@ -80,3 +80,8 @@ window.SKI_RESORTS = [
   { name: "Valle Nevado", country: "Chile", location: "Santiago Metropolitan Region", lat: -33.349, lon: -70.248, nearestIntlAirport: "Santiago Arturo Merino Benítez (SCL)" }, 
   { name: "Cerro Catedral", country: "Argentina", location: "San Carlos de Bariloche", lat: -41.171, lon: -71.439, nearestIntlAirport: "San Carlos de Bariloche (BRC)" } 
 ];
+
+// Ensure each resort has a `liftPrice` field (regular price). Default to null for now.
+window.SKI_RESORTS.forEach(function(resort) {
+  if (typeof resort.liftPrice === 'undefined') resort.liftPrice = null;
+});
