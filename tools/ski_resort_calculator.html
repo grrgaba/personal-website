@@ -23,6 +23,12 @@
       .arrow-wrap { flex:0 0 auto; }
     }
     .calc-btn { display:block; width:100%; padding:0.85rem; margin-top:1rem; background:linear-gradient(90deg,#4facfe,#00f2fe); color:#fff; border:0; border-radius:6px; font-size:1.05rem; cursor:pointer; }
+
+    /* Results box */
+    .results-box { border:1px solid #e1e4e8; background:#fafafa; padding:0.75rem; margin-top:1rem; border-radius:6px; max-height:220px; overflow:auto; }
+    .results-box ol { margin:0; padding-left:1.25rem; }
+    .results-box li { padding:0.45rem 0; border-bottom:1px solid rgba(0,0,0,0.04); font-weight:600; }
+    .results-box li:last-child { border-bottom:0; }
   </style>
 </head>
 <body>
@@ -60,7 +66,9 @@
 
       <button id="calculate" class="calc-btn">Calculate</button>
 
-      <p class="result" id="result"></p>
+      <div id="results-box" class="results-box" aria-live="polite">
+        <ol id="results-list"></ol>
+      </div>
     </section>
   </main>
 
@@ -184,12 +192,114 @@
     resortInput.addEventListener('input', function() { renderResortOptions(resortInput.value); });
     renderResortOptions('');
 
+    // cookie helpers
+    function setCookie(name, value, days) {
+      var d = new Date();
+      d.setTime(d.getTime() + (days*24*60*60*1000));
+      var expires = "expires=" + d.toUTCString();
+      document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+      var cname = name + "=";
+      var decoded = decodeURIComponent(document.cookie || "");
+      var parts = decoded.split(';');
+      for (var i = 0; i < parts.length; i++) {
+        var c = parts[i].trim();
+        if (c.indexOf(cname) === 0) return c.substring(cname.length, c.length);
+      }
+      return null;
+    }
+
+    function formatAndShowResult(airportRaw, resortRaw) {
+      if (!airportRaw || !resortRaw) return;
+      var list = document.getElementById('results-list');
+
+      // extract airport IATA (e.g. YEG) from common formats
+      var airportCode = '';
+      var m = airportRaw.match(/^([A-Za-z]{3})\b/);
+      if (m) {
+        airportCode = m[1].toUpperCase();
+      } else {
+        m = airportRaw.match(/\(([A-Za-z]{3})\)/);
+        if (m) airportCode = m[1].toUpperCase();
+        else {
+          var parts = airportRaw.split(' - ');
+          airportCode = (parts[0] || airportRaw).toUpperCase();
+        }
+      }
+
+      // extract resort name (before the first ' - ')
+      var resortName = resortRaw.split(' - ')[0].trim();
+
+      // try to find resort in catalog to get nearestIntlAirport
+      var match = resortCatalog.find(function(s) {
+        return s && s.name && s.name.toLowerCase() === resortName.toLowerCase();
+      });
+      if (!match) {
+        match = resortCatalog.find(function(s) {
+          return s && s.name && s.name.toLowerCase().indexOf(resortName.toLowerCase()) !== -1;
+        });
+      }
+
+      var nearest = (match && match.nearestIntlAirport) ? match.nearestIntlAirport : '';
+      var display = airportCode + ' ✈️ → ' + (nearest || '—') + ' ✈️ → ' + (match ? match.name : resortName);
+
+      // update only the first result row
+      var first = list.querySelector('li');
+      if (first) first.textContent = display;
+      else {
+        var li = document.createElement('li');
+        li.textContent = display;
+        list.appendChild(li);
+      }
+    }
+
+    // load saved values from cookies
+    (function loadSaved() {
+      var savedAirport = getCookie('lastAirportCode');
+      var savedResort = getCookie('lastResort');
+      if (savedAirport) {
+        // set airport input to saved code (user wanted code remembered)
+        document.getElementById('airport').value = savedAirport;
+      }
+      if (savedResort) {
+        document.getElementById('resort').value = savedResort;
+      }
+      // if both exist, show the last result
+      if (savedAirport && savedResort) {
+        formatAndShowResult(savedAirport, savedResort);
+      }
+    })();
+
     document.getElementById('calculate').addEventListener('click', function(){
       var a = document.getElementById('airport').value.trim();
       var r = document.getElementById('resort').value.trim();
-      var out = document.getElementById('result');
-      if (!a || !r) { out.textContent = 'Please enter both airport and resort name.'; return; }
-      out.textContent = a + ' → ' + r;
+      if (!a || !r) {
+        alert('Please enter both airport and resort name.');
+        return;
+      }
+
+      // compute airport code as displayed
+      var airportCode = '';
+      var m = a.match(/^([A-Za-z]{3})\b/);
+      if (m) airportCode = m[1].toUpperCase();
+      else {
+        m = a.match(/\(([A-Za-z]{3})\)/);
+        if (m) airportCode = m[1].toUpperCase();
+        else {
+          var parts = a.split(' - ');
+          airportCode = (parts[0] || a).toUpperCase();
+        }
+      }
+
+      // save cookies
+      setCookie('lastAirportCode', airportCode, 365);
+      setCookie('lastResort', r, 365);
+
+      // update the single result row
+      formatAndShowResult(airportCode, r);
+      document.getElementById('airport').focus();
     });
   </script>
 
