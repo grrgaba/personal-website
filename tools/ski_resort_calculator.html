@@ -31,6 +31,10 @@
     .results-box li:last-child { border-bottom:0; }
     .results-box .breakdown { font-weight:400; font-size:0.95rem; margin-top:0.5rem; color:#222; }
     .results-box .breakdown div { margin:0.25rem 0; }
+    .plan-table { width:100%; border-collapse:collapse; margin-top:0.4rem; }
+    .plan-table th, .plan-table td { text-align:left; padding:6px 8px; border-bottom:1px solid rgba(0,0,0,0.06); font-weight:400; }
+    .plan-table th { font-weight:600; }
+    .plan-select { width:100%; max-width:200px; }
   </style>
 </head>
 <body>
@@ -268,19 +272,22 @@
       var priceDisplay = '';
       if (liftPriceVal !== null && !isNaN(liftPriceVal)) priceDisplay = ' — Lift ticket: $' + liftPriceVal.toFixed(2);
 
-      var mainLine = airportCode + ' ✈️ → ' + (nearest || '—') + ' ✈️ → ' + (match ? match.name : resortName) + ' ⛷️';
+      var mainLine = airportCode + ' ✈️ → ' + (nearestCode || nearest || '—') + ' ✈️ → ' + (match ? match.name : resortName) + ' ⛷️';
 
-      // breakdown (placeholders for flight legs; actual computation can be added later)
-      var leg1 = airportCode + ' ✈️ → ' + (nearestCode || '—') + ' ✈️ = $<placeholder>';
-      var leg2 = (nearestCode || '—') + ' ✈️ → ' + (match ? match.name : resortName) + ' ⛷️= $<placeholder>';
-      var liftLine = (match ? match.name : resortName) + ' ⛷️= ' + (liftPriceVal !== null ? ('$' + liftPriceVal.toFixed(2)) : '$<placeholder>');
+      // travel plan table rows
+      var viaSelect = '<select class="plan-select"><option>Car Rental</option><option>Public Transit</option><option>Taxi</option></select>';
+      var leg1 = escapeHtml(airportCode + ' ✈️ → ' + (nearestCode || '—') + ' ✈️');
+      var leg2 = escapeHtml((nearestCode || '—') + ' ✈️ → ' + (match ? match.name : resortName) + ' ⛷️');
+      var liftLine = escapeHtml((match ? match.name : resortName) + ' ⛷️');
+      var liftPriceCell = (match && typeof match.priceUSD !== 'undefined' && match.priceUSD !== null) ? ('$' + Number(match.priceUSD).toFixed(2)) : '$<placeholder>';
 
       var html = '<strong>' + escapeHtml(mainLine) + '</strong>' +
-        '<div class="breakdown"><div><strong>Cost Break down:</strong></div>' +
-        '<div>' + escapeHtml(leg1) + '</div>' +
-        '<div>' + escapeHtml(leg2) + '</div>' +
-        '<div>' + escapeHtml(liftLine) + '</div>' +
-        '</div>';
+        '<div class="breakdown"><div><strong>Travel Plan:</strong></div>' +
+        '<table class="plan-table"><thead><tr><th>Header 1</th><th>via</th><th>Price (USD)</th></tr></thead><tbody>' +
+        '<tr><td>' + leg1 + '</td><td>' + escapeHtml('<airline>') + '</td><td>$<placeholder></td></tr>' +
+        '<tr><td>' + leg2 + '</td><td>' + viaSelect + '</td><td>$<placeholder></td></tr>' +
+        '<tr><td>' + liftLine + '</td><td>' + escapeHtml('Regular ticket') + '</td><td>' + escapeHtml(liftPriceCell) + '</td></tr>' +
+        '</tbody></table></div>';
 
       // update only the first result row (use innerHTML to preserve line structure)
       var first = list.querySelector('li');
@@ -294,7 +301,7 @@
 
     // load saved values from cookies
     (function loadSaved() {
-      var savedAirport = getCookie('lastAirportCode');
+      var savedAirport = getCookie('lastAirport');
       var savedResort = getCookie('lastResort');
       var savedLift = getCookie('lastLiftPrice');
       if (savedAirport) {
@@ -305,9 +312,10 @@
         document.getElementById('resort').value = savedResort;
       }
       if (savedLift) {
-        document.getElementById('lift-price').value = savedLift;
+        var liftEl = document.getElementById('lift-price');
+        if (liftEl) liftEl.value = savedLift;
       }
-      // if both exist, show the last result
+      // TODO::auto-show last calculation if both inputs present (remove if done)
       if (savedAirport && savedResort) {
         formatAndShowResult(savedAirport, savedResort, savedLift);
       }
@@ -321,27 +329,14 @@
         return;
       }
 
-      // compute airport code as displayed
-      var airportCode = '';
-      var m = a.match(/^([A-Za-z]{3})\b/);
-      if (m) airportCode = m[1].toUpperCase();
-      else {
-        m = a.match(/\(([A-Za-z]{3})\)/);
-        if (m) airportCode = m[1].toUpperCase();
-        else {
-          var parts = a.split(' - ');
-          airportCode = (parts[0] || a).toUpperCase();
-        }
-      }
-
-      var lift = document.getElementById('lift-price').value.trim();
-      // save cookies
-      setCookie('lastAirportCode', airportCode, 365);
+      var liftEl = document.getElementById('lift-price');
+      var lift = liftEl ? (liftEl.value || '').trim() : '';
+      // save cookies (store full airport string)
+      setCookie('lastAirport', a, 365);
       setCookie('lastResort', r, 365);
       setCookie('lastLiftPrice', lift, 365);
-
       // update the single result row
-      formatAndShowResult(airportCode, r, lift);
+      formatAndShowResult(a, r, lift);
       document.getElementById('airport').focus();
     });
   </script>
