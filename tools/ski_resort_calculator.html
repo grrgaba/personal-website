@@ -23,6 +23,10 @@
       .arrow-wrap { flex:0 0 auto; }
     }
     .calc-btn { display:block; width:100%; padding:0.85rem; margin-top:1rem; background:linear-gradient(90deg,#4facfe,#00f2fe); color:#fff; border:0; border-radius:6px; font-size:1.05rem; cursor:pointer; }
+    .actions{display:flex;gap:0.5rem;align-items:center}
+    .actions .calc-btn{flex:1;min-width:0}
+    .clear-btn{padding:0.6rem 0.9rem;margin-top:1rem;background:#f3f4f6;border:1px solid #e1e4e8;border-radius:6px;color:var(--text);cursor:pointer;font-size:0.95rem}
+    @media (max-width:640px){.actions{flex-direction:column}.actions .calc-btn,.clear-btn{width:100%}}
 
     /* Results box */
     .results-box { border:1px solid #e1e4e8; background:#fafafa; padding:0.75rem; margin-top:1rem; border-radius:6px; max-height:220px; overflow:auto; }
@@ -70,7 +74,10 @@
         </div>
       </div>
 
-      <button id="calculate" class="calc-btn">Calculate</button>
+      <div class="actions">
+        <button id="calculate" class="calc-btn">Calculate</button>
+        <button id="clear" class="clear-btn" type="button" aria-label="Clear entries">Clear</button>
+      </div>
 
       <div id="results-box" class="results-box" aria-live="polite">
         <ol id="results-list"></ol>
@@ -274,18 +281,35 @@
 
       var mainLine = airportCode + ' ✈️ → ' + (nearestCode || nearest || '—') + ' ✈️ → ' + (match ? match.name : resortName) + ' ⛷️';
 
-      // travel plan table rows
-      var viaSelect = '<select class="plan-select"><option>Car Rental</option><option>Public Transit</option><option>Taxi</option></select>';
+      // travel plan table rows: build via select with per-resort prices where available
+      var carPrice = (match && typeof match.carRentalPrice !== 'undefined' && match.carRentalPrice !== null) ? Number(match.carRentalPrice) : null;
+      var transitPrice = (match && typeof match.publicTransitPrice !== 'undefined' && match.publicTransitPrice !== null) ? Number(match.publicTransitPrice) : null;
+      var taxiPrice = (match && typeof match.taxiPrice !== 'undefined' && match.taxiPrice !== null) ? Number(match.taxiPrice) : null;
+
+      function opt(label, price) {
+        if (price === null) return '<option value="">' + escapeHtml(label) + '</option>';
+        return '<option value="' + Number(price).toFixed(2) + '">' + escapeHtml(label) + ' — $' + Number(price).toFixed(2) + '</option>';
+      }
+
+      var viaSelect = '<select class="plan-select">' + opt('Car Rental 🚗', carPrice) + opt('Public Transit 🚌', transitPrice) + opt('Taxi 🚕', taxiPrice) + '</select>';
+
       var leg1 = escapeHtml(airportCode + ' ✈️ → ' + (nearestCode || '—') + ' ✈️');
       var leg2 = escapeHtml((nearestCode || '—') + ' ✈️ → ' + (match ? match.name : resortName) + ' ⛷️');
       var liftLine = escapeHtml((match ? match.name : resortName) + ' ⛷️');
       var liftPriceCell = (match && typeof match.priceUSD !== 'undefined' && match.priceUSD !== null) ? ('$' + Number(match.priceUSD).toFixed(2)) : '$<placeholder>';
 
+      // determine initial leg2 price display (use the first available price in order: car, transit, taxi)
+      var initialLeg2Price = null;
+      if (carPrice !== null) initialLeg2Price = carPrice;
+      else if (transitPrice !== null) initialLeg2Price = transitPrice;
+      else if (taxiPrice !== null) initialLeg2Price = taxiPrice;
+      var leg2PriceCell = (initialLeg2Price !== null) ? ('$' + Number(initialLeg2Price).toFixed(2)) : '$<placeholder>';
+
       var html = '<strong>' + escapeHtml(mainLine) + '</strong>' +
         '<div class="breakdown"><div><strong>Travel Plan:</strong></div>' +
-        '<table class="plan-table"><thead><tr><th>Header 1</th><th>via</th><th>Price (USD)</th></tr></thead><tbody>' +
+        '<table class="plan-table"><thead><tr><th>Route</th><th>via</th><th>Price (USD)</th></tr></thead><tbody>' +
         '<tr><td>' + leg1 + '</td><td>' + escapeHtml('<airline>') + '</td><td>$<placeholder></td></tr>' +
-        '<tr><td>' + leg2 + '</td><td>' + viaSelect + '</td><td>$<placeholder></td></tr>' +
+        '<tr><td>' + leg2 + '</td><td>' + viaSelect + '</td><td>' + escapeHtml(leg2PriceCell) + '</td></tr>' +
         '<tr><td>' + liftLine + '</td><td>' + escapeHtml('Regular ticket') + '</td><td>' + escapeHtml(liftPriceCell) + '</td></tr>' +
         '</tbody></table></div>';
 
@@ -296,6 +320,36 @@
         var li = document.createElement('li');
         li.innerHTML = html;
         list.appendChild(li);
+      }
+
+      // attach change listener to update the leg2 price cell when user selects a different via option
+      var selectEl = list.querySelector('.plan-select');
+      if (selectEl) {
+        // ensure the price cell shows selected value
+        var updatePrice = function() {
+          var tr = selectEl.closest('tr');
+          if (!tr) return;
+          var priceTd = tr.querySelector('td:last-child');
+          var val = selectEl.value;
+          if (val === '' || typeof val === 'undefined' || val === null) {
+            priceTd.textContent = '$<placeholder>';
+          } else {
+            var n = Number(val);
+            if (!isNaN(n)) priceTd.textContent = '$' + n.toFixed(2);
+            else priceTd.textContent = '$<placeholder>';
+          }
+        };
+        // set initial value (first option may be empty if price missing)
+        if (selectEl.options && selectEl.options.length) {
+          // if first option has empty value but there is a later option with price, pick first priced option
+          if (!selectEl.value) {
+            for (var i = 0; i < selectEl.options.length; i++) {
+              if (selectEl.options[i].value) { selectEl.selectedIndex = i; break; }
+            }
+          }
+        }
+        updatePrice();
+        selectEl.addEventListener('change', updatePrice);
       }
     }
 
@@ -338,6 +392,19 @@
       // update the single result row
       formatAndShowResult(a, r, lift);
       document.getElementById('airport').focus();
+    });
+
+    document.getElementById('clear').addEventListener('click', function(){
+      var aEl = document.getElementById('airport');
+      var rEl = document.getElementById('resort');
+      if (aEl) aEl.value = '';
+      if (rEl) rEl.value = '';
+      var liftEl = document.getElementById('lift-price');
+      if (liftEl) liftEl.value = '';
+      var resultsList = document.getElementById('results-list');
+      if (resultsList) resultsList.innerHTML = '';
+      // focus the first input
+      if (aEl) aEl.focus();
     });
   </script>
 
