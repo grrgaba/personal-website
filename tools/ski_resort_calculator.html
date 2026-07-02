@@ -45,7 +45,7 @@
       <div class="input-row">
         <div class="col">
           <label for="airport"><strong>Airport</strong></label>
-          <input id="airport" class="airport-input" type="text" list="airport-options" autocomplete="off" placeholder="Start typing an IATA code or airport name">
+          <input id="airport" class="airport-input" type="text" list="airport-options" autocomplete="off" placeholder="Enter your Airport">
           <datalist id="airport-options"></datalist>
         </div>
 
@@ -53,7 +53,8 @@
 
         <div class="col">
           <label for="resort"><strong>Ski Resort</strong></label>
-          <input id="resort" class="resort-input" type="text" placeholder="Enter here">
+          <input id="resort" class="resort-input" type="text" list="resort-options" autocomplete="off" placeholder="Enter Ski Resort">
+          <datalist id="resort-options"></datalist>
         </div>
       </div>
 
@@ -64,6 +65,7 @@
   </main>
 
   <script src="../assets/airports-data.js"></script>
+  <script src="../assets/ski-resorts-data.js"></script>
   <script>
     function formatAirportOption(airport) {
       var pieces = [airport.iata, airport.name].filter(Boolean);
@@ -138,6 +140,49 @@
     });
 
     renderAirportOptions('');
+
+    /* --- Ski resort picker --- */
+    function formatResortOption(resort) {
+      var pieces = [resort.name, resort.location || resort.country].filter(Boolean);
+      return pieces.join(' - ');
+    }
+
+    var resortCatalog = (window.SKI_RESORTS || []).slice();
+
+    function resortScore(resort, query) {
+      if (!query) return 4;
+      if (resort.name.toLowerCase().indexOf(query) === 0) return 0;
+      if (resort.location && resort.location.toLowerCase().indexOf(query) === 0) return 1;
+      if (resort.country && resort.country.toLowerCase().indexOf(query) === 0) return 2;
+      return 3;
+    }
+
+    function renderResortOptions(query) {
+      var list = document.getElementById('resort-options');
+      var normalizedQuery = query.trim().toLowerCase();
+      var matches = resortCatalog.filter(function(r) {
+        if (!normalizedQuery) return true;
+        return r.name.toLowerCase().indexOf(normalizedQuery) !== -1 ||
+               (r.location && r.location.toLowerCase().indexOf(normalizedQuery) !== -1) ||
+               (r.country && r.country.toLowerCase().indexOf(normalizedQuery) !== -1);
+      }).sort(function(a, b) {
+        var sa = resortScore(a, normalizedQuery), sb = resortScore(b, normalizedQuery);
+        if (sa !== sb) return sa - sb;
+        return a.name.localeCompare(b.name);
+      }).slice(0, 20);
+
+      list.innerHTML = '';
+      matches.forEach(function(r) {
+        var option = document.createElement('option');
+        option.value = formatResortOption(r);
+        list.appendChild(option);
+      });
+
+    }
+
+    var resortInput = document.getElementById('resort');
+    resortInput.addEventListener('input', function() { renderResortOptions(resortInput.value); });
+    renderResortOptions('');
 
     document.getElementById('calculate').addEventListener('click', function(){
       var a = document.getElementById('airport').value.trim();
