@@ -118,3 +118,10 @@ main, .site-header, .site-footer, .container{position:relative;z-index:1}
 
 /* Prevent submenu disappearing when moving mouse from parent to submenu: add small top padding to nav area */
 .nav{padding-top:0.6rem;min-height:56px}
+
+/* Favorites star button inside grid items */
+.grid-button{position:relative}
+.fav-btn{position:absolute;top:10px;right:10px;border:0;background:transparent;color:rgba(255,255,255,0.55);font-size:1.25rem;cursor:pointer;padding:6px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center}
+.fav-btn:hover{color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.04)}
+.fav-btn.favorited{color:#FFD54F}
+

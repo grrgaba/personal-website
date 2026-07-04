@@ -7,17 +7,7 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <header class="site-header">
-    <nav class="nav container">
-      <a class="logo" href="/">nicodimaano.com</a>
-      <ul class="nav-links">
-        <li><a href="/tools/tools.html">Tools</a></li>
-        <li><a href="/diary/diary.html">Diary</a></li>
-        <li><a href="/SupportMe/SupportMe.html">Support Me</a></li>
-      </ul>
-      <a class="donate" href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer">Donate</a>
-    </nav>
-  </header>
+  <div id="site-header-placeholder"></div>
 
   <!-- timeline removed -->
 
@@ -29,7 +19,7 @@
     </article>
   </main>
 
-  <footer class="site-footer"><div class="container"><p>© 2026 nicodimaano.com</p></div></footer>
+  <div id="site-footer-placeholder"></div>
   <script>(function(){const _orig=document.getElementById.bind(document);document.getElementById=function(id){const safe=['timelineWrap','prevBtn','nextBtn','timeline'];const el=_orig(id);if(el) return el; if(safe.includes(id)) return {appendChild:()=>{},addEventListener:()=>{},disabled:false}; return null;};})();</script>
 
   <script>
@@ -88,5 +78,6 @@
     });
   })();
   </script>
+  <script src="/includes/loader.js"></script>
 </body>
 </html>

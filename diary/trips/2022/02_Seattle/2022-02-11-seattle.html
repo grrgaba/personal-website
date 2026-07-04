@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Feb 11 2022 — Seattle</title><link rel="stylesheet" href="/css/style.css"></head><body>
-<header class="site-header"><nav class="nav container"><a class="logo" href="/">nicodimaano.com</a><ul class="nav-links"><li><a href="/tools/tools.html">Tools</a></li><li><a href="/diary/diary.html">Diary</a></li><li><a href="/SupportMe/SupportMe.html">Support Me</a></li></ul><a class="donate" href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer">Donate</a></nav></header>
+<div id="site-header-placeholder"></div>
 <!-- timeline removed -->
 <main class="container"><article class="post"><h1>Feb 11 2022 — Seattle</h1><p class="muted">Placeholder — add photos and story here.</p><section id="content"></section></article></main>
-<footer class="site-footer"><div class="container"><p>© 2026 nicodimaano.com</p></div></footer>
+<div id="site-footer-placeholder"></div>
 <script>
 	(function(){
 		const originalGet = document.getElementById.bind(document);
@@ -23,4 +23,5 @@
 	})();
 </script>
 <script>(function(){const trips=[{slug:'2026-01-09-vegas-death-valley-mammoth.html',year:2026},{slug:'2026-05-24-iceland.html',year:2026},{slug:'2025-05-13-european-tour.html',year:2025},{slug:'2025-05-27-grand-teton-yellowstone.html',year:2025},{slug:'2025-09-26-sentinel-pass.html',year:2025},{slug:'2025-06-28-takakkaw-falls.html',year:2025},{slug:'2024-09-05-lake-ohara-takakkaw.html',year:2024},{slug:'2024-07-05-tonquin-valley.html',year:2024},{slug:'2024-10-17-hawaii.html',year:2024},{slug:'2024-10-01-south-korea-taiwan.html',year:2024},{slug:'2023-08-20-us-virgin-islands-cruise.html',year:2023},{slug:'2023-05-24-oregon-road-trip.html',year:2023},{slug:'2023-04-27-mexico.html',year:2023},{slug:'2022-11-10-san-francisco.html',year:2022},{slug:'2022-06-09-florida-orlando.html',year:2022},{slug:'2022-05-26-bc-road-trip.html',year:2022},{slug:'2022-02-18-whistler.html',year:2022},{slug:'2022-02-11-seattle.html',year:2022},{slug:'2022-01-20-whistler-cypress.html',year:2022},{slug:'2021-05-06-fairmont-bugaboo.html',year:2021},{slug:'2021-04-07-toronto.html',year:2021},{slug:'2021-03-26-revelstoke.html',year:2021},{slug:'2021-02-26-whistler.html',year:2021},{slug:'2021-01-14-vancouver.html',year:2021},{slug:'2021-11-19-rockies-ski-weekend.html',year:2021},{slug:'2023-07-29-bugaboo-provincial-park.html',year:2023}];const path=location.pathname.split('/').pop();const idx=trips.findIndex(t=>t.slug===path);const prev=document.getElementById('prevBtn');const next=document.getElementById('nextBtn');const yearsEl=document.getElementById('timeline');const years=Array.from(new Set(trips.map(t=>t.year))).sort((a,b)=>b-a);years.forEach(y=>{const b=document.createElement('button');b.textContent=y;b.addEventListener('click',()=>{const i=trips.findIndex(t=>t.year===y);if(i>=0)location.href='/diary/trips/'+trips[i].slug;});yearsEl.appendChild(b);});if(idx>0)prev.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx-1].slug);else prev.disabled=true;if(idx>=0&&idx<trips.length-1)next.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx+1].slug);else next.disabled=true;document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'&&idx>0)location.href='/diary/trips/'+trips[idx-1].slug; if(e.key==='ArrowRight'&&idx<trips.length-1)location.href='/diary/trips/'+trips[idx+1].slug;});})();</script>
+  <script src="/includes/loader.js"></script>
 </body></html>
