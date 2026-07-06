@@ -28,8 +28,16 @@
     .clear-btn{padding:0.6rem 0.9rem;margin-top:1rem;background:#f3f4f6;border:1px solid #e1e4e8;border-radius:6px;color:var(--text);cursor:pointer;font-size:0.95rem}
     @media (max-width:640px){.actions{flex-direction:column}.actions .calc-btn,.clear-btn{width:100%}}
 
-    /* Results box */
-    .results-box { border:1px solid #e1e4e8; background:#fafafa; padding:0.75rem; margin-top:1rem; border-radius:6px; max-height:220px; overflow:auto; }
+    /* preferences */
+    .muted-row{display:flex;align-items:center;gap:0.5rem}
+    .prefs-btn{background:transparent;border:0;font-size:1.15rem;cursor:pointer;padding:0.2rem 0.4rem;border-radius:6px}
+    .prefs-btn:focus{outline:2px solid rgba(11,95,255,0.12)}
+    .prefs-panel{position:absolute;margin-top:0.5rem;right:1rem;background:#fff;border:1px solid #e6eef8;padding:0.75rem;border-radius:8px;box-shadow:0 8px 24px rgba(11,17,32,0.08);z-index:50;min-width:220px}
+    .prefs-panel label{display:block;font-size:0.95rem;margin:0.35rem 0}
+    .prefs-panel input[type=date],.prefs-panel select{width:100%;padding:0.35rem;margin-top:0.25rem}
+
+    /* Results box (taller) */
+    .results-box { border:1px solid #e1e4e8; background:#fafafa; padding:0.75rem; margin-top:1rem; border-radius:6px; max-height:65vh; overflow:auto; }
     .results-box ol { margin:0; padding-left:1.25rem; }
     .results-box li { padding:0.45rem 0; border-bottom:1px solid rgba(0,0,0,0.04); font-weight:600; }
     .results-box li:last-child { border-bottom:0; }
@@ -56,7 +64,21 @@
   <main>
     <section class="container calculator">
       <h1>Ski Resort Trip Planner</h1>
-      <p class="muted">Utility Tool to help you get to your ski resort.</p>
+      <div class="muted-row">
+        <p class="muted">Utility Tool to help you get to your ski resort.</p>
+        <button id="prefs-btn" class="prefs-btn" aria-haspopup="true" aria-expanded="false" aria-label="Open preferences">⚙️</button>
+        <div id="prefs-panel" class="prefs-panel" hidden>
+          <form id="prefs-form">
+            <label>Preferred Date<br><input id="pref-date" type="date"></label>
+            <label>Currency<br><select id="pref-currency"><option value="USD">USD</option><option value="CAD">CAD</option><option value="EUR">EUR</option></select></label>
+            <label><input id="pref-cookies" type="checkbox"> Allow cookies (save last inputs)</label>
+            <div style="margin-top:0.5rem;display:flex;gap:0.5rem;justify-content:flex-end">
+              <button id="prefs-save" type="button" class="calc-btn">Save</button>
+              <button id="prefs-close" type="button" class="clear-btn">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
 
       <div class="input-row">
         <div class="col">
@@ -230,6 +252,62 @@
       return null;
     }
 
+    /* Preferences: save/load from localStorage */
+    function loadPrefs() {
+      try {
+        var s = localStorage.getItem('skiPrefs');
+        if (!s) return { currency: 'USD', allowCookies: true, date: '' };
+        var p = JSON.parse(s);
+        return { currency: p.currency || 'USD', allowCookies: !!p.allowCookies, date: p.date || '' };
+      } catch (e) { return { currency: 'USD', allowCookies: true, date: '' }; }
+    }
+
+    function savePrefs(prefs) {
+      try { localStorage.setItem('skiPrefs', JSON.stringify(prefs)); }
+      catch (e) { /* ignore */ }
+    }
+
+    function applyPrefsToUI() {
+      var p = loadPrefs();
+      var cur = document.getElementById('pref-currency'); if (cur) cur.value = p.currency;
+      var d = document.getElementById('pref-date'); if (d) d.value = p.date;
+      var c = document.getElementById('pref-cookies'); if (c) c.checked = !!p.allowCookies;
+    }
+
+    // wire up prefs panel toggling and buttons
+    document.addEventListener('click', function(e) {
+      var btn = document.getElementById('prefs-btn');
+      var panel = document.getElementById('prefs-panel');
+      if (!btn || !panel) return;
+      if (btn.contains(e.target)) return; // clicking the button handled separately
+      if (!panel.contains(e.target) && e.target !== btn) {
+        panel.hidden = true; btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.getElementById('prefs-btn').addEventListener('click', function(e) {
+      var panel = document.getElementById('prefs-panel');
+      if (!panel) return;
+      panel.hidden = !panel.hidden;
+      this.setAttribute('aria-expanded', String(!panel.hidden));
+      if (!panel.hidden) applyPrefsToUI();
+    });
+
+    document.getElementById('prefs-close').addEventListener('click', function(){
+      var panel = document.getElementById('prefs-panel'); if (panel) { panel.hidden = true; document.getElementById('prefs-btn').setAttribute('aria-expanded','false'); }
+    });
+
+    document.getElementById('prefs-save').addEventListener('click', function(){
+      var currency = document.getElementById('pref-currency').value || 'USD';
+      var date = document.getElementById('pref-date').value || '';
+      var allowCookies = !!document.getElementById('pref-cookies').checked;
+      savePrefs({ currency: currency, date: date, allowCookies: allowCookies });
+      var panel = document.getElementById('prefs-panel'); if (panel) { panel.hidden = true; document.getElementById('prefs-btn').setAttribute('aria-expanded','false'); }
+    });
+
+    // initialize prefs UI
+    applyPrefsToUI();
+
     function formatAndShowResult(airportRaw, resortRaw, liftRaw) {
       if (!airportRaw || !resortRaw) return;
       var list = document.getElementById('results-list');
@@ -385,10 +463,15 @@
 
       var liftEl = document.getElementById('lift-price');
       var lift = liftEl ? (liftEl.value || '').trim() : '';
-      // save cookies (store full airport string)
-      setCookie('lastAirport', a, 365);
-      setCookie('lastResort', r, 365);
-      setCookie('lastLiftPrice', lift, 365);
+      // save cookies (store full airport string) only if prefs allow
+      try {
+        var _prefs = loadPrefs();
+        if (_prefs && _prefs.allowCookies) {
+          setCookie('lastAirport', a, 365);
+          setCookie('lastResort', r, 365);
+          setCookie('lastLiftPrice', lift, 365);
+        }
+      } catch (e) { /* ignore */ }
       // update the single result row
       formatAndShowResult(a, r, lift);
       document.getElementById('airport').focus();
