@@ -5,79 +5,112 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>July 29–30 2023 — Bugaboo Provincial Park</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Custom Journal Style for Bugaboo Page */
+    .journal-entry {
+      font-family: 'Georgia', serif; /* Gives a more classic, storybook feel */
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #333;
+    }
+    .journal-entry p {
+      margin-bottom: 1.5em;
+    }
+    .warning-box {
+      background-color: #fff3f3;
+      border-left: 5px solid #d9534f;
+      padding: 15px 20px;
+      margin: 2em 0;
+      font-family: sans-serif;
+      font-size: 0.95rem;
+    }
+    .warning-box strong {
+      color: #d9534f;
+      display: block;
+      margin-bottom: 5px;
+    }
+    /* Polaroid-style image frames */
+    .polaroid {
+      background: #fff;
+      padding: 12px 12px 30px 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin: 2.5em auto;
+      max-width: 85%;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    /* Alternating tilts for a scrapbook look */
+    .polaroid:nth-of-type(odd) {
+      transform: rotate(-2deg);
+    }
+    .polaroid:nth-of-type(even) {
+      transform: rotate(2deg);
+    }
+    .polaroid:hover {
+      transform: rotate(0deg) scale(1.02);
+      z-index: 10;
+    }
+    .polaroid img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .polaroid figcaption {
+      margin-top: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
 
-  <!-- timeline removed -->
-
   <main class="container">
     <article class="post">
       <h1>July 29–30 2023 — Bugaboo Provincial Park</h1>
-      <p class="muted">Placeholder — add photos and story here.</p>
-      <section id="content"></section>
+      
+      <section id="content" class="journal-entry">
+        
+        <p>Bugaboo Provincial Park is a place of unbelievable, world-class beauty—but it certainly makes you work for it to get there. The entire experience felt like stepping into another world, dominated by towering granite spires and ancient glaciers.</p>
+
+        <div class="warning-box">
+          <strong>🚗 Travel Note: The Drive</strong>
+          The drive in on those active logging roads was a white-knuckle experience! It's rugged, steep, and honestly a bit scary. In fact, it was so steep that on our way back down the mountain, our brakes actually overheated. We had to pull over and wait for them to cool off before we could safely continue.
+        </div>
+
+        <figure class="polaroid">
+          <img src="pq9GmOcqQ1escpYODX_hXQ.jfif" alt="Pointing up at the massive glacier and granite peaks">
+          <figcaption>Taking in the sheer scale of the glaciers and spires.</figcaption>
+        </figure>
+
+        <p>Once we survived the drive and hit the trail, the stress of the road completely melted away. The landscape here is dramatic in a way that photos barely capture. Every time we gained the ridge, a new towering granite monolith came into view, flanked by rivers of ice.</p>
+
+        <figure class="polaroid">
+          <img src="0iONPsE-Rwevn59rvdhGZQ.jfif" alt="Hiking toward a basecamp below a giant granite spire">
+          <figcaption>Making our way across the slabs towards the imposing peaks.</figcaption>
+        </figure>
+
+        <p>The hiking involved navigating huge granite slabs and rocky terrain, but the payoff was constant. Exploring the area, we also found a beautifully pristine alpine lake. The water was incredibly clear and completely still, reflecting the rugged landscape around it.</p>
+
+        <figure class="polaroid">
+          <img src="Sarah_Lakejfif.jfif" alt="Standing on a white rock surrounded by crystal clear alpine water">
+          <figcaption>Finding a moment of absolute stillness on the water.</figcaption>
+        </figure>
+
+        <p>As evening approached, the fading sun hit the granite faces, lighting them up with an intense golden glow. Despite the harrowing drive and the overheated brakes on the way out, the Bugaboos delivered one of the most spectacular mountain experiences we've ever had. We left exhausted, a little dusty, and completely in awe.</p>
+
+        <figure class="polaroid">
+          <img src="r_W2AvNBR_qnC5Uobz32kA.jfif" alt="Selfie of the couple with the granite spires glowing in the setting sun">
+          <figcaption>Golden hour illuminating the Bugaboo spires perfectly.</figcaption>
+        </figure>
+
+      </section>
     </article>
   </main>
 
   <div id="site-footer-placeholder"></div>
   <script>(function(){const _orig=document.getElementById.bind(document);document.getElementById=function(id){const safe=['timelineWrap','prevBtn','nextBtn','timeline'];const el=_orig(id);if(el) return el; if(safe.includes(id)) return {appendChild:()=>{},addEventListener:()=>{},disabled:false}; return null;};})();</script>
-
-  <script>
-  (function(){
-    const trips = [
-      {slug: '2026-01-09-vegas-death-valley-mammoth.html', year:2026},
-      {slug: '2026-05-24-iceland.html', year:2026},
-      {slug: '2025-05-13-european-tour.html', year:2025},
-      {slug: '2025-05-27-grand-teton-yellowstone.html', year:2025},
-      {slug: '2025-09-26-sentinel-pass.html', year:2025},
-      {slug: '2025-06-28-takakkaw-falls.html', year:2025},
-      {slug: '2024-09-05-lake-ohara-takakkaw.html', year:2024},
-      {slug: '2024-07-05-tonquin-valley.html', year:2024},
-      {slug: '2024-10-17-hawaii.html', year:2024},
-      {slug: '2024-10-01-south-korea-taiwan.html', year:2024},
-      {slug: '2023-08-20-us-virgin-islands-cruise.html', year:2023},
-      {slug: '2023-05-24-oregon-road-trip.html', year:2023},
-      {slug: '2023-04-27-mexico.html', year:2023},
-      {slug: '2022-11-10-san-francisco.html', year:2022},
-      {slug: '2022-06-09-florida-orlando.html', year:2022},
-      {slug: '2022-05-26-bc-road-trip.html', year:2022},
-      {slug: '2022-02-18-whistler.html', year:2022},
-      {slug: '2022-02-11-seattle.html', year:2022},
-      {slug: '2022-01-20-whistler-cypress.html', year:2022},
-      {slug: '2021-05-06-fairmont-bugaboo.html', year:2021},
-      {slug: '2021-04-07-toronto.html', year:2021},
-      {slug: '2021-03-26-revelstoke.html', year:2021},
-      {slug: '2021-02-26-whistler.html', year:2021},
-      {slug: '2021-01-14-vancouver.html', year:2021},
-      {slug: '2021-11-19-rockies-ski-weekend.html', year:2021},
-      {slug: '2023-07-29-bugaboo-provincial-park.html', year:2023}
-    ];
-
-    const path = location.pathname.split('/').pop();
-    const idx = trips.findIndex(t=>t.slug===path);
-    const prev = document.getElementById('prevBtn');
-    const next = document.getElementById('nextBtn');
-    const yearsEl = document.getElementById('timeline');
-
-    const years = Array.from(new Set(trips.map(t=>t.year))).sort((a,b)=>b-a);
-    years.forEach(y=>{
-      const b = document.createElement('button');
-      b.textContent = y;
-      b.addEventListener('click', ()=>{
-        const i = trips.findIndex(t=>t.year===y);
-        if(i>=0) location.href = '/diary/trips/'+trips[i].slug;
-      });
-      yearsEl.appendChild(b);
-    });
-
-    if(idx>0) prev.addEventListener('click', ()=> location.href = '/diary/trips/'+trips[idx-1].slug); else prev.disabled=true;
-    if(idx>=0 && idx<trips.length-1) next.addEventListener('click', ()=> location.href = '/diary/trips/'+trips[idx+1].slug); else next.disabled=true;
-    document.addEventListener('keydown', e=>{
-      if(e.key==='ArrowLeft' && idx>0) location.href = '/diary/trips/'+trips[idx-1].slug;
-      if(e.key==='ArrowRight' && idx<trips.length-1) location.href = '/diary/trips/'+trips[idx+1].slug;
-    });
-  })();
-  </script>
   <script src="/includes/loader.js"></script>
 </body>
 </html>
