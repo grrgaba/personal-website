@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Budgeter — nicodimaano.com</title>
+	<link rel="stylesheet" href="/css/style.css">
+	<style>
+		/* Minimal calculator-specific tweaks so it fits site layout */
+		.budget-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 16px;
+		}
+		.budget-box {
+			border: 1px solid var(--border,#e6e6e6);
+			padding: 16px;
+			border-radius: 6px;
+			background: var(--card,#fff);
+		}
+		
+		/* Header flex container for the button */
+		.header-with-btn {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 0;
+			margin-bottom: 12px;
+		}
+		
+		.budget-row {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 8px;
+		}
+		
+		/* Inputs shrink gracefully */
+		.budget-row input[type=text],
+		.budget-row input[type=number],
+		.budget-row select {
+			box-sizing: border-box;
+			min-width: 0; 
+				padding: 6px; 
+			border: 1px solid #ccc; 
+			border-radius: 4px;
+		}
+		
+			/* reduce text size for the name input to better fit */
+			.budget-row input[type=text] { flex: 2; font-size: 13px; }
+		.budget-row input[type=number] { flex: 1; }
+			/* force equal heights for inputs, selects and buttons in rows */
+			.budget-row input[type=text],
+			.budget-row input[type=number],
+			.budget-row select,
+			.budget-row .remove { height: 36px; }
+			.budget-row .remove { display:inline-flex; align-items:center; justify-content:center; padding:0 8px; }
+		.small { flex: 0 0 90px; }
+		
+		.add-btn {
+			padding: 6px 12px;
+			border-radius: 6px;
+			background: #0b79d0;
+			color: #fff;
+			border: none;
+			cursor: pointer;
+		}
+		
+		.add-btn-small {
+			padding: 4px 10px;
+			font-size: 13px;
+			border-radius: 4px;
+			background: #0b79d0;
+			color: #fff;
+			border: none;
+			cursor: pointer;
+		}
+
+		.plain-btn {
+			padding: 6px 12px;
+			font-size: 13px;
+			border-radius: 6px;
+			background: transparent;
+			color: inherit;
+			border: 1px solid var(--border,#ddd);
+			cursor: pointer;
+		}
+
+		/* make the two top actions yellow */
+		#loadPresetBtn, #guidedSetupBtn {
+			background: #ffdd57;
+			color: #111;
+			border-color: #f0c02b;
+		}
+		#loadPresetBtn:hover, #guidedSetupBtn:hover { filter: brightness(0.95); }
+		.add-btn-small:disabled { background: #ccc; cursor: not-allowed; }
+		
+		.remove {
+			background: #f6f6f6;
+			border: 1px solid #ddd;
+			padding: 4px 8px;
+			border-radius: 4px;
+			cursor: pointer;
+			flex: 0 0 auto;
+		}
+		
+		/* Pop-up Modal Styles */
+		.modal {
+			display: none;
+			position: fixed; z-index: 1000;
+			left: 0; top: 0; width: 100%; height: 100%;
+			background-color: rgba(0,0,0,0.5);
+			align-items: center; justify-content: center;
+		}
+		.modal.active { display: flex; }
+		.modal-content {
+			background: var(--card,#fff);
+			padding: 20px;
+			border-radius: 8px;
+			width: 90%; max-width: 320px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+		}
+		.modal-input {
+			width: 100%; box-sizing: border-box; padding: 8px;
+			border: 1px solid #ccc; border-radius: 4px;
+			margin-bottom: 10px;
+		}
+		.modal-label {
+			display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #444;
+		}
+
+		.results-list { max-height: 320px; overflow: auto; }
+		.result-item {
+			display: flex;
+			justify-content: space-between;
+			padding: 6px 0;
+			border-bottom: 1px dashed #f1f1f1;
+		}
+		.income { color: green; }
+		.bill { color: #666; }
+
+		/* invalid cost input */
+		input.cost.invalid { border-color: #d9534f; background: #fff0f0; }
+		input.cost.invalid:focus { outline-color: #d9534f; }
+		.totals {
+			margin-top: 8px;
+			padding-top: 8px;
+			border-top: 2px solid #eee;
+			font-weight: 600;
+		}
+		.net-positive { color: green; }
+		.net-negative { color: red; }
+		/* Emphasize the main Net result */
+		#netTotal { font-size: 1.25rem; font-weight: 700; }
+	</style>
+</head>
+<body>
+	<div id="site-header-placeholder"></div>
+
+	<main>
+		<section class="hero container">
+			<h1 class="name">Budgeter</h1>
+			<p class="bio">Interactive budget calculator — add income streams and bills, switch view between daily/biweekly/monthly/yearly.</p>
+			<div style="margin-top:12px; display:flex; gap:8px; align-items:center">
+				<button id="loadPresetBtn" class="plain-btn">Load Preset</button>
+				<button id="guidedSetupBtn" class="plain-btn">Guided Setup</button>
+			</div>
+		</section>
+
+		<section class="container">
+			<p class="muted">Manage your flows and see totals below.</p>
+
+			<div style="margin-top:12px">
+				<div class="budget-grid">
+					<div class="budget-box" id="incomeBox">
+						<h3 class="header-with-btn">
+							Income Streams
+							<button class="add-btn-small" id="addIncome">+ Add Income</button>
+						</h3>
+						<div id="incomeRows"></div>
+						<div style="margin-top:12px;border-top:1px solid #f1f1f1;padding-top:8px;" class="box-footer">
+							<div>Total Income (<span id="incomeViewLabel">monthly</span>): <span id="incomeBoxTotal" class="income">$0.00</span></div>
+							<div id="incomeInfo" style="margin-top:6px;font-size:13px;color:#666"></div>
+						</div>
+					</div>
+
+					<div class="budget-box" id="billsBox">
+						<h3 class="header-with-btn">
+							Bills & Expenses
+							<button class="add-btn-small" id="addBill">+ Add Bill</button>
+						</h3>
+						<div id="billRows"></div>
+						<div style="margin-top:12px;border-top:1px solid #f1f1f1;padding-top:8px;" class="box-footer">
+							<div>Total Bills (<span id="billsViewLabel">monthly</span>): <span id="billsBoxTotal" class="bill">-$0.00</span></div>
+							<div id="billsInfo" style="margin-top:6px;font-size:13px;color:#666"></div>
+						</div>
+					</div>
+
+					<div class="budget-box" id="resultsBox">
+						<h3 class="header-with-btn">Results
+							<div style="display:flex;gap:8px;align-items:center">
+								<select id="resultsViewSelect" class="add-btn-small" style="min-width:120px;">
+									<option value="daily">Daily</option>
+									<option value="biweekly">Biweekly</option>
+									<option value="monthly">Monthly</option>
+									<option value="yearly">Yearly</option>
+								</select>
+							</div>
+						</h3>
+						<div class="results-list" id="resultsList"></div>
+						<div class="totals">
+							<div style="margin-top:6px">Net (<span id="viewLabel3">monthly</span>): <span id="netTotal">$0.00</span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<template id="rowTemplate">
+		<div class="budget-row item-row">
+			<input type="text" class="name" placeholder="Name">
+			<input type="number" class="cost" placeholder="0" step="1" min="0">
+			<select class="freq small">
+				<option value="daily">daily</option>
+				<option value="biweekly">biweekly</option>
+				<option value="monthly" selected>monthly</option>
+				<option value="yearly">yearly</option>
+			</select>
+			<button class="remove">✕</button>
+		</div>
+	</template>
+
+	<div id="addModal" class="modal">
+		<div class="modal-content">
+			<h3 id="modalTitle" style="margin-top:0; margin-bottom: 16px;">Add Item</h3>
+			
+			<label class="modal-label">Name</label>
+			<input type="text" id="modalName" placeholder="e.g. Salary, Rent, Allowance" class="modal-input">
+			
+			<label class="modal-label">Amount ($)</label>
+			<input type="number" id="modalCost" placeholder="0.00" step="1" min="0" class="modal-input">
+			
+			<label class="modal-label">Frequency</label>
+			<select id="modalFreq" class="modal-input">
+				<option value="daily">daily</option>
+				<option value="biweekly">biweekly</option>
+				<option value="monthly" selected>monthly</option>
+				<option value="yearly">yearly</option>
+			</select>
+			
+			<div style="display:flex; gap:8px; justify-content: flex-end; margin-top: 12px;">
+				<button id="modalCancel" class="remove">Cancel</button>
+				<button id="modalSave" class="add-btn">Save</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Preset Modal -->
+	<div id="presetModal" class="modal">
+		<div class="modal-content">
+			<h3 style="margin-top:0">Load Preset</h3>
+			<p style="margin-bottom:12px;color:#444">Choose a preset to load (this will overwrite current entries).</p>
+			<div style="display:flex;flex-direction:column;gap:8px">
+				<button class="add-btn" data-preset="renter">The Renter</button>
+				<button class="add-btn" data-preset="homeowner">The Homeowner</button>
+				<button class="add-btn" data-preset="student">The College Student</button>
+				<button class="add-btn" data-preset="freelancer">The Freelancer</button>
+			</div>
+			<div style="display:flex;justify-content:flex-end;margin-top:12px;gap:8px">
+				<button id="presetCancel" class="remove">Cancel</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Guided Setup Wizard Modal -->
+	<div id="wizardModal" class="modal">
+		<div class="modal-content" style="max-width:520px;">
+			<h3 id="wizardTitle" style="margin-top:0">Guided Setup</h3>
+			<div id="wizardStep" style="min-height:140px">
+				<!-- steps injected here -->
+			</div>
+			<div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px">
+				<button id="wizardBack" class="remove">Back</button>
+				<div style="display:flex;gap:8px">
+					<button id="wizardCancel" class="remove">Cancel</button>
+					<button id="wizardNext" class="add-btn">Next</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="site-footer-placeholder"></div>
+
+	<script>
+		// Frequency factors to annualize amounts
+		const toAnnual = {daily:365, biweekly:26, monthly:12, yearly:1};
+
+		const incomeRows = document.getElementById('incomeRows');
+		const billRows = document.getElementById('billRows');
+		const addIncome = document.getElementById('addIncome');
+		const addBill = document.getElementById('addBill');
+		const rowTpl = document.getElementById('rowTemplate');
+		const resultsList = document.getElementById('resultsList');
+		
+		const netTotalEl = document.getElementById('netTotal');
+		const viewLabel3 = document.getElementById('viewLabel3');
+		const resultsViewSelect = document.getElementById('resultsViewSelect');
+
+		// per-box totals/view labels
+		const incomeBoxTotalEl = document.getElementById('incomeBoxTotal');
+		const billsBoxTotalEl = document.getElementById('billsBoxTotal');
+		const incomeViewLabel = document.getElementById('incomeViewLabel');
+		const billsViewLabel = document.getElementById('billsViewLabel');
+
+		const incomeInfoEl = document.getElementById('incomeInfo');
+		const billsInfoEl = document.getElementById('billsInfo');
+
+		// Preset & Wizard elements
+		const loadPresetBtn = document.getElementById('loadPresetBtn');
+		const presetModal = document.getElementById('presetModal');
+		const presetCancel = document.getElementById('presetCancel');
+
+		const guidedSetupBtn = document.getElementById('guidedSetupBtn');
+		const wizardModal = document.getElementById('wizardModal');
+		const wizardStep = document.getElementById('wizardStep');
+		const wizardNext = document.getElementById('wizardNext');
+		const wizardBack = document.getElementById('wizardBack');
+		const wizardCancel = document.getElementById('wizardCancel');
+
+		// Preset definitions
+		const PRESETS = {
+			renter: {
+				incomes: [{name:'Salary', cost:3000, freq:'monthly'}],
+				bills: [
+					{name:'Rent', cost:1000, freq:'monthly'},
+					{name:"Renter's Insurance", cost:15, freq:'monthly'},
+					{name:'Groceries', cost:300, freq:'monthly'},
+					{name:'Internet', cost:60, freq:'monthly'},
+					{name:'Electricity', cost:80, freq:'monthly'},
+					{name:'Water', cost:30, freq:'monthly'}
+				]
+			},
+			homeowner: {
+				incomes: [{name:'Salary', cost:5000, freq:'monthly'}],
+				bills: [
+					{name:'Mortgage', cost:1800, freq:'monthly'},
+					{name:'Property Tax', cost:200, freq:'monthly'},
+					{name:'Home Insurance', cost:100, freq:'monthly'},
+					{name:'HOA Fees', cost:50, freq:'monthly'},
+					{name:'Groceries', cost:400, freq:'monthly'},
+					{name:'Internet', cost:60, freq:'monthly'},
+					{name:'Utilities', cost:200, freq:'monthly'},
+					{name:'Maintenance Fund', cost:100, freq:'monthly'}
+				]
+			},
+			student: {
+				incomes: [{name:'Part-time Job', cost:800, freq:'monthly'},{name:'Student Loan/Grant', cost:200, freq:'monthly'}],
+				bills: [
+					{name:'Rent', cost:600, freq:'monthly'},
+					{name:'Tuition/Books', cost:200, freq:'monthly'},
+					{name:'Groceries', cost:200, freq:'monthly'},
+					{name:'Phone Bill', cost:40, freq:'monthly'},
+					{name:'Streaming Services', cost:15, freq:'monthly'}
+				]
+			},
+			freelancer: {
+				incomes: [{name:'Client A', cost:1200, freq:'monthly'},{name:'Client B', cost:800, freq:'monthly'},{name:'Side Hustle', cost:300, freq:'monthly'}],
+				bills: [
+					{name:'Rent', cost:900, freq:'monthly'},
+					{name:'Self-Employment Tax Savings', cost:300, freq:'monthly'},
+					{name:'Software Subscriptions', cost:50, freq:'monthly'},
+					{name:'Internet', cost:60, freq:'monthly'},
+					{name:'Groceries', cost:250, freq:'monthly'}
+				]
+			}
+		};
+
+		// Modal Elements
+		const modal = document.getElementById('addModal');
+		const modalTitle = document.getElementById('modalTitle');
+		const modalName = document.getElementById('modalName');
+		const modalCost = document.getElementById('modalCost');
+		const modalFreq = document.getElementById('modalFreq');
+		const modalSave = document.getElementById('modalSave');
+		const modalCancel = document.getElementById('modalCancel');
+		let activeModalType = 'income'; // Tracks if adding income or bill
+
+		// max rows settings
+		const HARD_MAX_ROWS = 200; 
+		const COOKIE_BYTE_LIMIT = 3800; 
+
+		function createRow(isIncome){
+			const node = rowTpl.content.firstElementChild.cloneNode(true);
+			const removeBtn = node.querySelector('.remove');
+			const inputs = node.querySelectorAll('input,select');
+			// set placeholder specific to income vs bill
+			const nameInput = node.querySelector('.name');
+			if(nameInput) nameInput.placeholder = isIncome ? 'Income name (e.g. Salary)' : 'e.g. Rent, Utilities, Food';
+			removeBtn.addEventListener('click', ()=>{ node.remove(); updateAll(); });
+			inputs.forEach(i=>i.addEventListener('input', updateAll));
+			return node;
+		}
+
+		// Modal Logic
+		function openModal(type) {
+			activeModalType = type;
+			modalTitle.textContent = type === 'income' ? 'Add Income Stream' : 'Add Bill / Expense';
+			modalName.value = '';
+			modalName.placeholder = type === 'income' ? 'Income name (e.g. Salary)' : 'Bill name (e.g. Rent)';
+			modalCost.value = '';
+			// Default modal frequency to the current view setting for convenience
+			modalFreq.value = getViewFreq(); 
+			modal.classList.add('active');
+			modalName.focus();
+		}
+
+		function closeModal() {
+			modal.classList.remove('active');
+		}
+
+		addIncome.addEventListener('click', () => openModal('income'));
+		addBill.addEventListener('click', () => openModal('bill'));
+		modalCancel.addEventListener('click', closeModal);
+
+		modalSave.addEventListener('click', () => {
+			const container = activeModalType === 'income' ? incomeRows : billRows;
+			const row = createRow(activeModalType === 'income');
+			
+			row.querySelector('.name').value = modalName.value;
+			row.querySelector('.cost').value = modalCost.value;
+			row.querySelector('.freq').value = modalFreq.value;
+			
+			container.appendChild(row);
+			updateAll();
+			closeModal();
+		});
+
+		// Close modal if clicking outside of the box
+		window.addEventListener('click', (e) => {
+			if (e.target === modal) closeModal();
+		});
+
+		// Add one starter row each (will be replaced by cookie load if present)
+		incomeRows.appendChild(createRow(true));
+		billRows.appendChild(createRow(false));
+
+		// Cookie helpers
+		function setCookie(name, value, days){
+			let expires = '';
+			if(days){
+				const d = new Date(); d.setTime(d.getTime() + (days*24*60*60*1000));
+				expires = '; expires=' + d.toUTCString();
+			}
+			document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/';
+		}
+
+		function getCookie(name){
+			const cookies = document.cookie.split(';').map(c=>c.trim());
+			for(const c of cookies){
+				if(c.indexOf(name+'=')===0) return decodeURIComponent(c.substring(name.length+1));
+			}
+			return null;
+		}
+
+		function saveToCookie(){
+			const payload = { incomes: gatherRows(incomeRows,'income'), bills: gatherRows(billRows,'bill'), view: getViewFreq() };
+			const json = JSON.stringify(payload);
+			if(encodeURIComponent(json).length > COOKIE_BYTE_LIMIT){ return; }
+			setCookie('budgeter_data', json, 365);
+		}
+
+		function loadFromCookie(){
+			const raw = getCookie('budgeter_data');
+			if(!raw) return false;
+			try{
+				const data = JSON.parse(raw);
+				incomeRows.innerHTML = ''; billRows.innerHTML = '';
+				if(Array.isArray(data.incomes)){
+					for(const it of data.incomes){
+						const row = createRow(true);
+						row.querySelector('.name').value = it.name || '';
+						row.querySelector('.cost').value = (it.cost!=null)? it.cost : '';
+						row.querySelector('.freq').value = it.freq || 'monthly';
+						incomeRows.appendChild(row);
+					}
+				}
+				if(Array.isArray(data.bills)){
+					for(const it of data.bills){
+						const row = createRow(false);
+						row.querySelector('.name').value = it.name || '';
+						row.querySelector('.cost').value = (it.cost!=null)? it.cost : '';
+						row.querySelector('.freq').value = it.freq || 'monthly';
+						billRows.appendChild(row);
+					}
+				}
+				if(data.view) {
+					if(resultsViewSelect) resultsViewSelect.value = data.view;
+				}
+				return true;
+			}catch(e){ return false; }
+		}
+
+		// Preset modal handlers
+		loadPresetBtn.addEventListener('click', ()=>{ presetModal.classList.add('active'); });
+		presetCancel.addEventListener('click', ()=>{ presetModal.classList.remove('active'); });
+
+		presetModal.querySelectorAll('button[data-preset]').forEach(btn=>{
+			btn.addEventListener('click', ()=>{
+				const key = btn.getAttribute('data-preset');
+				if(!PRESETS[key]) return;
+				if(!confirm('Load preset "'+btn.textContent.trim()+'"? This will overwrite current entries.')) return;
+				// clear rows
+				incomeRows.innerHTML = ''; billRows.innerHTML = '';
+				// populate
+				for(const it of PRESETS[key].incomes){
+					const r = createRow(true);
+					r.querySelector('.name').value = it.name;
+					r.querySelector('.cost').value = it.cost;
+					r.querySelector('.freq').value = it.freq;
+					incomeRows.appendChild(r);
+				}
+				for(const it of PRESETS[key].bills){
+					const r = createRow(false);
+					r.querySelector('.name').value = it.name;
+					r.querySelector('.cost').value = it.cost;
+					r.querySelector('.freq').value = it.freq;
+					billRows.appendChild(r);
+				}
+				presetModal.classList.remove('active');
+				updateAll();
+			});
+		});
+
+		// Guided wizard logic
+		let wizardStepIndex = 0;
+		const WIZARD_STEPS = ['income','housing','utilities','complete'];
+
+		function openWizard(){ wizardStepIndex = 0; wizardModal.classList.add('active'); renderWizardStep(); }
+		function closeWizard(){ wizardModal.classList.remove('active'); }
+
+		guidedSetupBtn.addEventListener('click', openWizard);
+		wizardCancel.addEventListener('click', closeWizard);
+		wizardBack.addEventListener('click', ()=>{ if(wizardStepIndex>0){ wizardStepIndex--; renderWizardStep(); } });
+		wizardNext.addEventListener('click', ()=>{
+			if(wizardStepIndex < WIZARD_STEPS.length-1){ wizardStepIndex++; renderWizardStep(); }
+			else { // finish
+				// collect and apply
+				applyWizardResults();
+				closeWizard();
+			}
+		});
+
+		// storage for wizard answers
+		const wizardData = { incomes: [], bills: [] };
+
+		function renderWizardStep(){
+			const step = WIZARD_STEPS[wizardStepIndex];
+			wizardStep.innerHTML = '';
+			wizardBack.style.display = wizardStepIndex===0 ? 'none' : 'inline-block';
+			wizardNext.textContent = wizardStepIndex===WIZARD_STEPS.length-1 ? 'Finish' : 'Next';
+			if(step==='income'){
+				wizardStep.innerHTML = `<p><strong>Step 1 — Income</strong><br>Add up to 3 income sources</p>`;
+				for(let i=0;i<3;i++){
+					const idx = i;
+					const row = document.createElement('div');
+					row.style.display='flex'; row.style.gap='8px'; row.style.marginBottom='8px';
+					row.innerHTML = `<input class='modal-input' id='wiz_inc_name_${idx}' placeholder='Name'><input class='modal-input' id='wiz_inc_amt_${idx}' placeholder='Amount' type='number'><select class='modal-input' id='wiz_inc_freq_${idx}'><option value='monthly'>monthly</option><option value='biweekly'>biweekly</option><option value='daily'>daily</option><option value='yearly'>yearly</option></select>`;
+					wizardStep.appendChild(row);
+				}
+			}
+			else if(step==='housing'){
+				wizardStep.innerHTML = `<p><strong>Step 2 — Housing</strong><br>Do you rent or own?</p>`;
+				const wrap = document.createElement('div');
+				wrap.innerHTML = `<label style='margin-right:8px'><input type='radio' name='wiz_house' value='rent' checked> Rent</label><label><input type='radio' name='wiz_house' value='own'> Own</label><div id='wiz_house_fields' style='margin-top:8px'></div>`;
+				wizardStep.appendChild(wrap);
+				function renderHouseFields(){
+					const f = wizardStep.querySelector('#wiz_house_fields'); f.innerHTML='';
+					const val = wizardStep.querySelector('input[name=wiz_house]:checked').value;
+					if(val==='rent'){
+						f.innerHTML = `<input class='modal-input' id='wiz_rent_amt' placeholder='Rent amount' type='number'><input class='modal-input' id='wiz_renter_ins' placeholder="Renter's Insurance" type='number'>`;
+					}else{
+						f.innerHTML = `<input class='modal-input' id='wiz_mortgage' placeholder='Mortgage' type='number'><input class='modal-input' id='wiz_prop_tax' placeholder='Property Tax' type='number'><input class='modal-input' id='wiz_home_ins' placeholder='Home Insurance' type='number'>`;
+					}
+				}
+				wizardStep.querySelectorAll('input[name=wiz_house]').forEach(i=>i.addEventListener('change', renderHouseFields));
+				renderHouseFields();
+			}
+			else if(step==='utilities'){
+				wizardStep.innerHTML = `<p><strong>Step 3 — Utilities & Living</strong><br>Select utilities you pay for and enter amounts</p>`;
+				const options = ['Internet','Electricity','Water','Gas','Phone'];
+				options.forEach(opt=>{
+					const id = 'wiz_ut_'+opt.toLowerCase();
+					const row = document.createElement('div'); row.style.marginBottom='8px';
+					row.innerHTML = `<label style='margin-right:8px'><input type='checkbox' id='${id}_cb'> ${opt}</label><input class='modal-input' id='${id}_amt' placeholder='Amount' type='number' style='display:none'>`;
+					wizardStep.appendChild(row);
+					const cb = row.querySelector(`#${id}_cb`); const amt = row.querySelector(`#${id}_amt`);
+					cb.addEventListener('change', ()=>{ amt.style.display = cb.checked ? 'inline-block' : 'none'; });
+				});
+			}
+			else if(step==='complete'){
+				wizardStep.innerHTML = `<p><strong>Step 4 — Complete</strong><br>Click Finish to apply the data to the main form.</p>`;
+			}
+		}
+
+		function applyWizardResults(){
+			wizardData.incomes = [];
+			wizardData.bills = [];
+			// incomes step
+			for(let i=0;i<3;i++){
+				const name = (document.getElementById('wiz_inc_name_'+i)||{}).value;
+				const amt = parseFloat((document.getElementById('wiz_inc_amt_'+i)||{}).value||0);
+				const freq = (document.getElementById('wiz_inc_freq_'+i)||{}).value||'monthly';
+				if(name && amt>0) wizardData.incomes.push({name, cost:amt, freq});
+			}
+			// housing
+			const houseType = (wizardStep.querySelector && (wizardStep.querySelector('input[name=wiz_house]:checked')||{}).value) || 'rent';
+			if(houseType==='rent'){
+				const rent = parseFloat((document.getElementById('wiz_rent_amt')||{}).value||0);
+				const rin = parseFloat((document.getElementById('wiz_renter_ins')||{}).value||0);
+				if(rent>0) wizardData.bills.push({name:'Rent', cost:rent, freq:'monthly'});
+				if(rin>0) wizardData.bills.push({name:"Renter's Insurance", cost:rin, freq:'monthly'});
+			}else{
+				const mort = parseFloat((document.getElementById('wiz_mortgage')||{}).value||0);
+				const ptax = parseFloat((document.getElementById('wiz_prop_tax')||{}).value||0);
+				const hins = parseFloat((document.getElementById('wiz_home_ins')||{}).value||0);
+				if(mort>0) wizardData.bills.push({name:'Mortgage', cost:mort, freq:'monthly'});
+				if(ptax>0) wizardData.bills.push({name:'Property Tax', cost:ptax, freq:'monthly'});
+				if(hins>0) wizardData.bills.push({name:'Home Insurance', cost:hins, freq:'monthly'});
+			}
+			// utilities
+			const utilities = ['internet','electricity','water','gas','phone'];
+			utilities.forEach(u=>{
+				const cb = document.getElementById('wiz_ut_'+u+'_cb');
+				const amt = parseFloat((document.getElementById('wiz_ut_'+u+'_amt')||{}).value||0);
+				if(cb && cb.checked && amt>0){ wizardData.bills.push({name: u.charAt(0).toUpperCase()+u.slice(1), cost: amt, freq:'monthly'}); }
+			});
+
+			// apply to main form
+			incomeRows.innerHTML=''; billRows.innerHTML='';
+			wizardData.incomes.forEach(it=>{ const r=createRow(true); r.querySelector('.name').value=it.name; r.querySelector('.cost').value=it.cost; r.querySelector('.freq').value=it.freq; incomeRows.appendChild(r); });
+			wizardData.bills.forEach(it=>{ const r=createRow(false); r.querySelector('.name').value=it.name; r.querySelector('.cost').value=it.cost; r.querySelector('.freq').value=it.freq; billRows.appendChild(r); });
+			updateAll();
+		}
+
+		// listen view select in results header
+		if(resultsViewSelect) resultsViewSelect.addEventListener('change', updateAll);
+
+		function getViewFreq(){
+			return (resultsViewSelect && resultsViewSelect.value) ? resultsViewSelect.value : 'monthly';
+		}
+
+		function formatMoney(v){
+			return v.toLocaleString(undefined,{style:'currency',currency:'USD',minimumFractionDigits:2});
+		}
+
+		function gatherRows(container, type){
+			const rows = [];
+			container.querySelectorAll('.item-row').forEach(r=>{
+				const name = r.querySelector('.name').value || (type==='income'? 'Income':'Bill');
+				const cost = parseFloat(r.querySelector('.cost').value || '0');
+				const freq = r.querySelector('.freq').value;
+				rows.push({name,cost,freq});
+			});
+			return rows;
+		}
+
+		function updateAll(){
+			const view = getViewFreq();
+			const incomes = gatherRows(incomeRows,'income');
+			const bills = gatherRows(billRows,'bill');
+
+			// compute converted amounts to view period
+			const incomeConverted = incomes.map(it=>{
+				const annual = (it.cost || 0) * toAnnual[it.freq];
+				const viewAmount = annual / toAnnual[view];
+				return Object.assign({},it,{viewAmount});
+			});
+
+			const billsConverted = bills.map(it=>{
+				const annual = (it.cost || 0) * toAnnual[it.freq];
+				const viewAmount = annual / toAnnual[view];
+				return Object.assign({},it,{viewAmount});
+			});
+
+			renderResults(incomeConverted,billsConverted,view);
+			saveToCookie();
+			updateCountsAndLimits();
+			validateCosts();
+		}
+
+		function validateCosts(){
+			// mark cost inputs with zero/empty values as invalid
+			const costInputs = document.querySelectorAll('#incomeRows .cost, #billRows .cost');
+			costInputs.forEach(inp=>{
+				const v = parseFloat(inp.value);
+				if(!inp.type || inp.type!=='number') return;
+				if(isNaN(v) || v <= 0){
+					inp.classList.add('invalid');
+					inp.title = 'Please fill this field with a value greater than 0';
+				}else{
+					inp.classList.remove('invalid');
+					inp.removeAttribute('title');
+				}
+			});
+		}
+
+		function updateCountsAndLimits(){
+			const incomeCount = incomeRows.querySelectorAll('.item-row').length;
+			const billsCount = billRows.querySelectorAll('.item-row').length;
+			const totalRows = incomeCount + billsCount;
+
+			const payload = { incomes: gatherRows(incomeRows,'income'), bills: gatherRows(billRows,'bill') };
+			const json = JSON.stringify(payload);
+			const usedBytes = encodeURIComponent(json).length;
+			const avgRowSize = totalRows>0 ? Math.max(20, Math.round(usedBytes / totalRows)) : 100;
+			const estimatedMax = Math.floor(COOKIE_BYTE_LIMIT / avgRowSize) || HARD_MAX_ROWS;
+			const effectiveMax = Math.min(HARD_MAX_ROWS, estimatedMax);
+
+			incomeInfoEl.textContent = `Rows: ${incomeCount} - max: ${effectiveMax}`;
+			billsInfoEl.textContent = `Rows: ${billsCount} - max: ${effectiveMax}`;
+
+			if(totalRows >= effectiveMax){
+				addIncome.disabled = true; addBill.disabled = true; 
+			}else{ 
+				addIncome.disabled = false; addBill.disabled = false; 
+			}
+		}
+
+		function renderResults(incomes,bills,view){
+			resultsList.innerHTML = '';
+			let incomeTotal = 0, billsTotal = 0;
+
+			// Update the result label and per-box view labels to reflect the timeframe
+			if(viewLabel3) viewLabel3.textContent = view;
+			if(incomeViewLabel) incomeViewLabel.textContent = view;
+			if(billsViewLabel) billsViewLabel.textContent = view;
+
+			incomes.forEach(i=>{
+				incomeTotal += i.viewAmount;
+				const el = document.createElement('div');
+				el.className = 'result-item';
+				el.innerHTML = `<div>${escapeHtml(i.name)} <small style="color:#999">(${i.freq})</small></div><div class="income">${formatMoney(i.viewAmount)}</div>`;
+				resultsList.appendChild(el);
+			});
+
+			bills.forEach(b=>{
+				billsTotal += b.viewAmount;
+				const el = document.createElement('div');
+				el.className = 'result-item';
+				el.innerHTML = `<div>${escapeHtml(b.name)} <small style="color:#999">(${b.freq})</small></div><div class="bill">-${formatMoney(b.viewAmount)}</div>`;
+				resultsList.appendChild(el);
+			});
+
+			const net = incomeTotal - billsTotal;
+			netTotalEl.textContent = formatMoney(net);
+			netTotalEl.className = net>=0? 'net-positive':'net-negative';
+
+
+			// update per-box totals
+			if(incomeBoxTotalEl) incomeBoxTotalEl.textContent = formatMoney(incomeTotal);
+			if(billsBoxTotalEl) billsBoxTotalEl.textContent = '-' + formatMoney(billsTotal);
+		}
+
+		function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+		if(!loadFromCookie()){ updateAll(); }else{ updateAll(); }
+	</script>
+	<script src="/includes/loader.js"></script>
+</body>
+</html>
