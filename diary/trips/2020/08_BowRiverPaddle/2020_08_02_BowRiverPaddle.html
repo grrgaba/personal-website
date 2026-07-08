@@ -1,4 +1,173 @@
-Driver 1 is me in Yellow
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Bow River Float</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* "Paddle Boardy" Aquatic Theme */
+        :root {
+            --water-light: #e0f2f1;
+            --water-medium: #80deea;
+            --water-deep: #006064;
+            --sunshine: #ffd54f;
+            --text-dark: #263238;
+        }
+
+        body {
+            background-color: var(--water-light);
+            color: var(--text-dark);
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            line-height: 1.7;
+        }
+
+        .post {
+            background: #ffffff;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 96, 100, 0.1);
+            border-top: 8px solid var(--water-medium);
+        }
+
+        h1 {
+            color: var(--water-deep);
+            text-align: center;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #546e7a;
+            font-style: italic;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px dashed var(--water-medium);
+        }
+
+        .story-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Fun, compact image grid */
+        .river-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 3rem;
+        }
+
+        .photo-card {
+            background: #fff;
+            padding: 10px 10px 20px 10px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.2s ease;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            border-color: var(--water-medium);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 200px; /* Shrinks and unifies the photo sizes */
+            object-fit: cover;
+            border-radius: 2px;
+            margin-bottom: 12px;
+        }
+
+        .photo-card p {
+            font-size: 0.9rem;
+            color: var(--water-deep);
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Callout box for river memories */
+        .memories-box {
+            background-color: var(--sunshine);
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            color: var(--text-dark);
+        }
+
+        .memories-box h3 {
+            margin-top: 0;
+            color: #bf360c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="site-header-placeholder"></div>
+
+<main class="container">
+    <article class="post">
+        <h1>Bowness Park River Float</h1>
+        <div class="subtitle">Navigating the waters during the great COVID escape</div>
+        
+        <section class="story-content">
+            <p>Since it was COVID time, there was a lot of people in this river since it was one of the activities allowed. It was me, Nat, and Christian heading out for what turned out to be a fantastic 3-hour paddle.</p>
+            
+            <p>Pulling this off required some logistical planning. We needed two cars from departure to arrival, so we parked Nat's car downtown, and then we drove in my car to Bowness Park where we departed from. We actually still had to buy an oar since we didn't have one, but luckily Christian had the floatie.</p>
+
+            <p>When it came to navigating the water, Christian was the captain since he had the most experience. I took on the role of Driver 1 (in yellow), and Nat was Driver 2.</p>
+
+            <div class="memories-box">
+                <h3>🌊 River Sights & Sounds</h3>
+                <ul>
+                    <li>I remember a man swimming with his 2 dogs without equipment; his backyard was attached to the river which he and his dogs just dove into.</li>
+                    <li>We also passed a Spanish group being very fun and loud with the largest JBL speaker on the river.</li>
+                </ul>
+            </div>
+
+            <div class="river-gallery">
+                <div class="photo-card">
+                    <img src="BeforeStart.jfif" alt="Posing with the oar before getting in the water">
+                    <p>Ready to launch with the newly bought oar.</p>
+                </div>
+                
+                <div class="photo-card">
+                    <img src="CaptainChristian.jfif" alt="Christian sitting in the floatie">
+                    <p>Captain Christian at the helm.</p>
+                </div>
+                
+                <div class="photo-card">
+                    <img src="MeAndNat.jfif" alt="Selfie of me and Nat on the floatie">
+                    <p>Driver 1 and Driver 2 (Me and Nat).</p>
+                </div>
+                
+                <div class="photo-card">
+                    <img src="AreaWhereYoucanStandonRiver.jfif" alt="Standing in a shallow rocky area of the river">
+                    <p>Finding a shallow spot to stand mid-river.</p>
+                </div>
+            </div>
+
+        </section>
+    </article>
+</main>
+
+<div id="site-footer-placeholder"></div>
+<script src="/includes/loader.js"></script>
+</body>
+</html>
+
+<script>
+/* Driver 1 is me in Yellow
 Driver 2 is nat
 
 we needed two cars from departure to arrival
@@ -21,7 +190,6 @@ SINCE IT WAS COVID TIEM THERE WAS ALOT OF PEOPEL IN THIS RIVER SINCE it was one 
 I remember a man swimming with his 2 dogs without equipment and  his backyard was attached to the river which he and his dogs just dove
 
 
-I remember a spanish group being very fun and loud with the largest JBL speaker on the river 
+I remember a spanish group being very fun and loud with the largest JBL speaker on the river */
 
-
-
+</script>
