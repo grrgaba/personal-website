@@ -18,8 +18,7 @@ body{
   flex-direction:column;
 }
 .container{max-width:1100px;margin:0 auto;padding:1rem}
-.site-header{z-index:10}
-.site-header{border-bottom:1px solid #eef2f7}
+.site-header{z-index:50; position:relative; border-bottom:1px solid #eef2f7}
 .nav{display:flex;align-items:center;position:relative;padding:0.6rem 0;height:56px}
 .logo{font-weight:700;color:var(--text);text-decoration:none;position:relative;z-index:20}
 /* Donate button shown top-left */
@@ -27,12 +26,29 @@ body{
 .donate:hover{filter:brightness(0.98);box-shadow:0 6px 18px rgba(11,17,32,0.06)}
 .donate.large{padding:0.6rem 1rem;font-size:1rem}
 .nav > .donate{margin-left:auto}
+
+/* MAIN NAV KEEPS CENTER ALIGNMENT */
 .nav-links{list-style:none;display:flex;gap:2rem;margin:0;padding:0;position:static;margin-left:auto;margin-right:auto}
 .nav-links a{text-decoration:none;color:var(--muted);font-weight:600;font-size:1.1rem;padding:0.4rem 0.6rem}
 .nav-links a{text-decoration:none;color:var(--muted);font-weight:600;font-size:1.1rem;padding:0.4rem 0.6rem;display:inline-flex;align-items:center;height:56px}
 .logo{font-weight:700;color:var(--text);text-decoration:none;position:relative;z-index:20;display:inline-flex;align-items:center;height:56px}
 .donate{display:inline-flex;align-items:center}
-.nav-links li{min-width:140px;display:flex;align-items:center;justify-content:center}
+
+/* REMOVED rigid 140px width so dropdowns align to the text, NOT an invisible box */
+.nav-links > li{display:flex;align-items:center;position:relative}
+
+/* ADDED vertical dividers between main nav items */
+.nav-links > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -1rem; /* Places it exactly in the middle of your 2rem gap */
+  top: 35%;
+  bottom: 35%;
+  width: 1px;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
 .hero{padding:8rem 0 3.5rem;text-align:left}
 .name{font-size:clamp(2rem,4vw,3rem);margin:0 0 0.5rem}
 .bio{color:var(--muted);font-size:1.125rem;margin:0 0 1.25rem}
@@ -84,7 +100,6 @@ body::before{
   position:fixed;
   inset:0;
   pointer-events:none;
-  /* Lighter overlay for better visibility */
   background-image:linear-gradient(rgba(6,10,15,0.18),rgba(6,10,15,0.12));
   background-size:cover;
   background-position:center;
@@ -93,8 +108,9 @@ body::before{
   z-index:0;
 }
 
-/* Ensure main content sits above background */
-main, .site-header, .site-footer, .container{position:relative;z-index:1}
+/* THE CULPRIT WAS HERE: Removed .site-header from this grouping to protect its higher z-index above */
+main, .site-footer, .container{position:relative;z-index:1}
+
 @media (max-width:600px){
   .nav-links{display:none}
   .hero{padding:3rem 0;text-align:center}
@@ -107,11 +123,45 @@ main, .site-header, .site-footer, .container{position:relative;z-index:1}
 
 /* Per-item submenu for nav (shows when hovering the parent item) */
 .nav-links li{position:relative}
-.nav-links .submenu{position:absolute;top:100%;left:50%;transform:translateX(-50%);display:none;min-width:180px;background:#fff;border:1px solid #eef2f7;border-radius:8px;padding:0.5rem;box-shadow:0 8px 30px rgba(11,17,32,0.06);z-index:30}
+.nav-links .submenu{
+  position:absolute;
+  top:100%;
+  left:0;
+  display:none;
+  min-width:180px;
+  background:#fff;
+  border:1px solid #eef2f7;
+  border-radius:8px;
+  padding:0.5rem;
+  box-shadow:0 8px 30px rgba(11,17,32,0.06);
+  z-index:9999; 
+  transform:none;
+  pointer-events:auto;
+  text-align: left; 
+  list-style: none; /* REMOVES BULLET POINTS */
+  margin: 0; /* Strips default indent spacing */
+}
+
+/* INVISIBLE BRIDGE: This ensures that even if you move your mouse slightly off the text before hitting the menu, the menu won't close */
+.nav-links .submenu::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: transparent;
+}
+
 .nav-links .submenu li{margin:0}
-.nav-links .submenu a{display:block;padding:0.4rem 0.6rem;color:var(--muted);text-decoration:none;border-radius:6px}
+
+/* UPDATED: Overrode tall 56px height and reduced top/bottom padding from 0.4rem to 0.25rem */
+.nav-links .submenu a{display:block;padding:0.25rem 0.6rem;color:var(--muted);text-decoration:none;border-radius:6px;height:auto;line-height:1.4}
+
 .nav-links .submenu a:hover{background:rgba(11,17,32,0.04);color:var(--text)}
-.nav-links li:hover .submenu,.nav-links li:focus-within .submenu,.nav-links li.open .submenu{display:block}
+.nav-links li:hover .submenu,
+.nav-links li:focus-within .submenu,
+.nav-links li.open .submenu{display:block}
 @media (max-width:600px){
   .nav-links .submenu{display:none !important}
 }
@@ -119,9 +169,56 @@ main, .site-header, .site-footer, .container{position:relative;z-index:1}
 /* Prevent submenu disappearing when moving mouse from parent to submenu: add small top padding to nav area */
 .nav{padding-top:0.6rem;min-height:56px}
 
+/* Ensure submenu links are reachable (no pointer gaps) */
+.nav-links .submenu a{pointer-events:auto}
+
 /* Favorites star button inside grid items */
 .grid-button{position:relative}
 .fav-btn{position:absolute;top:10px;right:10px;border:0;background:transparent;color:rgba(255,255,255,0.55);font-size:1.25rem;cursor:pointer;padding:6px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center}
 .fav-btn:hover{color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.04)}
 .fav-btn.favorited{color:#FFD54F}
 
+/* Menu toggle (inline with donate) */
+.menu-toggle{
+  background:transparent;
+  border:0;
+  color:var(--muted);
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:0.4rem 0.6rem;
+  border-radius:6px;
+  cursor:pointer;
+  height:56px;
+  border-bottom:3px solid transparent;
+  transition:border-color .15s ease, color .15s ease, transform .12s ease;
+}
+.menu-toggle:hover{border-bottom-color:var(--accent); color:var(--text); transform:translateY(-1px)}
+.menu-toggle:focus{outline:3px solid rgba(11,95,255,0.12);outline-offset:3px}
+
+/* Side panel overlay and panel */
+.side-overlay{position:fixed;inset:0;background:rgba(6,10,15,0.45);z-index:9998;opacity:0;transition:opacity .18s ease;pointer-events:none}
+.side-overlay.visible{opacity:1;pointer-events:auto}
+.side-panel{position:fixed;top:0;right:0;height:100%;width:340px;max-width:90%;background:var(--bg);z-index:9999;box-shadow:-24px 0 48px rgba(11,17,32,0.12);transform:translateX(100%);transition:transform .25s ease;overflow:auto}
+.side-panel.open{transform:translateX(0)}
+.side-panel-inner{padding:1.25rem}
+.side-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:0.5rem;border-bottom:1px solid #eef2f7;margin-bottom:1rem}
+.side-close{background:transparent;border:0;font-size:22px;cursor:pointer;color:var(--muted)}
+.side-title{margin:0;font-size:1.125rem;font-weight:700}
+.side-nav ul{list-style:none;padding:0;margin:0}
+.side-nav li{border-bottom:1px solid #eef2f7}
+.side-nav a{display:block;padding:1rem 0;color:var(--text);text-decoration:none;font-weight:700}
+.side-nav a:hover{background:rgba(11,17,32,0.03)}
+
+@media (max-width:600px){
+  .side-panel{width:280px}
+}
+
+/* Side panel group toggles */
+.side-group{padding:0.5rem 0}
+.side-group-toggle{background:transparent;border:0;width:100%;text-align:left;padding:0.9rem 0;font-weight:700;font-size:1rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--text)}
+.side-group-toggle .caret{opacity:0.6;margin-left:8px}
+.side-submenu{list-style:none;padding:0 0 0 1rem;margin:0}
+.side-submenu li a{font-weight:600;padding:0.6rem 0;display:block;color:var(--muted)}
+.side-submenu li a:hover{color:var(--text);background:transparent}

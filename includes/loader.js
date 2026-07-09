@@ -6,9 +6,43 @@
       const html = await res.text();
       const placeholder = document.getElementById(placeholderId);
       if (placeholder) placeholder.outerHTML = html;
+      // If we just inserted the header, attach menu behaviors (scripts inserted via outerHTML won't auto-run)
+      if (placeholderId === 'site-header-placeholder') attachHeaderMenu();
     } catch (err) {
       console.error('Failed to load include', path, err);
     }
+  }
+
+  function attachHeaderMenu(){
+    try{
+      var toggle = document.getElementById('menuToggle');
+      var panel = document.getElementById('sidePanel');
+      var overlay = document.getElementById('sideOverlay');
+      var closeBtn = document.getElementById('sideClose');
+      if(!toggle || !panel) return;
+      function openPanel(){ panel.classList.add('open'); overlay.style.display='block'; setTimeout(function(){ overlay.classList.add('visible'); },10); panel.setAttribute('aria-hidden','false'); toggle.setAttribute('aria-expanded','true'); }
+      function closePanel(){ overlay.classList.remove('visible'); panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); toggle.setAttribute('aria-expanded','false'); setTimeout(function(){ overlay.style.display='none'; },250); }
+      toggle.addEventListener('click', function(e){ e.preventDefault(); var isOpen = panel.classList.contains('open'); if(isOpen) closePanel(); else openPanel(); });
+      overlay && overlay.addEventListener('click', closePanel);
+      closeBtn && closeBtn.addEventListener('click', closePanel);
+      document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePanel(); });
+      // attach side-group toggles (collapsible submenu groups)
+      var groupToggles = document.querySelectorAll('.side-group-toggle');
+      groupToggles.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var expanded = btn.getAttribute('aria-expanded') === 'true';
+          var submenu = btn.nextElementSibling; // the .side-submenu
+          if(!submenu) return;
+          if(expanded){
+            btn.setAttribute('aria-expanded','false');
+            submenu.setAttribute('hidden','');
+          } else {
+            btn.setAttribute('aria-expanded','true');
+            submenu.removeAttribute('hidden');
+          }
+        });
+      });
+    }catch(e){console.error('attachHeaderMenu error', e)}
   }
 
   function isTripsDetailPage() {

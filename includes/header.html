@@ -1,29 +1,10 @@
 <header class="site-header">
   <nav class="nav container">
     <a class="logo" href="/">nicodimaano.com</a>
-    <ul class="nav-links">
-      <li>
-        <a href="/tools/tools.html">Tools</a>
-        <ul class="submenu">
-          <li><a href="/tools/tools.html">Tools Home</a></li>
-          <li><a href="/tools/budgeter.html">Budgeter</a></li>
-          <li><a href="/tools/deadlock.html">Deadlock</a></li>
-          <li><a href="/tools/mortgage.html">Mortgage</a></li>
-          <li><a href="/tools/ski_resort_calculator.html">Ski Resort Calculator</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="/diary/diary.html">Diary</a>
-        <ul class="submenu">
-          <li><a href="/diary/diary.html">Diary Home</a></li>
-          <li><a href="/diary/about/about.html">About</a></li>
-          <li><a href="/diary/alltime/alltime.html">All Time</a></li>
-          <li><a href="/diary/ski-reviews/index.html">Ski Reviews</a></li>
-          <li><a href="/diary/trips/trips.html">Trips</a></li>
-        </ul>
-      </li>
-      <li><a href="/SupportMe/SupportMe.html">Support Me</a></li>
-    </ul>
+    <!-- Central nav removed per request (Menu + Donate only) -->
+    <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-controls="sidePanel" style="cursor:pointer;">Menu
+      <span class="hamburger" aria-hidden="true" style="margin-left:8px; font-size:18px; line-height:0;">☰</span>
+    </button>
     <a class="donate" style="cursor:pointer;" onclick="document.getElementById('donateModal').style.display='block'">Donate</a>
   </nav>
 </header>
@@ -70,3 +51,50 @@
     </div>
   </div>
 </div>
+
+<!-- Slide-out Side Panel -->
+<div id="sideOverlay" class="side-overlay" style="display:none;" aria-hidden="true"></div>
+<aside id="sidePanel" class="side-panel" aria-hidden="true">
+  <div class="side-panel-inner">
+    <header class="side-header">
+      <button id="sideClose" class="side-close" aria-label="Close Menu">✕</button>
+      <h2 class="side-title">Menu</h2>
+    </header>
+    <nav class="side-nav">
+      <ul>
+        <li class="side-group">
+          <button class="side-group-toggle" aria-expanded="false">Tools <span class="caret">▾</span></button>
+          <ul class="side-submenu" hidden>
+            <li><a href="/tools/tools.html">Tools Home</a></li>
+            <li><a href="/tools/budgeter.html">Budgeter</a></li>
+            <li><a href="/tools/deadlock.html">Deadlock</a></li>
+            <li><a href="/tools/mortgage.html">Mortgage</a></li>
+            <li><a href="/tools/ski_resort_calculator.html">Ski Resort Calculator</a></li>
+          </ul>
+        </li>
+
+        <li class="side-group">
+          <button class="side-group-toggle" aria-expanded="false">Diary <span class="caret">▾</span></button>
+          <ul class="side-submenu" hidden>
+            <li><a href="/diary/diary.html">Diary Home</a></li>
+            <li><a href="/diary/about/about.html">About</a></li>
+            <li><a href="/diary/alltime/alltime.html">All Time</a></li>
+            <li><a href="/diary/ski-reviews/index.html">Ski Reviews</a></li>
+            <li><a href="/diary/trips/trips.html">Trips</a></li>
+          </ul>
+        </li>
+
+        <li class="side-group">
+          <button class="side-group-toggle" aria-expanded="false">SupportMe <span class="caret">▾</span></button>
+          <ul class="side-submenu" hidden>
+            <li><a href="/SupportMe/SupportMe.html">Support Me</a></li>
+            <li><a href="/SupportMe/store.html">Store</a></li>
+            <li><a href="/SupportMe/sarjlab.html">Sarjlab</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+
+<!-- Event handlers are attached by includes/loader.js after header injection -->
