@@ -1,3 +1,4 @@
-1. Add subheader
+1. Put Background in SupportMe
 2. Add Stripe payment system
 3. Fix Square Site
+4. Budgeting  app

@@ -1,11 +1,15 @@
 <header class="site-header">
   <nav class="nav container">
     <a class="logo" href="/">nicodimaano.com</a>
-    <!-- Central nav removed per request (Menu + Donate only) -->
+    <ul class="nav-links">
+      <li><a href="/tools/tools.html">Tools</a></li>
+      <li><a href="/diary/diary.html">Diary</a></li>
+      <li><a href="/SupportMe/SupportMe.html">Support Me</a></li>
+    </ul>
+    <a class="donate" style="cursor:pointer;" onclick="document.getElementById('donateModal').style.display='block'">Donate</a>
     <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-controls="sidePanel" style="cursor:pointer;">Menu
       <span class="hamburger" aria-hidden="true" style="margin-left:8px; font-size:18px; line-height:0;">☰</span>
     </button>
-    <a class="donate" style="cursor:pointer;" onclick="document.getElementById('donateModal').style.display='block'">Donate</a>
   </nav>
 </header>
 
@@ -85,7 +89,7 @@
         </li>
 
         <li class="side-group">
-          <button class="side-group-toggle" aria-expanded="false">SupportMe <span class="caret">▾</span></button>
+          <button class="side-group-toggle" aria-expanded="false">Support Me <span class="caret">▾</span></button>
           <ul class="side-submenu" hidden>
             <li><a href="/SupportMe/SupportMe.html">Support Me</a></li>
             <li><a href="/SupportMe/store.html">Store</a></li>
