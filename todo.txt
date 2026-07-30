@@ -2,3 +2,4 @@
 2. Add Stripe payment system
 3. Fix Square Site
 4. Budgeting  app
+5. SKi resort planner Settings not working

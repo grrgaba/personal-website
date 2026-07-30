@@ -29,8 +29,10 @@
     @media (max-width:640px){.actions{flex-direction:column}.actions .calc-btn,.clear-btn{width:100%}}
 
     /* preferences */
-    .muted-row{display:flex;align-items:center;gap:0.5rem}
-    .prefs-btn{background:transparent;border:0;font-size:1.15rem;cursor:pointer;padding:0.2rem 0.4rem;border-radius:6px}
+    .muted-row{display:flex;align-items:center;gap:0.5rem;width:100%}
+    .muted-row .muted{flex:1;margin:0}
+    .prefs-btn{background:#f3f4f6;border:1px solid rgba(0,0,0,0.06);font-size:1.15rem;cursor:pointer;padding:0.35rem 0.6rem;border-radius:8px;margin-left:auto}
+    .prefs-btn:hover{background:#e9eef2}
     .prefs-btn:focus{outline:2px solid rgba(11,95,255,0.12)}
     .prefs-panel{position:absolute;margin-top:0.5rem;right:1rem;background:#fff;border:1px solid #e6eef8;padding:0.75rem;border-radius:8px;box-shadow:0 8px 24px rgba(11,17,32,0.08);z-index:50;min-width:220px}
     .prefs-panel label{display:block;font-size:0.95rem;margin:0.35rem 0}
@@ -58,7 +60,7 @@
       <h1>Ski Resort Trip Planner</h1>
       <div class="muted-row">
         <p class="muted">Utility Tool to help you get to your ski resort.</p>
-        <button id="prefs-btn" class="prefs-btn" aria-haspopup="true" aria-expanded="false" aria-label="Open preferences">⚙️</button>
+        <button id="prefs-btn" class="prefs-btn" aria-haspopup="true" aria-expanded="false" aria-label="Open preferences" title="Preferences — configure date, currency, and save options">⚙️</button>
         <div id="prefs-panel" class="prefs-panel" hidden>
           <form id="prefs-form">
             <label>Preferred Date<br><input id="pref-date" type="date"></label>
@@ -265,6 +267,18 @@
       var d = document.getElementById('pref-date'); if (d) d.value = p.date;
       var c = document.getElementById('pref-cookies'); if (c) c.checked = !!p.allowCookies;
     }
+      function formatCurrencyValue(value) {
+        var p = loadPrefs();
+        var code = (p && p.currency) ? p.currency : 'USD';
+        if (value === null || typeof value === 'undefined' || value === '$<placeholder>') return '$<placeholder>';
+        var n = Number(value);
+        if (isNaN(n)) return '$<placeholder>';
+        try {
+          return n.toLocaleString(undefined, { style: 'currency', currency: code, minimumFractionDigits: 2 });
+        } catch (e) {
+          return '$' + n.toFixed(2);
+        }
+      }
 
     // wire up prefs panel toggling and buttons
     document.addEventListener('click', function(e) {
@@ -287,6 +301,13 @@
 
     document.getElementById('prefs-close').addEventListener('click', function(){
       var panel = document.getElementById('prefs-panel'); if (panel) { panel.hidden = true; document.getElementById('prefs-btn').setAttribute('aria-expanded','false'); }
+      // refresh displayed results to reflect new currency preference
+      try {
+        var aVal = document.getElementById('airport') ? document.getElementById('airport').value.trim() : '';
+        var rVal = document.getElementById('resort') ? document.getElementById('resort').value.trim() : '';
+        var liftVal = (document.getElementById('lift-price') && document.getElementById('lift-price').value) ? document.getElementById('lift-price').value.trim() : '';
+        if (aVal && rVal) formatAndShowResult(aVal, rVal, liftVal);
+      } catch (e) { /* ignore */ }
     });
 
     document.getElementById('prefs-save').addEventListener('click', function(){
@@ -358,7 +379,7 @@
 
       function opt(label, price) {
         if (price === null) return '<option value="">' + escapeHtml(label) + '</option>';
-        return '<option value="' + Number(price).toFixed(2) + '">' + escapeHtml(label) + ' — $' + Number(price).toFixed(2) + '</option>';
+          return '<option value="' + Number(price).toFixed(2) + '">' + escapeHtml(label) + ' — ' + escapeHtml(formatCurrencyValue(price)) + '</option>';
       }
 
       var viaSelect = '<select class="plan-select">' + opt('Car Rental 🚗', carPrice) + opt('Public Transit 🚌', transitPrice) + opt('Taxi 🚕', taxiPrice) + '</select>';
@@ -377,7 +398,7 @@
 
       var html = '<strong>' + escapeHtml(mainLine) + '</strong>' +
         '<div class="breakdown"><div><strong>Travel Plan:</strong></div>' +
-        '<table class="plan-table"><thead><tr><th>Route</th><th>via</th><th>Price (USD)</th></tr></thead><tbody>' +
+        '<table class="plan-table"><thead><tr><th>Route</th><th>via</th><th>Price</th></tr></thead><tbody>' +
         '<tr><td>' + leg1 + '</td><td>' + escapeHtml('<airline>') + '</td><td>$<placeholder></td></tr>' +
         '<tr><td>' + leg2 + '</td><td>' + viaSelect + '</td><td>' + escapeHtml(leg2PriceCell) + '</td></tr>' +
         '<tr><td>' + liftLine + '</td><td>' + escapeHtml('Regular ticket') + '</td><td>' + escapeHtml(liftPriceCell) + '</td></tr>' +
@@ -405,7 +426,7 @@
             priceTd.textContent = '$<placeholder>';
           } else {
             var n = Number(val);
-            if (!isNaN(n)) priceTd.textContent = '$' + n.toFixed(2);
+            if (!isNaN(n)) priceTd.textContent = formatCurrencyValue(n);
             else priceTd.textContent = '$<placeholder>';
           }
         };
@@ -432,9 +453,6 @@
         // set airport input to saved code (user wanted code remembered)
         document.getElementById('airport').value = savedAirport;
       }
-      if (savedResort) {
-        document.getElementById('resort').value = savedResort;
-      }
       if (savedLift) {
         var liftEl = document.getElementById('lift-price');
         if (liftEl) liftEl.value = savedLift;
@@ -445,11 +463,12 @@
       }
     })();
 
-    document.getElementById('calculate').addEventListener('click', function(){
-      var a = document.getElementById('airport').value.trim();
-      var r = document.getElementById('resort').value.trim();
+    document.getElementById('calculate').addEventListener('click', function(e){
+      e.preventDefault();
+      var a = document.getElementById('airport') ? document.getElementById('airport').value.trim() : '';
+      var r = document.getElementById('resort') ? document.getElementById('resort').value.trim() : '';
       if (!a || !r) {
-        alert('Please enter both airport and resort name.');
+        if (document.getElementById('airport')) document.getElementById('airport').focus();
         return;
       }
 
@@ -466,7 +485,7 @@
       } catch (e) { /* ignore */ }
       // update the single result row
       formatAndShowResult(a, r, lift);
-      document.getElementById('airport').focus();
+      if (document.getElementById('airport')) document.getElementById('airport').focus();
     });
 
     document.getElementById('clear').addEventListener('click', function(){
