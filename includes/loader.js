@@ -64,8 +64,7 @@
     '/SupportMe/': '/SupportMe/SupportMe.html',
     '/diary/trips/': '/diary/diary.html'
   };
-  // trip-specific back button removed: the global page back button will handle trips pages
-
+  
   function ensurePageBackButtons() {
     // Insert a small "Back" link aligned with h1.name on every page
     try {
@@ -79,6 +78,8 @@
         style.id = 'page-back-button-style';
         style.textContent = [
           '.page-back-wrap{max-width:1100px;margin:0;padding:0 0rem;display:flex;justify-content:flex-start;position:fixed;top:calc(56px + 0.6rem);left:0.6rem;z-index:10010}',
+            '.hero.has-back-button{position:relative}',
+            '.page-back-wrap.hero-attached{position:absolute;top:0.6rem;left:0.6rem;z-index:10011}',
           '.page-back-button{display:inline-block;padding:.28rem .6rem;border-radius:6px;border:1px solid rgba(16,24,32,0.06);background:transparent;color:#334155;text-decoration:underline;font-weight:600;font-size:0.95rem;box-shadow:none;cursor:pointer}',
           '.page-back-button:hover{background:#f8fafc}',
           '@media (min-width:1100px){.page-back-wrap{left:calc(50% - 550px + 0.6rem)}}',
@@ -135,8 +136,8 @@
           }
 
           wrap.appendChild(link);
-
-          // Insert the wrap immediately before the heading so it lines up
+          // Try attach to hero (top-left of hero) first, otherwise insert before the heading
+          try { if (attachToHero(wrap)) return; } catch(e){}
           h.parentNode.insertBefore(wrap, h);
         });
       } else {
@@ -174,14 +175,35 @@
           });
         }
         wrap.appendChild(link);
-        const main = document.querySelector('main');
-        if (main && main.parentNode) {
-          main.parentNode.insertBefore(wrap, main);
-        } else {
-          document.body.insertBefore(wrap, document.body.firstChild);
+        // Try attach to hero (top-left) first, otherwise insert at top of main/body
+        if (!attachToHero(wrap)) {
+          const main = document.querySelector('main');
+          if (main && main.parentNode) main.parentNode.insertBefore(wrap, main);
+          else document.body.insertBefore(wrap, document.body.firstChild);
         }
       }
     } catch (e) { console.error('ensurePageBackButtons error', e); }
+  }
+
+  // Attempt to attach the back button to the hero container.
+  function attachToHero(wrap) {
+    try {
+      var hero = document.querySelector('.hero, .hero-inner, .hero-copy');
+      if (!hero) return false;
+      // Find the outermost hero container
+      while (hero && hero.parentElement && hero.parentElement.classList && hero.parentElement.classList.contains('hero-inner')) {
+        hero = hero.parentElement;
+      }
+      // Mark hero as having a back button so CSS can position relative
+      hero.classList.add('has-back-button');
+      wrap.classList.add('hero-attached');
+      // Insert the wrap as first child so it's top-left
+      hero.insertBefore(wrap, hero.firstChild);
+      return true;
+    } catch (e) {
+      console.error('attachToHero error', e);
+      return false;
+    }
   }
 
   // Run after DOM is ready
