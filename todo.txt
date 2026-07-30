@@ -3,3 +3,4 @@
 3. Fix Square Site
 4. Budgeting  app
 5. SKi resort planner Settings not working
+6. Need to solve the Images storage portion

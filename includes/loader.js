@@ -61,6 +61,7 @@
   var indexTargets = {
     '/tools/': '/tools/tools.html',
     '/diary/': '/diary/diary.html',
+    '/diary/projects/': '/diary/diary.html',
     '/SupportMe/': '/SupportMe/SupportMe.html',
     '/diary/trips/': '/diary/diary.html'
   };
