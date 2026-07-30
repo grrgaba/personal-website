@@ -51,6 +51,19 @@
     if (!path.includes('/diary/trips/')) return false;
     return !path.endsWith('/trips.html');
   }
+  // Detect the trips index page (/diary/trips/trips.html)
+  function isTripsIndexPage() {
+    const path = window.location.pathname.replace(/\\/g, '/');
+    return path.includes('/diary/trips/') && path.endsWith('/trips.html');
+  }
+
+  // Directory -> preferred index target mapping
+  var indexTargets = {
+    '/tools/': '/tools/tools.html',
+    '/diary/': '/diary/diary.html',
+    '/SupportMe/': '/SupportMe/SupportMe.html',
+    '/diary/trips/': '/diary/diary.html'
+  };
   // trip-specific back button removed: the global page back button will handle trips pages
 
   function ensurePageBackButtons() {
@@ -92,11 +105,33 @@
           link.setAttribute('aria-label','Go back');
           link.textContent = 'Back';
           if (isTripsDetailPage()) {
+            // For trip detail pages, go to the trips index
             link.href = '/diary/trips/trips.html';
             link.setAttribute('aria-label','Back to Trips');
             link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/trips/trips.html'; });
+          } else if (isTripsIndexPage()) {
+            // For trips index page, go to the diary index
+            link.href = '/diary/diary.html';
+            link.setAttribute('aria-label','Back to Diary');
+            link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/diary.html'; });
           } else {
-            link.addEventListener('click', function(e){ e.preventDefault(); try { if(history.length>1) history.back(); else window.location.href = '/'; } catch(err){ window.location.href = '/'; }});
+            // Navigate up one directory level by default, but prefer a mapped index target when available.
+            var parentPath = window.location.pathname.replace(/\\/g,'/').replace(/\/[^\/]+\/?$/,'/');
+            var target = indexTargets[parentPath] || parentPath || '/';
+            // If the target is the current page (we're on the index), go to root instead
+            var currentPath = window.location.pathname.replace(/\\/g,'/');
+            // compare case-insensitively and ignore trailing slashes
+            function norm(p){ return (p||'').replace(/\\/g,'/').replace(/\/+$/,'').toLowerCase(); }
+            if (norm(target) === norm(currentPath)) target = '/';
+            link.href = target;
+            link.addEventListener('click', function(e){
+              e.preventDefault();
+              try {
+                window.location.href = target;
+              } catch (err) {
+                try { if (history.length > 1) history.back(); else window.location.href = '/'; } catch (err2) { window.location.href = '/'; }
+              }
+            });
           }
 
           wrap.appendChild(link);
@@ -118,8 +153,25 @@
           link.href = '/diary/trips/trips.html';
           link.setAttribute('aria-label','Back to Trips');
           link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/trips/trips.html'; });
+        } else if (isTripsIndexPage()) {
+          link.href = '/diary/diary.html';
+          link.setAttribute('aria-label','Back to Diary');
+          link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/diary.html'; });
         } else {
-          link.addEventListener('click', function(e){ e.preventDefault(); try { if(history.length>1) history.back(); else window.location.href = '/'; } catch(err){ window.location.href = '/'; }});
+          var parentPath = window.location.pathname.replace(/\\/g,'/').replace(/\/[^\/]+\/?$/,'/');
+          var target = indexTargets[parentPath] || parentPath || '/';
+          var currentPath = window.location.pathname.replace(/\\/g,'/');
+          function norm(p){ return (p||'').replace(/\\/g,'/').replace(/\/+$/,'').toLowerCase(); }
+          if (norm(target) === norm(currentPath)) target = '/';
+          link.href = target;
+          link.addEventListener('click', function(e){
+            e.preventDefault();
+            try {
+              window.location.href = target;
+            } catch (err) {
+              try { if (history.length > 1) history.back(); else window.location.href = '/'; } catch (err2) { window.location.href = '/'; }
+            }
+          });
         }
         wrap.appendChild(link);
         const main = document.querySelector('main');
