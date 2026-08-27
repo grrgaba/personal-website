@@ -6,6 +6,50 @@
   <title>Aug 6 2026 — Healy Pass Wildflower Hike</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <style>
+    /* Custom collage styling to make the photos look sweet and combined */
+    .collage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .collage-grid figure {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .collage-grid img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease;
+    }
+    .collage-grid img:hover {
+      transform: scale(1.02);
+    }
+    .collage-grid figcaption {
+      margin-top: 0.75rem;
+      font-size: 0.95em;
+      color: #666;
+      text-align: center;
+      font-style: italic;
+    }
+    .featured-photo {
+      grid-column: 1 / -1;
+    }
+    .featured-photo img {
+      height: auto;
+      max-height: 550px;
+    }
+    .story-text {
+      line-height: 1.8;
+      font-size: 1.1em;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
@@ -13,41 +57,70 @@
   <main class="container">
     <article class="post">
       <h1>Aug 6 2026 — Healy Pass Wildflower Hike</h1>
-      <p class="muted">WIP — add story, photos, and a Google Earth video of the hike below.</p>
 
       <section>
-        <h2>Overview</h2>
-        <p>Short notes about the hike, route, participants, and highlights. Replace this with your trip write-up.</p>
-      </section>
-
-      <section>
-        <h2>Google Earth Video</h2>
-        <p>Embed a Google Earth Studio export or YouTube link here. Example placeholders:</p>
-        <!-- If you have a YouTube or hosted URL, paste it into the iframe src below -->
-        <div style="max-width:880px;">
-          <iframe id="earth-video" width="880" height="495" src="" frameborder="0" allowfullscreen title="Healy Pass Wildflower Hike - Google Earth"></iframe>
-        </div>
-        <p>Or place a local MP4 named <code>healy-pass-earth.mp4</code> in this folder and the video tag below will play it:</p>
-        <video controls style="max-width:880px;display:block;margin-top:0.5rem">
-          <source src="healy-pass-earth.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </section>
-
-      <section>
-        <h2>Photo Gallery</h2>
-        <p>Drop photos into this folder and add them below. Example markup:</p>
-        <div class="gallery" style="display:flex;flex-wrap:wrap;gap:0.5rem">
-          <img src="photo-1.jpg" alt="Healy Pass trailhead" style="width:calc(33% - 0.5rem);border-radius:6px">
-          <img src="photo-2.jpg" alt="Wildflowers" style="width:calc(33% - 0.5rem);border-radius:6px">
-          <img src="photo-3.jpg" alt="Mountain view" style="width:calc(33% - 0.5rem);border-radius:6px">
+        <h2>Our Smokey, Sweet Summer Adventure</h2>
+        <div class="story-text">
+          <p>We hit up Healy Pass today, and it felt like stepping into a completely different world! We started our trek at Banff Sunshine, which felt different to see it outside of the winter months. We are so used to being bundled up and snowboarding here, so trading our snow gear for hiking boots and seeing the bare ground was a fun twist.</p>
+          
+          <p>We saw mostly women on the hike, which makes me think the main attraction right now is the multiple, colorful and vibrant wildflower bloom! I couldn't tell you the proper names of a single flower we saw, but they were in full bloom and looked absolutely incredible, painting the meadows in bright yellows, purples, and whites.</p>
+          
+          <p>We had to battle a <strong>lot</strong> of hungry mosquitoes along the way, making bug spray our absolute best friend. There was also a wildfire nearby, which explains why the air was so smoky. It gave the mountains this hazy, atmospheric filter in all our pictures, turning the landscape into a bit of a moody portrait. Despite the smoke and the relentless bugs, the endless sea of blooms made every single step worth it!</p>
         </div>
       </section>
 
       <section>
-        <h2>Notes & GPS</h2>
-        <p>Optional: add GPS tracks, GPX download link, or route notes.</p>
+        <h2>Wildflower Collage</h2>
+        <p class="muted">A collection of our favorite moments from the hazy trail.</p>
+        
+        <div class="collage-grid">
+          <figure class="featured-photo">
+            <img src="Sunshine-beforehike.jpeg" alt="Sunshine Village before the hike">
+            <figcaption>Starting out at Banff Sunshine! So weird to see it without snow—we’re usually snowboarding here!</figcaption>
+          </figure>
+
+          <figure>
+            <img src="river-along-the-way.jpg" alt="Rocky river crossing">
+            <figcaption>A beautiful, rocky river crossing to distract us from the mosquito swarms.</figcaption>
+          </figure>
+
+          <figure>
+            <img src="Nico-locked-in-almost-done-trail.jpg" alt="Nico walking on the trail">
+            <figcaption>Nico locked in on the trail, powering through the hazy air.</figcaption>
+          </figure>
+
+          <figure class="featured-photo">
+            <img src="pose-together.jpeg" alt="Selfie together in the flowers">
+            <figcaption>Smiles, smoke, and a sea of wildflowers.</figcaption>
+          </figure>
+
+          <figure>
+            <img src="purple-flowers.jpg" alt="Purple blooming flowers">
+            <figcaption>I have no idea what these are, but their bloomed state makes them look so good!</figcaption>
+          </figure>
+
+          <figure>
+            <img src="sarah-flower-down-pic.jpg" alt="Sarah laying in a bed of yellow flowers">
+            <figcaption>Fully embracing the flower-child vibe of the trail today.</figcaption>
+          </figure>
+
+          <figure>
+            <img src="Sarah-pose.jpg" alt="Sarah doing a tree pose on a rock">
+            <figcaption>Finding some zen in the hazy meadows.</figcaption>
+          </figure>
+
+          <figure>
+            <img src="pose-with-the-flowers.jpg" alt="Looking out at the smoky mountains">
+            <figcaption>Taking in the smoky, floral views.</figcaption>
+          </figure>
+
+          <figure>
+            <img src="nico-with-camera.jpeg" alt="Nico holding his camera">
+            <figcaption>The designated wildflower paparazzi in action!</figcaption>
+          </figure>
+        </div>
       </section>
+
     </article>
   </main>
 
