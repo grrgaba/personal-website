@@ -1,28 +1,337 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>July 5–6 2024 — Tonquin Valley</title><link rel="stylesheet" href="/css/style.css">  <link rel="icon" type="image/png" href="/assets/favicon.png">
-</head><body>
-<div id="site-header-placeholder"></div>
-  
-<main class="container"><article class="post"><h1>July 5–6 2024 — Tonquin Valley</h1><p class="muted">Placeholder — add photos and story here.</p><section id="content"></section></article></main>
-<div id="site-footer-placeholder"></div>
-<script>
-	(function(){
-		const originalGet = document.getElementById.bind(document);
-		document.getElementById = function(id){
-			const safe = ['timelineWrap','prevBtn','nextBtn','timeline'];
-			const el = originalGet(id);
-			if (el) return el;
-			if (safe.includes(id)) {
-				return {
-					appendChild: function(){},
-					addEventListener: function(){},
-					disabled: false
-				};
-			}
-			return null;
-		};
-	})();
-</script>
-<script>(function(){const trips=[{slug:'2026-01-09-vegas-death-valley-mammoth.html',year:2026},{slug:'2026-05-24-iceland.html',year:2026},{slug:'2025-05-13-european-tour.html',year:2025},{slug:'2025-05-27-grand-teton-yellowstone.html',year:2025},{slug:'2025-09-26-sentinel-pass.html',year:2025},{slug:'2025-06-28-takakkaw-falls.html',year:2025},{slug:'2024-09-05-lake-ohara-takakkaw.html',year:2024},{slug:'2024-07-05-tonquin-valley.html',year:2024},{slug:'2024-10-17-hawaii.html',year:2024},{slug:'2024-10-01-south-korea-taiwan.html',year:2024},{slug:'2023-08-20-us-virgin-islands-cruise.html',year:2023},{slug:'2023-05-24-oregon-road-trip.html',year:2023},{slug:'2023-04-27-mexico.html',year:2023},{slug:'2022-11-10-san-francisco.html',year:2022},{slug:'2022-06-09-florida-orlando.html',year:2022},{slug:'2022-05-26-bc-road-trip.html',year:2022},{slug:'2022-02-18-whistler.html',year:2022},{slug:'2022-02-11-seattle.html',year:2022},{slug:'2022-01-20-whistler-cypress.html',year:2022},{slug:'2021-05-06-fairmont-bugaboo.html',year:2021},{slug:'2021-04-07-toronto.html',year:2021},{slug:'2021-03-26-revelstoke.html',year:2021},{slug:'2021-02-26-whistler.html',year:2021},{slug:'2021-01-14-vancouver.html',year:2021},{slug:'2021-11-19-rockies-ski-weekend.html',year:2021},{slug:'2023-07-29-bugaboo-provincial-park.html',year:2023}];const path=location.pathname.split('/').pop();const idx=trips.findIndex(t=>t.slug===path);const prev=document.getElementById('prevBtn');const next=document.getElementById('nextBtn');const yearsEl=document.getElementById('timeline');const years=Array.from(new Set(trips.map(t=>t.year))).sort((a,b)=>b-a);years.forEach(y=>{const b=document.createElement('button');b.textContent=y;b.addEventListener('click',()=>{const i=trips.findIndex(t=>t.year===y);if(i>=0)location.href='/diary/trips/'+trips[i].slug;});yearsEl.appendChild(b);});if(idx>0)prev.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx-1].slug);else prev.disabled=true;if(idx>=0&&idx<trips.length-1)next.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx+1].slug);else next.disabled=true;document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'&&idx>0)location.href='/diary/trips/'+trips[idx-1].slug; if(e.key==='ArrowRight'&&idx<trips.length-1)location.href='/diary/trips/'+trips[idx+1].slug;});})();</script>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>July 5–6 2024 — Tonquin Valley</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <style>
+    .trip-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .eyebrow {
+      color: #6a7d6f;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.74rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+    }
+    .trip-header h1 {
+      margin: 0;
+      font-size: clamp(2.3rem, 4vw, 4rem);
+      line-height: 1.1;
+    }
+    .lede {
+      max-width: 760px;
+      margin: 1rem auto 0;
+      font-size: 1.08rem;
+      color: #4d5952;
+      line-height: 1.7;
+    }
+    .hero-photo {
+      margin: 1.5rem auto 2.2rem;
+      width: min(100%, 1400px);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 18px 44px rgba(20, 30, 25, 0.14);
+      background: #eae7e0;
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 440px;
+      max-height: 1100px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-photo figcaption {
+      padding: 0.95rem 1rem 1.1rem;
+      text-align: center;
+      font-style: italic;
+      color: #4b564d;
+      background: rgba(255,255,255,0.9);
+    }
+    .story-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(260px, 0.9fr);
+      gap: 2rem;
+      align-items: start;
+      margin: 2rem 0 2.5rem;
+    }
+    .story-copy {
+      font-size: 1.08rem;
+      line-height: 1.9;
+      color: #2f3b35;
+    }
+    .story-copy p {
+      margin: 0 0 1.2rem;
+    }
+    .info-card {
+      background: linear-gradient(180deg, #f7f7f2, #eef2eb);
+      border: 1px solid #dde5dc;
+      border-radius: 16px;
+      padding: 1.3rem 1.2rem;
+      box-shadow: 0 10px 24px rgba(31, 44, 34, 0.07);
+    }
+    .info-card h3 {
+      margin: 0 0 0.9rem;
+      font-size: 1.05rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #496152;
+    }
+    .info-card ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      line-height: 1.9;
+      color: #3c4a40;
+    }
+    blockquote {
+      margin: 2.2rem auto 2.5rem;
+      padding: 1.4rem 1.5rem;
+      max-width: 760px;
+      border-left: 4px solid #7f9e83;
+      background: #f6f4ee;
+      border-radius: 0 12px 12px 0;
+      color: #35473d;
+      font-size: 1.08rem;
+      line-height: 1.8;
+      font-style: italic;
+    }
+    .trip-section {
+      margin-top: 3.2rem;
+    }
+    .trip-section h2 {
+      margin-bottom: 0.9rem;
+      font-size: clamp(1.8rem, 2vw, 2.5rem);
+      color: #1f2d26;
+    }
+    .trip-section p {
+      font-size: 1.06rem;
+      line-height: 1.9;
+      color: #2d3b35;
+      margin: 0 0 1.2rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.3rem;
+    }
+    .photo-card {
+      background: #fbfaf7;
+      border: 1px solid #e7e1d9;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 18px rgba(30, 33, 29, 0.06);
+    }
+    .photo-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-card figcaption {
+      padding: 0.8rem 0.9rem 1rem;
+      font-size: 0.9rem;
+      color: #46554b;
+      line-height: 1.6;
+    }
+    @media (max-width: 820px) {
+      .story-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header-placeholder"></div>
+
+  <main class="container">
+    <article class="post">
+      <header class="trip-header">
+        <p class="eyebrow">Backcountry hike • July 5–6, 2024</p>
+        <h1>Tonquin Valley</h1>
+        <p class="lede">Tonquin Valley is one of those hikes that feels easy on paper but huge in your memory. It is roughly 18–20 km one way to the valley, and depending on where you camp or wander, the total round trip can land around 35–40 km. We did it in two days, with a taxi drop at the trailhead and a parked car waiting at the finish, and it became one of the most beautiful and chaotic mountain trips we’ve ever done.</p>
+      </header>
+
+      <figure class="hero-photo">
+        <img src="2024-07-06_09-39-07_004.jpeg" alt="The Tonquin Valley mountain range under a clear sky">
+        <figcaption>Morning light over the Tonquin Valley peaks, the kind of view that makes the whole hike feel worth it.</figcaption>
+      </figure>
+
+      <div class="story-layout">
+        <div class="story-copy">
+          <p>We started this trip with that perfect kind of confidence that comes before a mountain adventure has a chance to teach you humility. The weather was sunny, the trail felt alive, and the whole valley looked like a postcard. We had planned to camp near the start of the MacCarib area, but the pace was good and the energy was better, so before long we were already pushing toward Portal instead of stopping where we originally meant to.</p>
+          <p>That was the first bright, stupidly optimistic sign: we were moving so well that we basically outran the plan. By the time the sun started sliding lower, we were still smiling, still climbing, still convinced the day belonged to us. We had the whole valley in front of us, the peaks glowing warm and golden, and the kind of light that makes every step feel cinematic.</p>
+          <p>Then came the part that turned the trip from “beautiful day hike” into “we will never forget this.” When night fell, the trail changed. The water level rose, the ground turned swampy, and there were stretches where crossing felt less like hiking and more like negotiating with the terrain itself. We were wet, tired, and a little stunned by how quickly the trail transformed into something messy and difficult. By the end of the night, we were no longer trying to finish the route in style — we were just trying to get through it.</p>
+        </div>
+
+        <aside class="info-card">
+          <h3>Trip notes</h3>
+          <ul>
+            <li>Two-day hike</li>
+            <li>Taxi dropped us at the trailhead</li>
+            <li>Car waiting at the end</li>
+            <li>Started in sunshine, ended in rain and cold</li>
+            <li>Originally planned to camp near MacCarib</li>
+            <li>Reached Portal early and chose to finish instead</li>
+          </ul>
+        </aside>
+      </div>
+
+      <blockquote>“We thought we were just doing a beautiful two-day hike. Somewhere between the valley and the dark, it became a story about endurance, weather, and the kind of luck that only feels good after it’s over.”</blockquote>
+
+      <section class="trip-section">
+        <h2>Day 1 — bright skies, long walking, and a trail that changed shape after sunset</h2>
+        <p>The first day was everything we wanted from the hike. We were out early, the mountain light was unreal, and we were moving at the kind of pace that makes you feel unstoppable. It was exactly the kind of day that makes you want to take ten more photos every time the scenery changes.</p>
+        <div class="gallery-grid">
+          <figure class="photo-card">
+            <img src="2024-07-05_11-47-41_709.jpeg" alt="Trail entrance area with mountain view">
+            <figcaption>The first stretch of the hike: clear sky, fresh legs, and zero suspicion that the weather would turn.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_12-44-15_232.jpeg" alt="Hiker standing beside wild mountain scenery">
+            <figcaption>Bright, open valley views and the feeling that this hike was going to be unforgettable for all the right reasons.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_16-12-21_060.jpg" alt="Mountain hike trail and landscape">
+            <figcaption>By the afternoon, the valley had gone from beautiful to cinematic. Every turn gave us another incredible view.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_16-43-34_979.jpg" alt="Forest trail with mountain panorama">
+            <figcaption>We were still smiling, still moving, and still convinced we’d reach camp on time.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_19-41-14_500.jpeg" alt="Late day view of mountains and lake">
+            <figcaption>Late-day light made the whole valley glow. This was the exact kind of place that makes you forget your phone is still in your pocket.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="trip-section">
+        <h2>Nightfall — when the river rose and the trail became a problem</h2>
+        <p>We were due for a good night of sleep, but the mountain had other ideas. Once it got dark, the weather turned heavy and the trail’s water crossings were no longer manageable. The water level had climbed, the ground was swampy, and there were sections we simply could not cross cleanly. It wasn’t dramatic in a cinematic way — it was more like the land itself had changed shape in front of us.</p>
+        <p>That’s when we found the backcountry lodge, a shelter that saved the night and probably the whole mood of the trip. We were cold, soaked, and tired, but we had a roof, warm shelter, and a small, surreal sense of relief. The rain came down hard, and we sat there for a while grateful to be somewhere dry and not drowning in the valley floor.</p>
+        <div class="gallery-grid">
+          <figure class="photo-card">
+            <img src="2024-07-06_00-30-08_115.jpg" alt="Dark mountain silhouette at night in Tonquin Valley">
+            <figcaption>Night over Tonquin Valley: the mountains went dark, the weather turned rough, and the whole day felt very different from the one we started.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_05-40-16_329.jpg" alt="Backcountry hut in the early morning">
+            <figcaption>Morning found us grateful, damp, and unexpectedly lucky. The lodge gave us exactly what we needed to regroup.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_05-46-42_196.jpg" alt="Hiker in front of a log cabin shelter">
+            <figcaption>We weren’t at the campsite we had planned, but we were alive, dry, and starting to believe the trip might still end beautifully.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="trip-section">
+        <h2>Day 2 — the valley looked like a painting</h2>
+        <p>We woke up to a completely different mood. The rain had passed, the sky was bright, and the whole valley looked somehow sharper, cleaner, and even more alive than it had before. We got a proper breakfast, took it all in, and headed out on a beautiful morning walk through the forest and meadows. It felt like the trail was apologizing for the night before.</p>
+        <p>We did not linger on the idea of “camping at Portal.” We had made it there early enough that it no longer made sense to stop. We just kept going, and the day unfolded around us in the best way possible. Strong views, easy hiking, plenty of mountain air, and the satisfaction of finishing a route that had initially looked simple but left a much bigger impression than expected.</p>
+        <div class="gallery-grid">
+          <figure class="photo-card">
+            <img src="2024-07-06_06-18-30_165.jpeg" alt="Beautiful mountain scenery with clouds and sunlight">
+            <figcaption>Somehow the next morning looked even better than the first. The valley felt fresh, open, and full of possibility.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_09-01-37_160.jpg" alt="Mountain landscape and trails after the storm">
+            <figcaption>Blue sky, soft clouds, and the kind of mountain view that makes you forget every wet moment from the night before.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_09-39-07_004.jpeg" alt="Wide scenic mountain panorama">
+            <figcaption>We kept going and finished the hike with huge views behind us and a sense that we’d gotten the best of both worlds: adventure and reward.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="Sarah.jpeg" alt="Sarah and Nico together in front of Tonquin Valley mountain panorama">
+            <figcaption>Final trail photo: a little tired, a lot happy, and very much in love with the place.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="trip-section">
+        <h2>Photo journal</h2>
+        <div class="gallery-grid">
+          <figure class="photo-card">
+            <img src="2024-07-05_11-47-41_709.jpeg" alt="First photos of the Tonquin Valley hike">
+            <figcaption>We started the hike full of optimism and not nearly enough respect for the weather.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_12-44-15_232.jpeg" alt="Trail and valley landscape">
+            <figcaption>The valley was wide open and the sun was doing exactly what we wanted it to do.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_16-12-21_060.jpg" alt="Mountain valley with trees and trail">
+            <figcaption>Everything felt grand and easy in the mid-afternoon light.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_16-43-34_979.jpg" alt="Forest trail in the valley">
+            <figcaption>We weren’t yet thinking about the river or the rain — just the next beautiful viewpoint.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-05_19-41-14_500.jpeg" alt="Evening mountain light">
+            <figcaption>The final light of day one made everything feel magical.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_00-30-08_115.jpg" alt="Misty mountain night collapse">
+            <figcaption>Night changed the story in a hurry. The trail got rough, the river rose, and our plan changed fast.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_05-40-16_329.jpg" alt="Early morning shelter and valley view">
+            <figcaption>The storm gave way to a beautiful sunrise and the kind of relief that feels earned.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_05-46-42_196.jpg" alt="Hiker standing at the backcountry lodge">
+            <figcaption>We found a place to hide from the worst of the rain and regrouped before the final push.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_06-18-30_165.jpeg" alt="Early morning mountain panorama">
+            <figcaption>Breakfast felt extra good after the night we had.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_09-01-37_160.jpg" alt="Open valley under blue sky">
+            <figcaption>By morning, the valley looked completely different — brighter, calmer, and full of energy.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="2024-07-06_09-39-07_004.jpeg" alt="Wide mountain landscape with snow and sky">
+            <figcaption>We walked out under one of the clearest, best-looking sky days of the whole trip.</figcaption>
+          </figure>
+          <figure class="photo-card">
+            <img src="Sarah.jpeg" alt="Sarah smiling at Tonquin Valley">
+            <figcaption>We were tired, proud, and absolutely happy to be here.</figcaption>
+          </figure>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <div id="site-footer-placeholder"></div>
+  <script>
+    (function(){
+      const originalGet = document.getElementById.bind(document);
+      document.getElementById = function(id){
+        const safe = ['timelineWrap','prevBtn','nextBtn','timeline'];
+        const el = originalGet(id);
+        if (el) return el;
+        if (safe.includes(id)) {
+          return {
+            appendChild: function(){},
+            addEventListener: function(){},
+            disabled: false
+          };
+        }
+        return null;
+      };
+    })();
+  </script>
+  <script>(function(){const trips=[{slug:'2026-01-09-vegas-death-valley-mammoth.html',year:2026},{slug:'2026-05-24-iceland.html',year:2026},{slug:'2025-05-13-european-tour.html',year:2025},{slug:'2025-05-27-grand-teton-yellowstone.html',year:2025},{slug:'2025-09-26-sentinel-pass.html',year:2025},{slug:'2025-06-28-takakkaw-falls.html',year:2025},{slug:'2024-09-05-lake-ohara-takakkaw.html',year:2024},{slug:'2024-07-05-tonquin-valley.html',year:2024},{slug:'2024-10-17-hawaii.html',year:2024},{slug:'2024-10-01-south-korea-taiwan.html',year:2024},{slug:'2023-08-20-us-virgin-islands-cruise.html',year:2023},{slug:'2023-05-24-oregon-road-trip.html',year:2023},{slug:'2023-04-27-mexico.html',year:2023},{slug:'2022-11-10-san-francisco.html',year:2022},{slug:'2022-06-09-florida-orlando.html',year:2022},{slug:'2022-05-26-bc-road-trip.html',year:2022},{slug:'2022-02-18-whistler.html',year:2022},{slug:'2022-02-11-seattle.html',year:2022},{slug:'2022-01-20-whistler-cypress.html',year:2022},{slug:'2021-05-06-fairmont-bugaboo.html',year:2021},{slug:'2021-04-07-toronto.html',year:2021},{slug:'2021-03-26-revelstoke.html',year:2021},{slug:'2021-02-26-whistler.html',year:2021},{slug:'2021-01-14-vancouver.html',year:2021},{slug:'2021-11-19-rockies-ski-weekend.html',year:2021},{slug:'2023-07-29-bugaboo-provincial-park.html',year:2023}];const path=location.pathname.split('/').pop();const idx=trips.findIndex(t=>t.slug===path);const prev=document.getElementById('prevBtn');const next=document.getElementById('nextBtn');const yearsEl=document.getElementById('timeline');const years=Array.from(new Set(trips.map(t=>t.year))).sort((a,b)=>b-a);years.forEach(y=>{const b=document.createElement('button');b.textContent=y;b.addEventListener('click',()=>{const i=trips.findIndex(t=>t.year===y);if(i>=0)location.href='/diary/trips/'+trips[i].slug;});yearsEl.appendChild(b);});if(idx>0)prev.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx-1].slug);else prev.disabled=true;if(idx>=0&&idx<trips.length-1)next.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx+1].slug);else next.disabled=true;document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'&&idx>0)location.href='/diary/trips/'+trips[idx-1].slug; if(e.key==='ArrowRight'&&idx<trips.length-1)location.href='/diary/trips/'+trips[idx+1].slug;});})();</script>
   <script src="/includes/loader.js"></script>
-</body></html>
+</body>
+</html>
