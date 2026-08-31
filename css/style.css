@@ -69,9 +69,11 @@ main{flex:1}
 .product-name{font-weight:700;margin-bottom:0.5rem}
 .product-desc{color:var(--muted);font-size:0.95rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;align-items:start;margin-top:1rem}
-.card{display:flex;flex-direction:column;justify-content:center;padding:1.25rem;border:1px solid #eef2f7;border-radius:10px;background:#fff;color:var(--text);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease;min-height:160px}
+.card{position:relative;display:flex;flex-direction:column;justify-content:center;padding:1.25rem;border:1px solid #eef2f7;border-radius:10px;background:#fff;color:var(--text);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease;min-height:160px;background-size:cover;background-position:center;background-repeat:no-repeat;overflow:hidden;isolation:isolate}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,0.20),rgba(15,23,42,0.58));z-index:0}
+.card h3,.card p{position:relative;z-index:1}
 .card h3{margin:0 0 0.5rem}
-.card p{margin:0;color:var(--muted)}
+.card p{margin:0;color:rgba(255,255,255,0.84)}
 .card:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(11,17,32,0.06)}
 
 /* Grid button: dark monochrome fading to grey with light text */
