@@ -57,6 +57,13 @@
     return path.includes('/diary/trips/') && path.endsWith('/trips.html');
   }
 
+  function resetScrollToTop() {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }
+
   // Directory -> preferred index target mapping
   var indexTargets = {
     '/tools/': '/tools/tools.html',
@@ -78,9 +85,9 @@
         const style = document.createElement('style');
         style.id = 'page-back-button-style';
         style.textContent = [
-          '.page-back-wrap{max-width:1100px;margin:0;padding:0 0rem;display:flex;justify-content:flex-start;position:fixed;top:calc(56px + 0.6rem);left:0.6rem;z-index:10010}',
+          '.page-back-wrap{position:relative;margin:0.6rem 0 0 0;padding:0;display:flex;justify-content:flex-start}',
             '.hero.has-back-button{position:relative}',
-            '.page-back-wrap.hero-attached{position:absolute;top:0.6rem;left:0.6rem;z-index:10011}',
+            '.page-back-wrap.hero-attached{position:relative;margin:0.6rem 0 0 0.6rem;padding:0}',
           '.page-back-button{display:inline-block;padding:.28rem .6rem;border-radius:6px;border:1px solid rgba(16,24,32,0.06);background:transparent;color:#334155;text-decoration:underline;font-weight:600;font-size:0.95rem;box-shadow:none;cursor:pointer}',
           '.page-back-button:hover{background:#f8fafc}',
           '@media (min-width:1100px){.page-back-wrap{left:calc(50% - 550px + 0.6rem)}}',
@@ -138,7 +145,7 @@
 
           wrap.appendChild(link);
           // Try attach to hero (top-left of hero) first, otherwise insert before the heading
-          try { if (attachToHero(wrap)) return; } catch(e){}
+          try { if (!isTripsDetailPage() && attachToHero(wrap)) return; } catch(e){}
           h.parentNode.insertBefore(wrap, h);
         });
       } else {
@@ -176,7 +183,7 @@
           });
         }
         wrap.appendChild(link);
-        // Try attach to hero (top-left) first, otherwise insert at top of main/body
+        // Try attach to hero (top-left) first, otherwise insert at top of body
         if (!attachToHero(wrap)) {
           const main = document.querySelector('main');
           if (main && main.parentNode) main.parentNode.insertBefore(wrap, main);
@@ -212,11 +219,17 @@
     document.addEventListener('DOMContentLoaded', function() {
       loadInclude('/includes/header.html', 'site-header-placeholder');
       loadInclude('/includes/footer.html', 'site-footer-placeholder');
+      resetScrollToTop();
       ensurePageBackButtons();
     });
   } else {
     loadInclude('/includes/header.html', 'site-header-placeholder');
     loadInclude('/includes/footer.html', 'site-footer-placeholder');
+    resetScrollToTop();
     ensurePageBackButtons();
   }
+
+  window.addEventListener('pageshow', function() {
+    resetScrollToTop();
+  });
 })();
