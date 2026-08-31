@@ -85,14 +85,9 @@
         const style = document.createElement('style');
         style.id = 'page-back-button-style';
         style.textContent = [
-          '.page-back-wrap{position:relative;margin:0.6rem 0 0 0;padding:0;display:flex;justify-content:flex-start}',
-            '.hero.has-back-button{position:relative}',
-            '.page-back-wrap.hero-attached{position:relative;margin:0.6rem 0 0 0.6rem;padding:0}',
+          '.page-back-wrap{display:block;margin:0.6rem 0 1rem 0.6rem;padding:0}',
           '.page-back-button{display:inline-block;padding:.28rem .6rem;border-radius:6px;border:1px solid rgba(16,24,32,0.06);background:transparent;color:#334155;text-decoration:underline;font-weight:600;font-size:0.95rem;box-shadow:none;cursor:pointer}',
-          '.page-back-button:hover{background:#f8fafc}',
-          '@media (min-width:1100px){.page-back-wrap{left:calc(50% - 550px + 0.6rem)}}',
-          '.page-back-wrap + h1.name{margin-top:2.25rem}',
-          '@media (max-width:600px){.page-back-wrap{top:calc(56px + 0.8rem);left:0.6rem}.page-back-wrap + h1.name{margin-top:2.8rem}}'
+          '.page-back-button:hover{background:#f8fafc}'
         ].join('');
         document.head.appendChild(style);
       }
