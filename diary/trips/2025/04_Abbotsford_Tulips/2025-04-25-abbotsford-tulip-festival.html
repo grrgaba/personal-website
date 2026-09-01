@@ -6,19 +6,23 @@
   <title>Apr 25 2025 — Abbotsford Tulip Festival</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
+
   <style>
     body {
       background: #edf0ea;
     }
+
     .post {
       max-width: 1220px;
       margin: 0 auto;
       padding: 1.5rem 1rem 4rem;
     }
+
     .trip-header {
       text-align: center;
       margin-bottom: 1.8rem;
     }
+
     .trip-header h1 {
       margin: 0;
       font-size: clamp(2.6rem, 6vw, 6rem);
@@ -26,6 +30,7 @@
       letter-spacing: -0.06em;
       color: #1d2b2b;
     }
+
     .eyebrow {
       margin: 0 0 0.75rem;
       text-transform: uppercase;
@@ -34,6 +39,7 @@
       color: #5d7268;
       font-weight: 700;
     }
+
     .lede {
       max-width: 860px;
       margin: 1rem auto 0;
@@ -41,32 +47,42 @@
       line-height: 1.7;
       color: #30433f;
     }
+
+    /* HERO */
     .hero-wrap {
       margin-bottom: 2.2rem;
     }
+
     .hero-photo {
       margin: 0 0 1.2rem;
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 18px 40px rgba(20,32,26,0.12);
       background: #e9e5dd;
-      height: 520px;
     }
+
     .hero-photo img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
+      height: auto;
+      max-height: 700px;
+      object-fit: contain;
+      object-position: center;
       display: block;
+      margin: 0 auto;
     }
+
     .side-stack {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
+
     @media (max-width: 600px) {
-      .side-stack { grid-template-columns: 1fr; }
+      .side-stack {
+        grid-template-columns: 1fr;
+      }
     }
+
     .mini-card {
       background: rgba(255,255,255,0.55);
       border: 1px solid rgba(53,72,64,0.08);
@@ -74,6 +90,7 @@
       padding: 1rem 1rem 0.9rem;
       box-shadow: 0 10px 22px rgba(20,24,20,0.05);
     }
+
     .mini-card h3 {
       margin: 0 0 0.7rem;
       font-size: 0.82rem;
@@ -81,18 +98,21 @@
       text-transform: uppercase;
       color: #496158;
     }
+
     .mini-card p {
       margin: 0;
       color: #2d3e3a;
       line-height: 1.7;
       font-size: 1rem;
     }
+
     .flower-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
       margin-top: 0.85rem;
     }
+
     .flower-tags span {
       background: #dfe9df;
       border: 1px solid #c7d6c9;
@@ -101,6 +121,8 @@
       font-size: 0.8rem;
       color: #335145;
     }
+
+    /* STORY */
     .story-copy {
       max-width: 890px;
       margin: 2.2rem 0 1.5rem;
@@ -108,15 +130,20 @@
       line-height: 1.8;
       color: #253b39;
     }
+
     .story-copy p {
       margin: 0 0 1.2rem;
     }
+
+    /* PHOTO GALLERY */
     .mosaic {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
       gap: 1rem;
       margin-top: 2rem;
+      align-items: start;
     }
+
     .photo-card {
       margin: 0;
       background: rgba(255,255,255,0.5);
@@ -125,63 +152,110 @@
       border: 1px solid rgba(65,83,72,0.08);
       box-shadow: 0 8px 22px rgba(18,24,18,0.06);
     }
+
+    /*
+      IMPORTANT:
+      Do NOT force an aspect ratio.
+      This keeps the original proportions of every photo.
+    */
     .photo-card img {
       width: 100%;
       height: auto;
-      object-fit: cover;
       display: block;
+      object-fit: contain;
     }
-    .photo-card.tall { grid-column: span 5; }
-    .photo-card.tall img { aspect-ratio: 4 / 5; }
-    
-    .photo-card.wide { grid-column: span 7; }
-    .photo-card.wide img { aspect-ratio: 3 / 2; }
-    
-    .photo-card.full { grid-column: span 12; }
-    .photo-card.full img { aspect-ratio: 21 / 9; }
-    
+
+    .photo-card.tall {
+      grid-column: span 5;
+    }
+
+    .photo-card.wide {
+      grid-column: span 7;
+    }
+
+    .photo-card.full {
+      grid-column: span 12;
+    }
+
     .photo-card figcaption {
       padding: 0.75rem 0.9rem 1rem;
       font-size: 0.9rem;
       color: #40554f;
       line-height: 1.5;
     }
+
     @media (max-width: 900px) {
-      .hero-wrap {
-        grid-template-columns: 1fr;
-      }
       .photo-card.tall,
       .photo-card.wide,
       .photo-card.full {
         grid-column: span 12;
       }
-      .photo-card.tall img,
-      .photo-card.wide img,
-      .photo-card.full img {
-        aspect-ratio: 3 / 2;
+    }
+
+    @media (max-width: 600px) {
+      .post {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      .mosaic {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+      }
+
+      .photo-card.tall,
+      .photo-card.wide,
+      .photo-card.full {
+        grid-column: span 1;
+      }
+
+      .hero-photo img {
+        max-height: none;
       }
     }
   </style>
 </head>
+
 <body>
+
   <div id="site-header-placeholder"></div>
 
   <main class="container">
     <article class="post">
+
       <header class="trip-header">
         <p class="eyebrow">April 25, 2025</p>
+
         <h1>Abbotsford Tulip Festival</h1>
-        <p class="lede">We left early in the morning, before the day was fully awake, with Nico, Sarah, Tita Lani, and Tita Lani’s friend. The tulips were already glowing in the cool spring air, and the whole field felt like a color story waiting to be walked through.</p>
+
+        <p class="lede">
+          We left early in the morning, before the day was fully awake, with Nico,
+          Sarah, Tita Lani, and Tita Lani’s friend. The tulips were already glowing
+          in the cool spring air, and the whole field felt like a color story waiting
+          to be walked through.
+        </p>
       </header>
 
       <div class="hero-wrap">
+
         <figure class="hero-photo">
-          <img src="2025-04-25_12-47-28_518.jpeg" alt="People standing in a tulip field with mountains in the background">
+          <img
+            src="2025-04-25_12-47-28_518.jpeg"
+            alt="People standing in a tulip field with mountains in the background"
+          >
         </figure>
+
         <div class="side-stack">
+
           <div class="mini-card">
             <h3>Flower notes</h3>
-            <p>Rows of hot pink, red, orange, white, and yellow tulips stretched out in every direction, with bright blossoms and a few flowering trees at the edges.</p>
+
+            <p>
+              Rows of hot pink, red, orange, white, and yellow tulips stretched out
+              in every direction, with bright blossoms and a few flowering trees
+              at the edges.
+            </p>
+
             <div class="flower-tags">
               <span>Pink tulips</span>
               <span>Red tulips</span>
@@ -190,154 +264,323 @@
               <span>White tulips</span>
             </div>
           </div>
+
           <div class="mini-card">
             <h3>What we did</h3>
-            <p>We got there early, wandered the rows, took a bunch of photos, and let the field do the rest. It was one of those simple days that somehow feels huge in memory.</p>
+
+            <p>
+              We got there early, wandered the rows, took a bunch of photos, and
+              let the field do the rest. It was one of those simple days that
+              somehow feels huge in memory.
+            </p>
           </div>
+
         </div>
       </div>
 
       <div class="story-copy">
-        <p>There’s something about tulips first thing in the morning that makes everything feel lighter. The colour is so intense it almost feels unreal, and the mountains in the background made the whole field look even more cinematic. Pink and crimson rows stretched into the distance, while the orange and yellow patches kept the whole thing feeling warm and bright.</p>
-        <p>We were moving slow, taking photos, laughing, and just soaking in the mood. It was one of those days where no one was rushing — we were just enjoying the flowers, the weather, and being out together before the rest of the day got loud.</p>
-        <p>Getting there was already a moment of its own — I drove a Tesla for the first time. Smooth, quiet, and kind of surreal in the best way. The drive down matched the whole vibe of the day.</p>
+
+        <p>
+          There’s something about tulips first thing in the morning that makes
+          everything feel lighter. The colour is so intense it almost feels
+          unreal, and the mountains in the background made the whole field look
+          even more cinematic. Pink and crimson rows stretched into the distance,
+          while the orange and yellow patches kept the whole thing feeling warm
+          and bright.
+        </p>
+
+        <p>
+          We were moving slow, taking photos, laughing, and just soaking in the
+          mood. It was one of those days where no one was rushing — we were just
+          enjoying the flowers, the weather, and being out together before the
+          rest of the day got loud.
+        </p>
+
+        <p>
+          Getting there was already a moment of its own — I drove a Tesla for
+          the first time. Smooth, quiet, and kind of surreal in the best way.
+          The drive down matched the whole vibe of the day.
+        </p>
+
       </div>
 
       <div class="mosaic">
+
         <figure class="photo-card tall">
-          <img src="2025-04-25_06-06-35_710.jpeg" alt="Early morning tulip field before sunrise light">
-          <figcaption>Early morning light and the quiet before the field got busy.</figcaption>
+          <img
+            src="2025-04-25_06-06-35_710.jpeg"
+            alt="Early morning tulip field before sunrise light"
+          >
+          <figcaption>
+            Early morning light and the quiet before the field got busy.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_08-36-06_808.jpeg" alt="Tulip field during the warm spring morning">
-          <figcaption>The morning light turned the field into a layered wash of pink and gold.</figcaption>
+          <img
+            src="2025-04-25_08-36-06_808.jpeg"
+            alt="Tulip field during the warm spring morning"
+          >
+          <figcaption>
+            The morning light turned the field into a layered wash of pink and gold.
+          </figcaption>
         </figure>
 
         <figure class="photo-card full">
-          <img src="2025-04-25_11-27-55_498.jpeg" alt="Group photo in the tulip field">
-          <figcaption>Nico, Sarah, Tita Lani, and the crew in the pink rows.</figcaption>
+          <img
+            src="2025-04-25_11-27-55_498.jpeg"
+            alt="Group photo in the tulip field"
+          >
+          <figcaption>
+            Nico, Sarah, Tita Lani, and the crew in the pink rows.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_11-31-58_244.jpeg" alt="People walking through dense tulip rows">
-          <figcaption>Wandering through the colour while the whole field felt like a living photo backdrop.</figcaption>
+          <img
+            src="2025-04-25_11-31-58_244.jpeg"
+            alt="People walking through dense tulip rows"
+          >
+          <figcaption>
+            Wandering through the colour while the whole field felt like a living
+            photo backdrop.
+          </figcaption>
         </figure>
 
         <figure class="photo-card tall">
-          <img src="2025-04-25_11-39-49_867.jpg" alt="Close-up tulips with bright pink and orange petals">
-          <figcaption>Close-up colour from the bloom rows that looked almost unreal.</figcaption>
+          <img
+            src="2025-04-25_11-39-49_867.jpg"
+            alt="Close-up tulips with bright pink and orange petals"
+          >
+          <figcaption>
+            Close-up colour from the bloom rows that looked almost unreal.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_11-44-49_288.jpg" alt="Flower rows with bright red and yellow tulips">
-          <figcaption>Bright red and yellow patches broken up by the soft spring sky.</figcaption>
+          <img
+            src="2025-04-25_11-44-49_288.jpg"
+            alt="Flower rows with bright red and yellow tulips"
+          >
+          <figcaption>
+            Bright red and yellow patches broken up by the soft spring sky.
+          </figcaption>
         </figure>
 
         <figure class="photo-card tall">
-          <img src="2025-04-25_11-45-31_074.jpeg" alt="Tulip field with packed rows and mountain background">
-          <figcaption>Every row was full and vivid, like the field had been painted in layers.</figcaption>
+          <img
+            src="2025-04-25_11-45-31_074.jpeg"
+            alt="Tulip field with packed rows and mountain background"
+          >
+          <figcaption>
+            Every row was full and vivid, like the field had been painted in layers.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_11-54-11_839.jpg" alt="People strolling through the tulip rows">
-          <figcaption>A slow walk through the flowers was the plan, and it was exactly right.</figcaption>
+          <img
+            src="2025-04-25_11-54-11_839.jpg"
+            alt="People strolling through the tulip rows"
+          >
+          <figcaption>
+            A slow walk through the flowers was the plan, and it was exactly right.
+          </figcaption>
         </figure>
 
         <figure class="photo-card full">
-          <img src="2025-04-25_11-57-05_845.jpg" alt="Tulips with pink and white blooms in the field">
-          <figcaption>Soft pinks and whites mixed with stronger colours across the field.</figcaption>
+          <img
+            src="2025-04-25_11-57-05_845.jpg"
+            alt="Tulips with pink and white blooms in the field"
+          >
+          <figcaption>
+            Soft pinks and whites mixed with stronger colours across the field.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-02-34_666.jpeg" alt="Wide tulip field with colourful rows and mountain backdrop">
-          <figcaption>Rows of tulips in every colour, with a mountain backdrop that made it feel like a postcard.</figcaption>
+          <img
+            src="2025-04-25_12-02-34_666.jpeg"
+            alt="Wide tulip field with colourful rows and mountain backdrop"
+          >
+          <figcaption>
+            Rows of tulips in every colour, with a mountain backdrop that made it
+            feel like a postcard.
+          </figcaption>
         </figure>
 
         <figure class="photo-card tall">
-          <img src="2025-04-25_12-08-54_967.jpg" alt="Pink and orange tulips with mountain backdrop">
-          <figcaption>More vivid pinks and warm oranges that kept changing with the light.</figcaption>
+          <img
+            src="2025-04-25_12-08-54_967.jpg"
+            alt="Pink and orange tulips with mountain backdrop"
+          >
+          <figcaption>
+            More vivid pinks and warm oranges that kept changing with the light.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-12-14_031.jpeg" alt="Tulip field stretching toward distant mountains">
-          <figcaption>The field kept going and going, with the mountains framing every row.</figcaption>
+          <img
+            src="2025-04-25_12-12-14_031.jpeg"
+            alt="Tulip field stretching toward distant mountains"
+          >
+          <figcaption>
+            The field kept going and going, with the mountains framing every row.
+          </figcaption>
         </figure>
 
         <figure class="photo-card full">
-          <img src="2025-04-25_12-24-02_765.jpg" alt="Flowering trees and tulips together in the field">
-          <figcaption>Spring detail at the edges of the field, where the trees and tulips met.</figcaption>
+          <img
+            src="2025-04-25_12-24-02_765.jpg"
+            alt="Flowering trees and tulips together in the field"
+          >
+          <figcaption>
+            Spring detail at the edges of the field, where the trees and tulips met.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-25-11_541.jpg" alt="Crowd enjoying the tulip festival when the field was full of colour">
-          <figcaption>The field was full by mid-morning, and the whole place felt alive.</figcaption>
+          <img
+            src="2025-04-25_12-25-11_541.jpg"
+            alt="Crowd enjoying the tulip festival when the field was full of colour"
+          >
+          <figcaption>
+            The field was full by mid-morning, and the whole place felt alive.
+          </figcaption>
         </figure>
 
         <figure class="photo-card tall">
-          <img src="2025-04-25_12-28-11_077.jpg" alt="Tulip field with purple flower accents">
-          <figcaption>Every corner had another colour combination to stop and admire.</figcaption>
+          <img
+            src="2025-04-25_12-28-11_077.jpg"
+            alt="Tulip field with purple flower accents"
+          >
+          <figcaption>
+            Every corner had another colour combination to stop and admire.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-28-47_694.jpeg" alt="People sitting in the tulip field under flowering trees">
-          <figcaption>Someone said “let’s sit a minute,” and suddenly the whole field became the perfect place to pause.</figcaption>
+          <img
+            src="2025-04-25_12-28-47_694.jpeg"
+            alt="People sitting in the tulip field under flowering trees"
+          >
+          <figcaption>
+            Someone said “let’s sit a minute,” and suddenly the whole field became
+            the perfect place to pause.
+          </figcaption>
         </figure>
 
         <figure class="photo-card full">
-          <img src="2025-04-25_12-29-35_545.jpeg" alt="Colourful tulips with strong pink, orange, and red blooms">
-          <figcaption>The colour intensity kept building as the day warmed up.</figcaption>
+          <img
+            src="2025-04-25_12-29-35_545.jpeg"
+            alt="Colourful tulips with strong pink, orange, and red blooms"
+          >
+          <figcaption>
+            The colour intensity kept building as the day warmed up.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-30-28_109.jpg" alt="Tulip field in the bright noon light">
-          <figcaption>By midday, the tulips looked even brighter under the high spring sun.</figcaption>
+          <img
+            src="2025-04-25_12-30-28_109.jpg"
+            alt="Tulip field in the bright noon light"
+          >
+          <figcaption>
+            By midday, the tulips looked even brighter under the high spring sun.
+          </figcaption>
         </figure>
 
         <figure class="photo-card tall">
-          <img src="2025-04-25_12-33-55_501.jpg" alt="Group walking through bright tulips">
-          <figcaption>Little pauses and long looks at the flowers were the whole point.</figcaption>
+          <img
+            src="2025-04-25_12-33-55_501.jpg"
+            alt="Group walking through bright tulips"
+          >
+          <figcaption>
+            Little pauses and long looks at the flowers were the whole point.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-36-09_770.jpg" alt="Tulip rows with people exploring the festival grounds">
-          <figcaption>The festival grounds were buzzing, but the rows still felt like a private pocket of colour.</figcaption>
+          <img
+            src="2025-04-25_12-36-09_770.jpg"
+            alt="Tulip rows with people exploring the festival grounds"
+          >
+          <figcaption>
+            The festival grounds were buzzing, but the rows still felt like a
+            private pocket of colour.
+          </figcaption>
         </figure>
 
         <figure class="photo-card tall">
-          <img src="2025-04-25_12-38-24_589.jpg" alt="Tulips and flowers under soft spring light">
-          <figcaption>One more moment in the field before the day moved on.</figcaption>
+          <img
+            src="2025-04-25_12-38-24_589.jpg"
+            alt="Tulips and flowers under soft spring light"
+          >
+          <figcaption>
+            One more moment in the field before the day moved on.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-46-22_531.jpeg" alt="Tulip field with red and pink flowers and a wooden fence">
-          <figcaption>Red and pink tulips everywhere, with the kind of soft spring light that makes everything glow.</figcaption>
+          <img
+            src="2025-04-25_12-46-22_531.jpeg"
+            alt="Tulip field with red and pink flowers and a wooden fence"
+          >
+          <figcaption>
+            Red and pink tulips everywhere, with the kind of soft spring light
+            that makes everything glow.
+          </figcaption>
         </figure>
 
         <figure class="photo-card full">
-          <img src="2025-04-25_12-47-28_518.jpeg" alt="People standing in a tulip field with mountains in the background">
-          <figcaption>The first big hero shot from the day, all colour and movement and spring air.</figcaption>
+          <img
+            src="2025-04-25_12-47-28_518.jpeg"
+            alt="People standing in a tulip field with mountains in the background"
+          >
+          <figcaption>
+            The first big hero shot from the day, all colour and movement and
+            spring air.
+          </figcaption>
         </figure>
 
         <figure class="photo-card tall">
-          <img src="2025-04-25_12-50-11_996.jpeg" alt="Tulip field with big flowers and bright colours in full bloom">
-          <figcaption>One of those scenes where the flowers feel so alive they almost look painted.</figcaption>
+          <img
+            src="2025-04-25_12-50-11_996.jpeg"
+            alt="Tulip field with big flowers and bright colours in full bloom"
+          >
+          <figcaption>
+            One of those scenes where the flowers feel so alive they almost look
+            painted.
+          </figcaption>
         </figure>
 
         <figure class="photo-card wide">
-          <img src="2025-04-25_12-51-45_487.jpeg" alt="Tulip rows near the end of the festival walk">
-          <figcaption>Even the last stretch of the field still felt full of life and colour.</figcaption>
+          <img
+            src="2025-04-25_12-51-45_487.jpeg"
+            alt="Tulip rows near the end of the festival walk"
+          >
+          <figcaption>
+            Even the last stretch of the field still felt full of life and colour.
+          </figcaption>
         </figure>
 
         <figure class="photo-card full">
-          <img src="2025-04-25_12-52-25_107.jpeg" alt="Final vibrant tulip scene with wide colour and mountain horizon">
-          <figcaption>A final sweep of colour to end the walk on the brightest note.</figcaption>
+          <img
+            src="2025-04-25_12-52-25_107.jpeg"
+            alt="Final vibrant tulip scene with wide colour and mountain horizon"
+          >
+          <figcaption>
+            A final sweep of colour to end the walk on the brightest note.
+          </figcaption>
         </figure>
+
       </div>
+
     </article>
   </main>
 
   <div id="site-footer-placeholder"></div>
+
   <script src="/includes/loader.js"></script>
+
 </body>
 </html>
