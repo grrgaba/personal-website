@@ -48,39 +48,14 @@
       color: #30433f;
     }
 
-    /* HERO */
     .hero-wrap {
       margin-bottom: 2.2rem;
-    }
-
-    .hero-photo {
-      margin: 0 0 1.2rem;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 18px 40px rgba(20,32,26,0.12);
-      background: #e9e5dd;
-    }
-
-    .hero-photo img {
-      width: 100%;
-      height: auto;
-      max-height: 700px;
-      object-fit: contain;
-      object-position: center;
-      display: block;
-      margin: 0 auto;
     }
 
     .side-stack {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
-    }
-
-    @media (max-width: 600px) {
-      .side-stack {
-        grid-template-columns: 1fr;
-      }
     }
 
     .mini-card {
@@ -122,7 +97,6 @@
       color: #335145;
     }
 
-    /* STORY */
     .story-copy {
       max-width: 890px;
       margin: 2.2rem 0 1.5rem;
@@ -135,7 +109,6 @@
       margin: 0 0 1.2rem;
     }
 
-    /* PHOTO GALLERY */
     .mosaic {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -153,11 +126,6 @@
       box-shadow: 0 8px 22px rgba(18,24,18,0.06);
     }
 
-    /*
-      IMPORTANT:
-      Do NOT force an aspect ratio.
-      This keeps the original proportions of every photo.
-    */
     .photo-card img {
       width: 100%;
       height: auto;
@@ -193,6 +161,10 @@
     }
 
     @media (max-width: 600px) {
+      .side-stack {
+        grid-template-columns: 1fr;
+      }
+
       .post {
         padding-left: 0.75rem;
         padding-right: 0.75rem;
@@ -209,9 +181,6 @@
         grid-column: span 1;
       }
 
-      .hero-photo img {
-        max-height: none;
-      }
     }
   </style>
 </head>
@@ -229,31 +198,32 @@
         <h1>Abbotsford Tulip Festival</h1>
 
         <p class="lede">
-          We left early in the morning, before the day was fully awake, with Nico,
-          Sarah, Tita Lani, and Tita Lani’s friend. The tulips were already glowing
-          in the cool spring air, and the whole field felt like a color story waiting
-          to be walked through.
+          We flew from Edmonton to Abbotsford early that morning, just to spend
+          the day surrounded by flowers. It was me, Sarah, Tita Lani, and Tita
+          Lani’s friend. After landing at YXX, we picked up a Tesla — my first
+          time ever driving one — and headed straight for Lakeland Flowers.
         </p>
       </header>
 
+      <figure style="width: 100%; margin: 2rem 0;">
+        <img
+          src="2025-04-25_11-43-22_049.jpeg"
+          alt="People standing in a tulip field with mountains in the background"
+          style="width: 100%; height: auto; display: block; object-fit: cover;"
+        >
+      </figure>
       <div class="hero-wrap">
-
-        <figure class="hero-photo">
-          <img
-            src="2025-04-25_12-47-28_518.jpeg"
-            alt="People standing in a tulip field with mountains in the background"
-          >
-        </figure>
 
         <div class="side-stack">
 
           <div class="mini-card">
-            <h3>Flower notes</h3>
+            <h3>Flower Notes</h3>
 
             <p>
-              Rows of hot pink, red, orange, white, and yellow tulips stretched out
-              in every direction, with bright blossoms and a few flowering trees
-              at the edges.
+              Rows of pink, red, orange, white, and yellow tulips stretched out
+              in every direction. With the mountains in the distance and
+              flowering trees around the edges, the whole place felt almost
+              unreal.
             </p>
 
             <div class="flower-tags">
@@ -266,12 +236,13 @@
           </div>
 
           <div class="mini-card">
-            <h3>What we did</h3>
+            <h3>The Day</h3>
 
             <p>
-              We got there early, wandered the rows, took a bunch of photos, and
-              let the field do the rest. It was one of those simple days that
-              somehow feels huge in memory.
+              We flew in early, picked up the Tesla, drove to the flower field,
+              wandered through the rows, took way too many photos, and just
+              enjoyed being there. Nothing complicated — just a really good day
+              together.
             </p>
           </div>
 
@@ -281,25 +252,46 @@
       <div class="story-copy">
 
         <p>
-          There’s something about tulips first thing in the morning that makes
-          everything feel lighter. The colour is so intense it almost feels
-          unreal, and the mountains in the background made the whole field look
-          even more cinematic. Pink and crimson rows stretched into the distance,
-          while the orange and yellow patches kept the whole thing feeling warm
-          and bright.
+          The day started before the sun had really gotten going. We were up
+          early in Edmonton, heading to the airport for our flight to Abbotsford.
+          It sounds a little crazy to fly somewhere just to look at flowers, but
+          that was basically the plan — and honestly, it was worth it.
         </p>
 
         <p>
-          We were moving slow, taking photos, laughing, and just soaking in the
-          mood. It was one of those days where no one was rushing — we were just
-          enjoying the flowers, the weather, and being out together before the
-          rest of the day got loud.
+          After landing at YXX, we picked up the Tesla we had rented. I had never
+          driven one before, so even getting out of the airport felt like part
+          of the adventure. It was incredibly quiet and smooth, and definitely
+          made the drive to Lakeland Flowers a little more memorable.
         </p>
 
         <p>
-          Getting there was already a moment of its own — I drove a Tesla for
-          the first time. Smooth, quiet, and kind of surreal in the best way.
-          The drive down matched the whole vibe of the day.
+          Once we arrived, the flowers immediately took over. There were rows
+          and rows of tulips in almost every colour you could imagine. Pink,
+          red, orange, yellow, and white stretched across the field, with the
+          mountains sitting behind everything. The combination made the whole
+          place look like a postcard.
+        </p>
+
+        <p>
+          We took our time walking around, stopping whenever something caught
+          our attention. There wasn't really a schedule beyond seeing the
+          flowers and enjoying the day. We took photos, joked around, walked
+          through the rows, and eventually just sat down for a bit.
+        </p>
+
+        <p>
+          Looking back through the photos, what I like most is how the day
+          gradually changed. The first pictures are from the early morning
+          before everything was busy, and by the time we reached the later
+          photos, the field was full of people and colour.
+        </p>
+
+        <p>
+          It was a simple trip, but those are sometimes the ones that stick with
+          you. A very early flight, a first drive in a Tesla, a field full of
+          tulips, and a day spent with people I enjoy being around. Not a bad
+          reason to wake up ridiculously early.
         </p>
 
       </div>
@@ -309,269 +301,311 @@
         <figure class="photo-card tall">
           <img
             src="2025-04-25_06-06-35_710.jpeg"
-            alt="Early morning tulip field before sunrise light"
+            alt="Waiting at Edmonton airport early in the morning"
           >
           <figcaption>
-            Early morning light and the quiet before the field got busy.
+            6:06 AM — Starting the day at YEG. Way too early, but we had a
+            flower field waiting for us in Abbotsford.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_08-36-06_808.jpeg"
-            alt="Tulip field during the warm spring morning"
+            alt="Tesla rental at Abbotsford airport"
           >
           <figcaption>
-            The morning light turned the field into a layered wash of pink and gold.
+            8:36 AM — We landed at YXX and picked up the Tesla. This was my
+            first time driving one.
           </figcaption>
         </figure>
 
         <figure class="photo-card full">
           <img
             src="2025-04-25_11-27-55_498.jpeg"
-            alt="Group photo in the tulip field"
+            alt="Group selfie at the tulip field"
           >
           <figcaption>
-            Nico, Sarah, Tita Lani, and the crew in the pink rows.
+            11:27 AM — First selfie of the day. Me, Sarah, Tita Lani, and
+            Tita Lani’s friend, finally at the tulip field.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_11-31-58_244.jpeg"
-            alt="People walking through dense tulip rows"
+            alt="People walking through rows of tulips"
           >
           <figcaption>
-            Wandering through the colour while the whole field felt like a living
-            photo backdrop.
+            11:31 AM — We started wandering through the rows, taking in just
+            how huge the fields were.
           </figcaption>
         </figure>
 
         <figure class="photo-card tall">
           <img
             src="2025-04-25_11-39-49_867.jpg"
-            alt="Close-up tulips with bright pink and orange petals"
+            alt="Close-up of colourful tulips"
           >
           <figcaption>
-            Close-up colour from the bloom rows that looked almost unreal.
+            11:39 AM — The colours were ridiculous up close. Pink, orange,
+            red — pretty much everywhere you looked there was another photo.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_11-44-49_288.jpg"
-            alt="Flower rows with bright red and yellow tulips"
+            alt="Red and yellow tulips across the field"
           >
           <figcaption>
-            Bright red and yellow patches broken up by the soft spring sky.
+            11:44 AM — Red and yellow rows stretching across the field.
           </figcaption>
         </figure>
 
         <figure class="photo-card tall">
           <img
             src="2025-04-25_11-45-31_074.jpeg"
-            alt="Tulip field with packed rows and mountain background"
+            alt="Tulip field with mountains in the background"
           >
           <figcaption>
-            Every row was full and vivid, like the field had been painted in layers.
+            11:45 AM — The mountains in the background made the whole field
+            feel even bigger.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_11-54-11_839.jpg"
-            alt="People strolling through the tulip rows"
+            alt="People walking through tulip rows"
           >
           <figcaption>
-            A slow walk through the flowers was the plan, and it was exactly right.
+            11:54 AM — Just taking our time and wandering wherever the flowers
+            looked interesting.
           </figcaption>
         </figure>
 
         <figure class="photo-card full">
           <img
             src="2025-04-25_11-57-05_845.jpg"
-            alt="Tulips with pink and white blooms in the field"
+            alt="Pink and white tulips in the field"
           >
           <figcaption>
-            Soft pinks and whites mixed with stronger colours across the field.
+            11:57 AM — A mix of softer pinks and whites among the brighter
+            colours.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-02-34_666.jpeg"
-            alt="Wide tulip field with colourful rows and mountain backdrop"
+            alt="Wide view of colourful tulip fields"
           >
           <figcaption>
-            Rows of tulips in every colour, with a mountain backdrop that made it
-            feel like a postcard.
+            12:02 PM — The farther we walked, the more the field opened up.
+            Tulips in every direction.
           </figcaption>
         </figure>
 
         <figure class="photo-card tall">
           <img
             src="2025-04-25_12-08-54_967.jpg"
-            alt="Pink and orange tulips with mountain backdrop"
+            alt="Pink and orange tulips with mountains behind them"
           >
           <figcaption>
-            More vivid pinks and warm oranges that kept changing with the light.
+            12:08 PM — Pink and orange blooms with the mountains behind them.
+            This was one of my favourite combinations.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-12-14_031.jpeg"
-            alt="Tulip field stretching toward distant mountains"
+            alt="Tulip field stretching toward the mountains"
           >
           <figcaption>
-            The field kept going and going, with the mountains framing every row.
+            12:12 PM — The rows seemed to keep going all the way toward the
+            mountains.
           </figcaption>
         </figure>
 
         <figure class="photo-card full">
           <img
             src="2025-04-25_12-24-02_765.jpg"
-            alt="Flowering trees and tulips together in the field"
+            alt="Flowering trees beside the tulip field"
           >
           <figcaption>
-            Spring detail at the edges of the field, where the trees and tulips met.
+            12:24 PM — The tulips weren't the only thing blooming. The
+            flowering trees around the field added another layer of colour.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-25-11_541.jpg"
-            alt="Crowd enjoying the tulip festival when the field was full of colour"
+            alt="Crowd walking through the tulip festival"
           >
           <figcaption>
-            The field was full by mid-morning, and the whole place felt alive.
+            12:25 PM — By now the festival was getting much busier. Definitely
+            a different feeling from when we first arrived.
           </figcaption>
         </figure>
 
         <figure class="photo-card tall">
           <img
             src="2025-04-25_12-28-11_077.jpg"
-            alt="Tulip field with purple flower accents"
+            alt="Colourful tulips including purple flowers"
           >
           <figcaption>
-            Every corner had another colour combination to stop and admire.
+            12:28 PM — Another little pocket of colour. At this point, every
+            few steps felt like another picture.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-28-47_694.jpeg"
-            alt="People sitting in the tulip field under flowering trees"
+            alt="People sitting among the tulips"
           >
           <figcaption>
-            Someone said “let’s sit a minute,” and suddenly the whole field became
-            the perfect place to pause.
+            12:28 PM — Eventually we found a spot to sit and just enjoy the
+            view for a while.
           </figcaption>
         </figure>
 
         <figure class="photo-card full">
           <img
             src="2025-04-25_12-29-35_545.jpeg"
-            alt="Colourful tulips with strong pink, orange, and red blooms"
+            alt="Bright pink orange and red tulips"
           >
           <figcaption>
-            The colour intensity kept building as the day warmed up.
+            12:29 PM — At this point the colours were everywhere. Pink, orange,
+            red and everything in between.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-30-28_109.jpg"
-            alt="Tulip field in the bright noon light"
+            alt="Tulip field in bright midday sunlight"
           >
           <figcaption>
-            By midday, the tulips looked even brighter under the high spring sun.
+            12:30 PM — The midday sun made the colours even brighter.
           </figcaption>
         </figure>
 
         <figure class="photo-card tall">
           <img
             src="2025-04-25_12-33-55_501.jpg"
-            alt="Group walking through bright tulips"
+            alt="Group walking through the tulip field"
           >
           <figcaption>
-            Little pauses and long looks at the flowers were the whole point.
+            12:33 PM — More walking, more photos, and absolutely no shortage
+            of flowers.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-36-09_770.jpg"
-            alt="Tulip rows with people exploring the festival grounds"
+            alt="People exploring the tulip festival"
           >
           <figcaption>
-            The festival grounds were buzzing, but the rows still felt like a
-            private pocket of colour.
+            12:36 PM — The festival was getting busy, but there was still
+            plenty of room to wander through the rows.
           </figcaption>
         </figure>
 
         <figure class="photo-card tall">
           <img
             src="2025-04-25_12-38-24_589.jpg"
-            alt="Tulips and flowers under soft spring light"
+            alt="Tulips and flowers under spring light"
           >
           <figcaption>
-            One more moment in the field before the day moved on.
+            12:38 PM — One of those little moments where we stopped walking
+            just to take everything in.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-46-22_531.jpeg"
-            alt="Tulip field with red and pink flowers and a wooden fence"
+            alt="Red and pink tulips beside a wooden fence"
           >
           <figcaption>
-            Red and pink tulips everywhere, with the kind of soft spring light
-            that makes everything glow.
+            12:46 PM — Red and pink tulips along the fence as we made our way
+            through the last part of the field.
           </figcaption>
         </figure>
 
         <figure class="photo-card full">
           <img
             src="2025-04-25_12-47-28_518.jpeg"
-            alt="People standing in a tulip field with mountains in the background"
+            alt="Group standing in the tulip field with mountains behind them"
           >
           <figcaption>
-            The first big hero shot from the day, all colour and movement and
-            spring air.
+            12:47 PM — One of the big group shots from the day. Mountains,
+            flowers, and the whole crew in one frame.
           </figcaption>
         </figure>
 
         <figure class="photo-card tall">
           <img
             src="2025-04-25_12-50-11_996.jpeg"
-            alt="Tulip field with big flowers and bright colours in full bloom"
+            alt="Tulips in full bloom"
           >
           <figcaption>
-            One of those scenes where the flowers feel so alive they almost look
-            painted.
+            12:50 PM — By now we had seen just about every colour imaginable,
+            but the field still managed to surprise us.
           </figcaption>
         </figure>
 
         <figure class="photo-card wide">
           <img
             src="2025-04-25_12-51-45_487.jpeg"
-            alt="Tulip rows near the end of the festival walk"
+            alt="Tulip rows near the end of the walk"
           >
           <figcaption>
-            Even the last stretch of the field still felt full of life and colour.
+            12:51 PM — Nearing the end of our walk, with the fields still
+            stretching out around us.
           </figcaption>
         </figure>
 
         <figure class="photo-card full">
           <img
             src="2025-04-25_12-52-25_107.jpeg"
-            alt="Final vibrant tulip scene with wide colour and mountain horizon"
+            alt="Final wide view of the colourful tulip field"
           >
           <figcaption>
-            A final sweep of colour to end the walk on the brightest note.
+            12:52 PM — The last look at the tulips before we called it a day.
+            A pretty good way to finish the trip.
           </figcaption>
         </figure>
+
+      </div>
+  
+      <div class="story-copy">
+
+        <p>
+          After spending the morning at the tulip fields, we headed into
+          Vancouver for the rest of the day. One of our stops was Cowdog, and
+          we spent the remaining hours exploring the city, grabbing some food,
+          and enjoying the afternoon before it was time to head back to the
+          airport.
+        </p>
+
+        <p>
+          Eventually, it was time to say goodbye to British Columbia and make
+          our way back to YXX. Our flight to Edmonton was at 6:00 PM, so we
+          wrapped up the day, returned the Tesla, and headed to the airport.
+        </p>
+
+        <p>
+          It was a surprisingly full day for a trip that started with an
+          early-morning flight from Edmonton. Flowers in Abbotsford, a first
+          drive in a Tesla, some time in Vancouver, and then a flight home all
+          in the same day. Definitely worth the early wake-up.
+        </p>
 
       </div>
 
