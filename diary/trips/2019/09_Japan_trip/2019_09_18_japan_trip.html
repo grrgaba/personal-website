@@ -3,21 +3,632 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>(WIP) 2019-09-xx - Japan Trip</title>
+  <title>September 2019 — Japan with Dad</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <style>
+    body {
+      background: #f3ecdf;
+      color: #14323a;
+    }
+
+    body .page-back-wrap {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      display: block;
+      max-width: 42rem;
+      margin: 0.35rem auto 0.2rem;
+      padding: 0;
+      z-index: auto;
+    }
+
+    body .page-back-button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0.45rem 0.95rem;
+      border: 1px solid rgba(20, 50, 58, 0.22);
+      border-radius: 999px;
+      background: transparent;
+      color: #1a3c46;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: none;
+    }
+
+    body .page-back-button:hover {
+      background: #14323a;
+      color: #f6f0e6;
+    }
+
+    main.container {
+      max-width: 1180px;
+    }
+
+    .post {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.25rem 0 5rem;
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    }
+
+    .trip-header {
+      text-align: center;
+      padding: 0.5rem 0 0.25rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.7rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #8a5a3a;
+    }
+
+    .trip-header h1 {
+      margin: 0;
+      font-weight: 500;
+      font-size: clamp(2.8rem, 7vw, 5.6rem);
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+      color: #102830;
+    }
+
+    .lede {
+      max-width: 40rem;
+      margin: 1.1rem auto 0;
+      font-size: clamp(1.12rem, 1.7vw, 1.35rem);
+      line-height: 1.65;
+      color: #2a4650;
+    }
+
+    .day-nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.55rem;
+      margin: 1.6rem 0 0.4rem;
+      padding: 0.75rem 0.4rem;
+      background: rgba(243, 236, 223, 0.94);
+      backdrop-filter: blur(10px);
+    }
+
+    .day-nav button {
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #1a3c46;
+      background: transparent;
+      border: 1px solid rgba(20, 50, 58, 0.22);
+      border-radius: 999px;
+      padding: 0.7rem 1.15rem;
+      min-height: 44px;
+      cursor: pointer;
+    }
+
+    .day-nav button.is-on {
+      background: #14323a;
+      color: #f6f0e6;
+      border-color: #14323a;
+    }
+
+    .day-nav button:focus-visible,
+    .shot:focus-visible,
+    .lb-close:focus-visible {
+      outline: 2px solid #b85c38;
+      outline-offset: 3px;
+    }
+
+    .day {
+      scroll-margin-top: 5.5rem;
+      padding-top: 0.4rem;
+    }
+
+    .day h2 {
+      max-width: 42rem;
+      margin: 1.4rem auto 0.35rem;
+      font-weight: 500;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      letter-spacing: -0.03em;
+      color: #102830;
+    }
+
+    .when {
+      max-width: 42rem;
+      margin: 0 auto 0.2rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #8a5a3a;
+    }
+
+    .story-copy {
+      max-width: 42rem;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: clamp(1.08rem, 1.45vw, 1.28rem);
+      line-height: 1.75;
+      color: #1c3640;
+    }
+
+    .story-copy p {
+      margin: 0 0 1.15rem;
+    }
+
+    .scene {
+      max-width: 42rem;
+      margin: 2.4rem auto 0.85rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #1c4e57;
+    }
+
+    .mosaic {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 0.4rem 0 1.6rem;
+      align-items: start;
+    }
+
+    .photo-card {
+      margin: 0;
+      min-width: 0;
+      background: rgba(255, 252, 247, 0.72);
+      border: 1px solid rgba(20, 50, 58, 0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(40, 28, 16, 0.06);
+    }
+
+    .photo-card.full { grid-column: span 12; }
+    .photo-card.wide { grid-column: span 7; }
+    .photo-card.tall { grid-column: span 5; }
+    .photo-card.half { grid-column: span 6; }
+    .photo-card.solo { grid-column: 4 / span 6; }
+
+    .shot {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: #e7dccb;
+      cursor: zoom-in;
+    }
+
+    .shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .photo-card figcaption {
+      padding: 0.8rem 1rem 1rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: #3d534f;
+    }
+
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10020;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background: rgba(12, 22, 26, 0.88);
+    }
+
+    #lightbox[hidden] {
+      display: none;
+    }
+
+    .lb-figure {
+      margin: 0;
+      max-width: min(1100px, 100%);
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #lightbox img {
+      max-width: 100%;
+      max-height: 78vh;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    #lightbox figcaption {
+      margin-top: 0.8rem;
+      max-width: 40rem;
+      text-align: center;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      color: #f6f0e6;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .lb-close {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: #f6f0e6;
+      color: #14323a;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    @media (max-width: 800px) {
+      .photo-card.full,
+      .photo-card.wide,
+      .photo-card.tall,
+      .photo-card.half,
+      .photo-card.solo {
+        grid-column: span 12;
+      }
+
+      .post {
+        padding-bottom: 4rem;
+      }
+
+      .day-nav {
+        justify-content: stretch;
+      }
+
+      .day {
+        scroll-margin-top: 9rem;
+      }
+
+      .day-nav button {
+        flex: 1 1 calc(50% - 0.55rem);
+        max-width: calc(50% - 0.3rem);
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
 
   <main class="container">
     <article class="post">
-      <h1>(WIP) 2019-09-18 - Japan Trip</h1>
-      <p>Temporary trip page. Full notes and photos coming soon.</p>
+      <div class="page-back-wrap">
+        <a class="page-back-button" href="/diary/trips/trips.html">← Back</a>
+      </div>
+      <header class="trip-header">
+        <p class="eyebrow">September 2019 · with Dad</p>
+        <h1>Japan</h1>
+        <p class="lede">A short trip, just the two of us. We woke up and were out by nine. The first day was Tokyo, Shin-Okubo to Shinjuku, and the day I bought my first pair of Jordans. Yellow. The next day was Odaiba, then Asakusa. After that, Hiroshima, and Kyoto.</p>
+      </header>
+
+      <nav class="day-nav" aria-label="Stops on the trip">
+        <button type="button" data-day="tokyo1">Tokyo 1</button>
+        <button type="button" data-day="tokyo2">Tokyo 2</button>
+        <button type="button" data-day="hiroshima">Hiroshima</button>
+        <button type="button" data-day="kyoto">Kyoto</button>
+      </nav>
+
+      <section class="day" id="tokyo1">
+        <p class="when">Out by nine</p>
+        <h2>Tokyo, Shin-Okubo to Shinjuku</h2>
+        <div class="story-copy">
+          <p>We woke up and left around nine. Dad had gone ahead, so the day started where I caught him: Shin-Okubo, then the fish market, a temple and the station statue, Shibuya, Harajuku, food at Yoyogi, and Shinjuku to close it. Somewhere on that walk I bought my first pair of Jordans. Yellow.</p>
+        </div>
+
+        <p class="scene">Shin-Okubo</p>
+        <div class="story-copy">
+          <p>Korea town. Dad was already on the sidewalk with a friend, which is not what I expected to walk into at the start of Tokyo.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="dad%20and%20his%20friend.jpg" alt="Dad’s friend in a black shirt and Dad in a black-and-white leaf shirt, standing together outside a restaurant in Japan.">
+            </button>
+            <figcaption>Dad and his friend in Shin-Okubo. I was the one still catching up.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="infront%20of%20market.jpg" alt="Selfie of Dad’s friend, Nico in a yellow jacket, and Dad in a leaf-print shirt on a bright Tokyo street, with a Yoshinoya and a bear-shaped sign behind them.">
+            </button>
+            <figcaption>The three of us on the street. Yoshinoya behind Dad, a bear over the road, and the yellow jacket.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Fish market</p>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="FishMarket.jpg" alt="Nico in a black t-shirt eating sea urchin from a paper plate at a fish-market stall, with oysters on ice beside him.">
+            </button>
+            <figcaption>Uni on a paper plate, oysters on ice, the stall open onto the alley.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Harajuku</p>
+        <div class="mosaic">
+          <figure class="photo-card solo">
+            <button type="button" class="shot">
+              <img src="MeijuJinguWine.jpg" alt="Nico in a black t-shirt standing in front of a wall of stacked sake barrels covered in Japanese calligraphy.">
+            </button>
+            <figcaption>Harajuku, the wall of sake barrels. Rows of straw, ink, and brewery names.</figcaption>
+          </figure>
+        </div>
+        
+        <p class="scene">Temple, station, statue</p>
+        <div class="mosaic">
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="Temple.jpg" alt="Nico standing with arms crossed in front of a dark wooden Japanese temple hall, a pine branch hanging over the roof.">
+            </button>
+            <figcaption>The temple. Arms crossed, the pine sitting on the roof.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="Tokyo%20tatue.jpg" alt="Nico in a black t-shirt pointing up at the bronze statue of a samurai on a rearing horse.">
+            </button>
+            <figcaption>The station statue. The horse is rearing. I am pointing at it.</figcaption>
+          </figure>
+          <figure class="photo-card solo">
+            <button type="button" class="shot">
+              <img src="TokyoSation.jpg" alt="Dad jumping with both arms up in the stone plaza in front of the red-brick Tokyo Station.">
+            </button>
+            <figcaption>Tokyo Station. Dad in the plaza with both arms up.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Shibuya</p>
+        <div class="story-copy">
+          <p>Samurai in the street, working the crossing in full armor. A rugby crew stopped us because they wanted a picture with the armor and with us. The flag says Samoa.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="Samurai_Shibuya.jpg" alt="Two street performers in samurai armor posing in a Shibuya intersection, with the 109, Uniqlo, and H&amp;M buildings behind them.">
+            </button>
+            <figcaption>The Shibuya samurai. One standing, one crouched, the crossing going on around them.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="randomAussieteamwantedapicwithus.jpg" alt="A Samoa rugby group posing in Shibuya with two samurai performers, one person holding the Samoa flag.">
+            </button>
+            <figcaption>They wanted the photo. Samoa flag on the left, samurai in the middle, and us in the pile.</figcaption>
+          </figure>
+          <figure class="photo-card solo">
+            <button type="button" class="shot">
+              <img src="DressingupasSamurai.jpg" alt="Nico dressed in red samurai armor, holding a katana, posing in a studio with more armor on display behind him.">
+            </button>
+            <figcaption>Shinjuku. I put the armor on. Red, two swords, a red floor.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Yoyogi</p>
+        <div class="story-copy">
+          <p>We ate. Hot pot, small plates, the two of us at the table.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card solo">
+            <button type="button" class="shot">
+              <img src="drinkingwithdad.jpg" alt="Nico in a yellow jacket and Dad in a leaf-print shirt smiling over a hot pot, sashimi, and sake cups.">
+            </button>
+            <figcaption>Yoyogi. Hot pot, a pile of small plates, and sake cups.</figcaption>
+          </figure>
+        </div>
+
+      </section>
+
+      <section class="day" id="tokyo2">
+        <p class="when">The next day</p>
+        <h2>Odaiba, then Asakusa</h2>
+        <div class="story-copy">
+          <p>Odaiba first. The bridge, the little Statue of Liberty, the Gundam, and teamLab. Asakusa after that, under the big red lantern.</p>
+        </div>
+        <p class="scene">Odaiba</p>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="odaiba.jpg" alt="Dad in a leaf-print shirt and Nico in a yellow jacket on a brick overlook, with Rainbow Bridge and the Odaiba Statue of Liberty behind them.">
+            </button>
+            <figcaption>Rainbow Bridge and the little Liberty. Dad fixing his glasses.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="inFrontofRobot.jpg" alt="Nico in a yellow jacket standing in front of the life-size Unicorn Gundam statue outside DiverCity Tokyo Plaza in Odaiba.">
+            </button>
+            <figcaption>The Unicorn Gundam. I am in the photo so you can tell how tall it is.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="TeamLabs.jpg" alt="Nico in a yellow jacket pointing up at the teamLab Planets Tokyo sign on the white museum facade.">
+            </button>
+            <figcaption>teamLab Planets. I pointed at the sign.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="teamLabs2.jpg" alt="Nico in a yellow jacket holding up a giant glowing balloon in a dark room full of soft colored orbs at teamLab Planets.">
+            </button>
+            <figcaption>The balloon room. You push them and they glow.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="image-563636.jpg" alt="Nico in a yellow jacket standing in a dark teamLab room where blue light and flowers are projected across the floor and walls.">
+            </button>
+            <figcaption>The other room. Light on the walls, flowers in the projection, the floor moving.</figcaption>
+          </figure>
+        </div>
+        <p class="scene">Asakusa</p>
+        <div class="mosaic">
+          <figure class="photo-card solo">
+            <button type="button" class="shot">
+              <img src="Asakusa.jpg" alt="Nico in a yellow jacket and glasses smiling under the giant red lantern at the Kaminarimon gate of Senso-ji in Asakusa.">
+            </button>
+            <figcaption>Asakusa. The big red lantern, and a crowd that had the same idea.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="day" id="hiroshima">
+        <p class="when">South</p>
+        <h2>Hiroshima</h2>
+        <div class="story-copy">
+          <p>The Atomic Bomb Dome is still standing, the steel frame of the roof open to the sky. I did not have much to say in front of it.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card solo">
+            <button type="button" class="shot">
+              <img src="Hiroshima.jpg" alt="Nico in a backwards white cap and blue shirt standing in front of the ruined Atomic Bomb Dome in Hiroshima.">
+            </button>
+            <figcaption>Hiroshima. The dome, the hedges, a backwards cap. The building is the photograph.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="day" id="kyoto">
+        <p class="when">The night, then the morning</p>
+        <h2>Kyoto</h2>
+        <div class="story-copy">
+          <p>We got in at night and ended up at a table with people we had just met. In the morning it was Fushimi Inari, the torii going up the hill. That afternoon we flew home.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="kyoto.jpg" alt="Nico in a black shirt and white cap and Dad in a striped shirt at night, with a lit red shrine gate behind them in Kyoto.">
+            </button>
+            <figcaption>Kyoto after dark. The gate is doing all the lighting.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="DrinkingwithrandomsAtKyoto.jpg" alt="Nico and Dad squeezed into an izakaya booth in Kyoto with three other people, waving over a table of noodles, small plates, and iced drinks.">
+            </button>
+            <figcaption>The table we shared. Hands up, noodles in the middle, and people whose names I did not keep.</figcaption>
+          </figure>
+          <figure class="photo-card solo">
+            <button type="button" class="shot">
+              <img src="FushimiInari.jpg" alt="Nico in a yellow jacket and blue shorts standing on the steps under the orange torii gates at Fushimi Inari.">
+            </button>
+            <figcaption>Fushimi Inari in the morning. The gates go back until they turn into a tunnel.</figcaption>
+          </figure>
+        </div>
+      </section>
     </article>
   </main>
 
+  <div id="lightbox" hidden>
+    <button type="button" class="lb-close" aria-label="Close photo">×</button>
+    <figure class="lb-figure">
+      <img alt="">
+      <figcaption></figcaption>
+    </figure>
+  </div>
+
   <div id="site-footer-placeholder"></div>
+
+  <script>
+    (function () {
+      const days = ["tokyo1", "tokyo2", "hiroshima", "kyoto"];
+      const buttons = Array.from(document.querySelectorAll(".day-nav button"));
+
+      function setActive(id) {
+        buttons.forEach(function (btn) {
+          const on = btn.getAttribute("data-day") === id;
+          btn.classList.toggle("is-on", on);
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const id = btn.getAttribute("data-day");
+          const section = document.getElementById(id);
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+          setActive(id);
+          history.replaceState(null, "", "#" + id);
+        });
+      });
+
+      const observer = new IntersectionObserver(function (entries) {
+        const visible = entries
+          .filter(function (entry) { return entry.isIntersecting; })
+          .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; });
+        if (visible.length) setActive(visible[0].target.id);
+      }, { rootMargin: "-20% 0px -55% 0px", threshold: [0.1, 0.25, 0.5] });
+
+      days.forEach(function (id) {
+        observer.observe(document.getElementById(id));
+      });
+
+      const start = location.hash.replace("#", "");
+      if (days.indexOf(start) !== -1) {
+        setActive(start);
+        document.getElementById(start).scrollIntoView();
+      } else {
+        setActive("tokyo1");
+      }
+
+      const lightbox = document.getElementById("lightbox");
+      const lbImg = lightbox.querySelector("img");
+      const lbCap = lightbox.querySelector("figcaption");
+      const lbClose = lightbox.querySelector(".lb-close");
+      let lastFocus = null;
+
+      function openLightbox(shot) {
+        const img = shot.querySelector("img");
+        const caption = shot.closest("figure").querySelector("figcaption");
+        lbImg.src = img.getAttribute("src");
+        lbImg.alt = img.alt;
+        lbCap.textContent = caption.textContent;
+        lastFocus = document.activeElement;
+        lightbox.hidden = false;
+        document.body.style.overflow = "hidden";
+        lbClose.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lbImg.removeAttribute("src");
+        document.body.style.overflow = "";
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      document.querySelectorAll(".shot").forEach(function (shot) {
+        const img = shot.querySelector("img");
+        if (img && img.alt) shot.setAttribute("aria-label", img.alt);
+        shot.addEventListener("click", function () {
+          openLightbox(shot);
+        });
+      });
+
+      lbClose.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", function (event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
+      });
+    })();
+  </script>
   <script src="/includes/loader.js"></script>
 </body>
 </html>
