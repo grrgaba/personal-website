@@ -6,6 +6,44 @@
   <title>Trips — Diary — nicodimaano.com</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <style>
+    .year-nav {
+      position: sticky;
+      top: 56px;
+      z-index: 30;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0;
+      padding-top: 0.35rem;
+      padding-bottom: 0.75rem;
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .year-nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .year-nav a.is-on,
+    .year-nav a:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .year-block {
+      scroll-margin-top: 8.25rem;
+    }
+
+    .year-block .grid {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
@@ -16,13 +54,31 @@
       <p class="bio">Travel logs and short trip notes.</p>
     </section>
 
-    <section class="container">
+    <nav class="year-nav container" aria-label="Trip years">
+      <a href="#y2026">2026</a>
+      <a href="#y2025">2025</a>
+      <a href="#y2024">2024</a>
+      <a href="#y2023">2023</a>
+      <a href="#y2022">2022</a>
+      <a href="#y2021">2021</a>
+      <a href="#y2020">2020</a>
+      <a href="#y2019">2019</a>
+    </nav>
+
+    <section class="container year-block" id="y2026">
+      <h2>2026</h2>
       <div class="grid">
         <a class="card" data-bg="/diary/trips/2026/08_Healy_Pass_Wildflower_Hike/pose-together.jpeg" href="2026/08_Healy_Pass_Wildflower_Hike/2026-08-06-healy-pass-wildflower-hike.html"><h3>Aug 6 2026</h3><p>Healy Pass Wildflower Hike</p></a>
         <a class="card" href="2026/07_Kelowna_RoadTrip/2026-07-23-kelowna-road-trip.html"><h3>(WIP) Jul 23–25 2026</h3><p>Kelowna Road Trip</p></a>
         <a class="card" data-bg="/diary/trips/2026/07_Galatea_Lakes/2026-07-17_10-15-04_626.jpg" href="2026/07_Galatea_Lakes/2026-07-17-galatea-lakes-hike.html"><h3>Jul 17 2026</h3><p>Galatea Lakes Hike</p></a>
         <a class="card" href="2026/05_Iceland/2026-05-24-iceland.html"><h3>(WIP) May 24–June 2 2026</h3><p>Iceland</p></a>
         <a class="card" href="2026/01_Vegas/2026-01-09-vegas-death-valley-mammoth.html"><h3>(WIP) Jan 9–11 2026</h3><p>Vegas, Death Valley, Mammoth Mountain</p></a>
+      </div>
+    </section>
+
+    <section class="container year-block" id="y2025">
+      <h2>2025</h2>
+      <div class="grid">
         <a class="card" href="2025/09_MaligneLake/2025-09-20-maligne-lake.html"><h3>(WIP) Sep 20 2025</h3><p>Maligne Lake</p></a>
         <a class="card" data-bg="/diary/trips/2025/09_JohnsonLake/Jasper.jfif" href="2025/09_JohnsonLake/2025-09-13-road-trip.html"><h3>Sep 13 2025</h3><p>Johnson Lake &amp; Kinney Lake</p></a>
         <a class="card" data-bg="/diary/trips/2025/09_Sentinel/AmN9FhoWTXmCCDL-8akZ6w.jfif" href="2025/09_Sentinel/2025-09-26-sentinel-pass.html"><h3>Sep 26 2025</h3><p>Sentinel Pass</p></a>
@@ -33,6 +89,12 @@
         <a class="card" href="2025/04_WasootchHike/2025-04-17-wasootch-ridge-canyon-creek-ice-caves.html"><h3>(WIP) Apr 17–18 2025</h3><p>Wasootch Ridge &amp; Canyon Creek Ice Caves</p></a>
         <a class="card" href="2025/02_Jasper_Roadie/2025-02-28-jasper-roadie.html"><h3>(WIP) Feb 28 2025</h3><p>Jasper Roadie</p></a>
         <a class="card" href="2025/02_KelownaSkiTrip/2025-02-07-kelowna-ski-trip.html"><h3>(WIP) Feb 7–9 2025</h3><p>Kelowna Ski Trip (Big White, Sun Peaks, Silver Star)</p></a>
+      </div>
+    </section>
+
+    <section class="container year-block" id="y2024">
+      <h2>2024</h2>
+      <div class="grid">
         <a class="card" href="2024/10_Hawaii/2024-10-17-hawaii.html"><h3>(WIP) Oct 17–21 2024</h3><p>Hawaii</p></a>
         <a class="card" data-bg="/diary/trips/2024/10_Chasing_Aurora/Aurora1.jfif" href="2024/10_Chasing_Aurora/2024-10-08-chasing-aurora.html"><h3>Oct 8–10 2024</h3><p>Chasing Aurora</p></a>
         <a class="card" href="2024/10_Asia/2024-10-01-south-korea-taiwan.html"><h3>(WIP) Oct 1–7 2024</h3><p>South Korea &amp; Taiwan</p></a>
@@ -40,6 +102,12 @@
         <a class="card" href="2024/07_Banff_w_Titas/2024-07-12-banff-with-the-titas.html"><h3>(WIP) Jul 12–14 2024</h3><p>Banff with the Titas</p></a>
         <a class="card" data-bg="/diary/trips/2024/07_Tonquin_Valley/2024-07-06_09-39-07_004.jpeg" href="2024/07_Tonquin_Valley/2024-07-05-tonquin-valley.html"><h3>Jul 5–6 2024</h3><p>Tonquin Valley</p></a>
         <a class="card" href="2024/01_Kelowna_Ski_Trip/2024-01-11-kelowna-ski-trip.html"><h3>(WIP) Jan 11–13 2024</h3><p>Kelowna Ski Trip</p></a>
+      </div>
+    </section>
+
+    <section class="container year-block" id="y2023">
+      <h2>2023</h2>
+      <div class="grid">
         <a class="card" href="2023/12_Fernie/2023-12-02-fernie.html"><h3>(WIP) Dec 2–3 2023</h3><p>Fernie</p></a>
         <a class="card" href="2023/11_Peyto_Lake/2023-11-25-peyto-lake.html"><h3>(WIP) Nov 25 2023</h3><p>Peyto Lake</p></a>
         <a class="card" href="2023/11_Lake_Louise_Skiing/2023-11-10-lake-louise-skiing.html"><h3>(WIP) Nov 10 2023</h3><p>Lake Louise Skiing</p></a>
@@ -58,6 +126,12 @@
         <a class="card" href="2023/05_EEOR/2023-05-21-eeor.html"><h3>(WIP) May 21 2023</h3><p>EEOR</p></a>
         <a class="card" href="2023/04_Mexico/2023-04-27-mexico.html"><h3>(WIP) Apr 27–29 2023</h3><p>Mexico</p></a>
         <a class="card" href="2023/03_Kelowna/2023-03-17-kelowna.html"><h3>(WIP) Mar 17–19 2023</h3><p>Kelowna</p></a>
+      </div>
+    </section>
+
+    <section class="container year-block" id="y2022">
+      <h2>2022</h2>
+      <div class="grid">
         <a class="card" href="2022/11_San_Fran/2022-11-10-san-francisco.html"><h3>(WIP) Nov 10 2022</h3><p>San Francisco</p></a>
         <a class="card" href="2022/10_Tent_Ridge/2022-10-15-tent-ridge.html"><h3>(WIP) Oct 15 2022</h3><p>Tent Ridge</p></a>
         <a class="card" href="2022/09_Van_Isle/2022-09-23-van-isle.html"><h3>(WIP) Sep 23–26 2022</h3><p>Van Isle</p></a>
@@ -72,18 +146,36 @@
         <a class="card" href="2022/02_Seattle/2022-02-11-seattle.html"><h3>(WIP) Feb 11 2022</h3><p>Seattle</p></a>
         <a class="card" href="2022/01_Whistler/2022-01-20-whistler-cypress.html"><h3>(WIP) Jan 20–21 2022</h3><p>Whistler &amp; Cypress Mountain</p></a>
         <a class="card" data-bg="/diary/trips/2022/01_Grotto_Nakiska/IMG_6084.png" href="2022/01_Grotto_Nakiska/2022-01-02-grotto-canyon-nakiska.html"><h3>Jan 02 2022</h3><p>Grotto Canyon &amp; Nakiska Ski trip</p></a>
+      </div>
+    </section>
+
+    <section class="container year-block" id="y2021">
+      <h2>2021</h2>
+      <div class="grid">
         <a class="card" href="2021/11_Ski_weekend/2021-11-19-rockies-ski-weekend.html"><h3>(WIP) Nov 19–21 2021</h3><p>Rockies Ski Weekend</p></a>
         <a class="card" href="2021/01_Vancouver/2021-01-14-vancouver.html"><h3>(WIP) Jan 14–16 2021</h3><p>Vancouver</p></a>
+      </div>
+    </section>
+
+    <section class="container year-block" id="y2020">
+      <h2>2020</h2>
+      <div class="grid">
         <a class="card" href="2020/08_TwoJack_CascadePond/2020_08_xx_twojack_cascadepond.html"><h3>(WIP)  Aug xx 2020</h3><p>Two Jack & Cascade Pond</p></a>
         <a class="card" href="2020/08_SlaveLake/2020_08_xx_slavelake.html"><h3>(WIP)  Aug xx 2020</h3><p>Slave Lake</p></a>
         <a class="card" href="2020/08_HeartMountain/2020_08_xx_heartmountain.html"><h3>(WIP)  Aug xx 2020</h3><p>Heart Mountain</p></a>
         <a class="card" data-bg="/diary/trips/2020/08_BowRiverPaddle/BeforeStart.jfif" href="2020/08_BowRiverPaddle/2020_08_02_BowRiverPaddle.html"><h3>Aug 2 2020</h3><p>Bow River Paddle</p></a>
         <a class="card" data-bg="/diary/trips/2020/07_Prairie_Mountain/view.jfif" href="2020/07_Prairie_Mountain/2020_07_31_prairie_mountain.html"><h3>Jul 31 2020</h3><p>Prairie Mountain</p></a>
         <a class="card" data-bg="/diary/trips/2020/07_Banff/BowFalls.jfif" href="2020/07_Banff/2020_07_18_banff.html"><h3>Jul 18 2020</h3><p>Banff short trip</p></a>
-        <a class="card" data-bg="/diary/trips/2020/07_BanffRoadie/LakeLouise.jfif" href="2020/07_BanffRoadie/2020_07_12_banffroadie.html"><h3>Jul 12 2020</h3><p>Banff Roadie</p></a>        
+        <a class="card" data-bg="/diary/trips/2020/07_BanffRoadie/LakeLouise.jfif" href="2020/07_BanffRoadie/2020_07_12_banffroadie.html"><h3>Jul 12 2020</h3><p>Banff Roadie</p></a>
         <a class="card" href="2020/06_Biking/2020_06_xx_biking.html"><h3>(WIP)  Jun xx 2020</h3><p>Biking</p></a>
         <a class="card" href="2020/05_BMPB_Car_meet/2020_05_xx_bmpb_car_meet.html"><h3>(WIP)  May xx 2020</h3><p>BMPB Car Meet</p></a>
         <a class="card" href="2020/02_Banff_Canmore/2020_02_xx_banff_canmore.html"><h3>(WIP)  Feb xx 2020</h3><p>Banff & Canmore</p></a>
+      </div>
+    </section>
+
+    <section class="container year-block" id="y2019">
+      <h2>2019</h2>
+      <div class="grid">
         <a class="card" href="2019/12_Vancouver/2019_12_06_vancouver.html"><h3>(WIP)  Dec 6 2019</h3><p>Vancouver</p></a>
         <a class="card" data-bg="/diary/trips/2019/09_Japan_trip/odaiba.jpg" href="2019/09_Japan_trip/2019_09_18_japan_trip.html"><h3>Sep 18 2019</h3><p>Japan with Dad</p></a>
         <a class="card" data-bg="/diary/trips/2019/07_Niagara_Falls/NiagaraTunnel.png" href="2019/07_Niagara_Falls/2019_07_26_NiagaraFalls.html"><h3>Jul 26 2019</h3><p>Niagara Falls</p></a>
@@ -112,6 +204,28 @@
         card.style.color = '#fff';
       });
     });
+
+    (function () {
+      var links = Array.from(document.querySelectorAll('.year-nav a'));
+      var years = links.map(function (link) {
+        return document.getElementById(link.getAttribute('href').slice(1));
+      });
+
+      function setActive(id) {
+        links.forEach(function (link) {
+          link.classList.toggle('is-on', link.getAttribute('href') === '#' + id);
+        });
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        var visible = entries.filter(function (entry) { return entry.isIntersecting; });
+        if (visible.length) setActive(visible[0].target.id);
+      }, { rootMargin: '-30% 0px -55% 0px', threshold: 0.1 });
+
+      years.forEach(function (section) { if (section) observer.observe(section); });
+      if (location.hash) setActive(location.hash.slice(1));
+      else setActive('y2026');
+    })();
   </script>
 </body>
 </html>

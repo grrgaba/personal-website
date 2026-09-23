@@ -224,6 +224,10 @@ main, .site-footer, .container{position:relative;z-index:1}
 .side-submenu{list-style:none;padding:0 0 0 1rem;margin:0}
 .side-submenu li a{font-weight:600;padding:0.6rem 0;display:block;color:var(--muted)}
 .side-submenu li a:hover{color:var(--text);background:transparent}
+.side-submenu .side-group{padding:0;border-bottom:0}
+.side-submenu .side-group-toggle{font-weight:600;font-size:0.95rem;color:var(--muted);padding:0.6rem 0}
+.side-years li{border-bottom:0}
+.side-years li a{padding:0.35rem 0;font-weight:600}
 
 /* Hero action buttons under welcome message */
 .hero-actions{margin-top:1.25rem;display:flex;gap:0.75rem;align-items:center}

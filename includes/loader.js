@@ -25,6 +25,9 @@
       toggle.addEventListener('click', function(e){ e.preventDefault(); var isOpen = panel.classList.contains('open'); if(isOpen) closePanel(); else openPanel(); });
       overlay && overlay.addEventListener('click', closePanel);
       closeBtn && closeBtn.addEventListener('click', closePanel);
+      panel.querySelectorAll('a').forEach(function(link){
+        link.addEventListener('click', closePanel);
+      });
       document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePanel(); });
       // attach side-group toggles (collapsible submenu groups)
       var groupToggles = document.querySelectorAll('.side-group-toggle');
