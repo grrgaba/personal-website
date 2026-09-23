@@ -1,29 +1,830 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Oct 17–21 2024 — Hawaii</title><link rel="stylesheet" href="/css/style.css">  <link rel="icon" type="image/png" href="/assets/favicon.png">
-</head><body>
-<div id="site-header-placeholder"></div>
-  
-<main class="container"><article class="post"><h1>Oct 17–21 2024 — Hawaii</h1><p class="muted">Placeholder — add photos and story here.</p><section id="content"></section></article></main>
-<div id="site-footer-placeholder"></div>
-<script>
-	(function(){
-		const originalGet = document.getElementById.bind(document);
-		document.getElementById = function(id){
-			const safe = ['timelineWrap','prevBtn','nextBtn','timeline'];
-			const el = originalGet(id);
-			if (el) return el;
-			if (safe.includes(id)) {
-				return {
-					appendChild: function(){},
-					addEventListener: function(){},
-					disabled: false
-				};
-			}
-			return null;
-		};
-	})();
-</script>
-<script>(function(){const trips=[{slug:'2026-01-09-vegas-death-valley-mammoth.html',year:2026},{slug:'2026-05-24-iceland.html',year:2026},{slug:'2025-05-13-european-tour.html',year:2025},{slug:'2025-05-27-grand-teton-yellowstone.html',year:2025},{slug:'2025-09-26-sentinel-pass.html',year:2025},{slug:'2025-06-28-takakkaw-falls.html',year:2025},{slug:'2024-09-05-lake-ohara-takakkaw.html',year:2024},{slug:'2024-07-05-tonquin-valley.html',year:2024},{slug:'2024-10-17-hawaii.html',year:2024},{slug:'2024-10-01-south-korea-taiwan.html',year:2024},{slug:'2023-08-20-us-virgin-islands-cruise.html',year:2023},{slug:'2023-05-24-oregon-road-trip.html',year:2023},{slug:'2023-04-27-mexico.html',year:2023},{slug:'2022-11-10-san-francisco.html',year:2022},{slug:'2022-06-09-florida-orlando.html',year:2022},{slug:'2022-05-26-bc-road-trip.html',year:2022},{slug:'2022-02-18-whistler.html',year:2022},{slug:'2022-02-11-seattle.html',year:2022},{slug:'2022-01-20-whistler-cypress.html',year:2022},{slug:'2021-05-06-fairmont-bugaboo.html',year:2021},{slug:'2021-04-07-toronto.html',year:2021},{slug:'2021-03-26-revelstoke.html',year:2021},{slug:'2021-02-26-whistler.html',year:2021},{slug:'2021-01-14-vancouver.html',year:2021},{slug:'2021-11-19-rockies-ski-weekend.html',year:2021},{slug:'2023-07-29-bugaboo-provincial-park.html',year:2023}];const path=location.pathname.split('/').pop();const idx=trips.findIndex(t=>t.slug===path);const prev=document.getElementById('prevBtn');const next=document.getElementById('nextBtn');const yearsEl=document.getElementById('timeline');const years=Array.from(new Set(trips.map(t=>t.year))).sort((a,b)=>b-a);years.forEach(y=>{const b=document.createElement('button');b.textContent=y;b.addEventListener('click',()=>{const i=trips.findIndex(t=>t.year===y);if(i>=0)location.href='/diary/trips/'+trips[i].slug;});yearsEl.appendChild(b);});if(idx>0)prev.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx-1].slug);else prev.disabled=true;if(idx>=0&&idx<trips.length-1)next.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx+1].slug);else next.disabled=true;document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'&&idx>0)location.href='/diary/trips/'+trips[idx-1].slug; if(e.key==='ArrowRight'&&idx<trips.length-1)location.href='/diary/trips/'+trips[idx+1].slug;});})();</script>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Oct 17–21 2024 — Hawaii</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <style>
+    body {
+      background: #f3ecdf;
+      color: #14323a;
+    }
+
+    body .page-back-wrap {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      max-width: none;
+      margin: 0.85rem 0 0;
+      z-index: auto;
+    }
+
+    body .page-back-wrap + main {
+      margin-top: 0;
+    }
+
+    main.container {
+      max-width: 1180px;
+    }
+
+    .post {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.25rem 0 5rem;
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    }
+
+    .trip-header {
+      text-align: center;
+      padding: 0.5rem 0 0.25rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.7rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #8a5a3a;
+    }
+
+    .trip-header h1 {
+      margin: 0;
+      font-weight: 500;
+      font-size: clamp(2.8rem, 7vw, 5.6rem);
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+      color: #102830;
+    }
+
+    .lede {
+      max-width: 40rem;
+      margin: 1.1rem auto 0;
+      font-size: clamp(1.12rem, 1.7vw, 1.35rem);
+      line-height: 1.65;
+      color: #2a4650;
+    }
+
+    .day-nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.55rem;
+      margin: 1.6rem 0 0.4rem;
+      padding: 0.75rem 0.4rem;
+      background: rgba(243, 236, 223, 0.94);
+      backdrop-filter: blur(10px);
+    }
+
+    .day-nav button {
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #1a3c46;
+      background: transparent;
+      border: 1px solid rgba(20, 50, 58, 0.22);
+      border-radius: 999px;
+      padding: 0.7rem 1.15rem;
+      min-height: 44px;
+      cursor: pointer;
+    }
+
+    .day-nav button.is-on {
+      background: #14323a;
+      color: #f6f0e6;
+      border-color: #14323a;
+    }
+
+    .day-nav button:focus-visible,
+    .shot:focus-visible,
+    .lb-close:focus-visible {
+      outline: 2px solid #b85c38;
+      outline-offset: 3px;
+    }
+
+    .day {
+      scroll-margin-top: 5rem;
+      padding-top: 0.4rem;
+    }
+
+    .day h2 {
+      margin: 1.4rem 0 0.35rem;
+      font-weight: 500;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      letter-spacing: -0.03em;
+      color: #102830;
+    }
+
+    .when {
+      margin: 0 0 0.2rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #8a5a3a;
+    }
+
+    .story-copy {
+      max-width: 42rem;
+      font-size: clamp(1.08rem, 1.45vw, 1.28rem);
+      line-height: 1.75;
+      color: #1c3640;
+    }
+
+    .story-copy p {
+      margin: 0 0 1.15rem;
+    }
+
+    .scene {
+      margin: 2.4rem 0 0.85rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #1c4e57;
+    }
+
+    .mosaic {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 0.4rem 0 1.6rem;
+      align-items: start;
+    }
+
+    .photo-card {
+      margin: 0;
+      background: rgba(255, 252, 247, 0.72);
+      border: 1px solid rgba(20, 50, 58, 0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(40, 28, 16, 0.06);
+    }
+
+    .photo-card.full { grid-column: span 12; }
+    .photo-card.wide { grid-column: span 7; }
+    .photo-card.tall { grid-column: span 5; }
+    .photo-card.half { grid-column: span 6; }
+
+    .shot {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: #e7dccb;
+      cursor: zoom-in;
+    }
+
+    .shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .photo-card figcaption {
+      padding: 0.8rem 1rem 1rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: #3d534f;
+    }
+
+    .pending {
+      max-width: 42rem;
+      margin: 0 0 1.5rem;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: #3d534f;
+    }
+
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10020;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background: rgba(12, 22, 26, 0.88);
+    }
+
+    #lightbox[hidden] {
+      display: none;
+    }
+
+    .lb-figure {
+      margin: 0;
+      max-width: min(1100px, 100%);
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #lightbox img {
+      max-width: 100%;
+      max-height: 78vh;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    #lightbox figcaption {
+      margin-top: 0.8rem;
+      max-width: 40rem;
+      text-align: center;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      color: #f6f0e6;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .lb-close {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: #f6f0e6;
+      color: #14323a;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    @media (max-width: 800px) {
+      .photo-card.full,
+      .photo-card.wide,
+      .photo-card.tall,
+      .photo-card.half {
+        grid-column: span 12;
+      }
+
+      .post {
+        padding-bottom: 4rem;
+      }
+
+      .day-nav {
+        justify-content: stretch;
+      }
+
+      .day {
+        scroll-margin-top: 9rem;
+      }
+
+      .day-nav button {
+        flex: 1 1 calc(50% - 0.55rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header-placeholder"></div>
+
+  <main class="container">
+    <article class="post">
+      <header class="trip-header">
+        <p class="eyebrow">October 17–21, 2024 · Oʻahu</p>
+        <h1>Hawaii</h1>
+        <p class="lede">We left Edmonton on a Thursday and did not really stop until a rock at Lāʻie Point. The first two days are the story. The last two are the pictures, until I write the rest.</p>
+      </header>
+
+      <nav class="day-nav" aria-label="Days of the trip">
+        <button type="button" data-day="oct17" aria-pressed="true">Oct 17</button>
+        <button type="button" data-day="oct18" aria-pressed="false">Oct 18</button>
+        <button type="button" data-day="oct19" aria-pressed="false">Oct 19–20</button>
+        <button type="button" data-day="oct21" aria-pressed="false">Oct 21</button>
+      </nav>
+
+      <section class="day" id="oct17">
+        <p class="when">Thursday</p>
+        <h2>Departure, and a layover we spent outside</h2>
+        <div class="story-copy">
+          <p>The flight out of Edmonton was at 10. YEG to YVR, and then a wait I did not want to spend under airport lights. The book was already open at the gate.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-17_09-03-08_124.jpeg" alt="Reading You Deserve This Shit in the airport terminal, white hoodie, glasses, and white sneakers, with luggage on the seats beside him.">
+            </button>
+            <figcaption>Before the flight. <em>You Deserve This Shit</em>, open in the terminal. It felt like a joke at the gate. It reads differently now.</figcaption>
+          </figure>
+        </div>
+        <div class="story-copy">
+          <p>In Vancouver we rented a car and drove south to Steveston. Gulf of Georgia Cannery first, the national historic site on the water, and then lunch while we still had the car. Two bowls of hot pot, the cannery buildings sitting across the street.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="2024-10-17_12-53-57_408.jpeg" alt="Two hot pot bowls, plates, and drinks on a restaurant table, with waterfront buildings visible through the window.">
+            </button>
+            <figcaption>Lunch in Steveston. Hot pot for two, and the cannery shore outside the glass.</figcaption>
+          </figure>
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="2024-10-17_17-09-48_000.jpeg" alt="Sarah standing under yellow autumn leaves in a white hoodie with a goat on it, black pants and white sneakers.">
+            </button>
+            <figcaption>Garry Point, under the leaves. The goat hoodie, and a sky that still looked like October on the mainland.</figcaption>
+          </figure>
+        </div>
+        <div class="story-copy">
+          <p>Garry Point Park was the sweet part of the layover. A picnic table facing the water, mountains on the far shore, and the two of us walking the driftwood with Vancouver only a faint line behind us. Then the clock ran out. At 5 we were back at YVR to meet Peter. I slept on the flight after that. The next time I was really awake, the Pacific was under us and Oʻahu was close.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-17_17-00-47_000.jpeg" alt="A wooden picnic table and benches beside the water at Garry Point, with mountains across the inlet.">
+            </button>
+            <figcaption>The table by the water. We did not need much more than this and an hour.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-17_17-24-09_000.jpeg" alt="Sarah in a white hoodie and Nico in a black jacket walking the driftwood shore at Garry Point, a distant skyline behind them.">
+            </button>
+            <figcaption>Walking the driftwood. The city is barely in the frame, which was the point.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="day" id="oct18" hidden>
+        <p class="when">Friday</p>
+        <h2>The night, the almost, and Lāʻie Point</h2>
+        <div class="story-copy">
+          <p>We landed around 11 and did not go to bed. The island was right there, so we went out into it. Around 1 we were on the rocks at Diamond Head Beach Park. After that we looked at crabs at Maunalua Bay Beach Park, then stood at Koko Kai Beach Mini Park trying to find Spitting Cave in the dark. We never did. China Walls was the same: we looked, and the dark looked back.</p>
+          <p>Lānai Lookout at least gave us the lava shelf, and a flashlight. Later we were crabbing again, on the beach near Sandy Beach, the beam doing all the work.</p>
+        </div>
+        <p class="scene">After midnight</p>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_06-13-23_939.jpeg" alt="A person in a maroon shirt crouched on the rocks at night at Diamond Head Beach Park, white sneakers, the water behind them.">
+            </button>
+            <figcaption>Diamond Head Beach Park, sometime after one. Crouched on the rocks because sitting still was not the plan.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_06-46-54_219.jpeg" alt="A flashlight beam on a lava shelf at night, with the ocean disappearing into the dark at Lanai Lookout.">
+            </button>
+            <figcaption>Lānai Lookout. The flashlight found the shelf. Spitting Cave did not turn up, and neither did China Walls.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_06-47-13_601.jpeg" alt="Another night view of the lava shelf at Lanai Lookout, a flashlight lighting the rock above black water.">
+            </button>
+            <figcaption>Same shelf, a few steps on. The water stayed black and the cave stayed hidden.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_08-55-06_266.jpeg" alt="Night crabbing on the beach near Sandy Beach, a person in a black hoodie with a headlamp and a flashlight on the sand.">
+            </button>
+            <figcaption>Crabbing by flashlight on the beach near Sandy Beach. The headlamp was the whole scene.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Byodo-In, once it opened</p>
+        <div class="story-copy">
+          <p>Near Heʻeia we tried to rinse off at a gym. It did not work out that way. We rested there for about two hours, until Byodo-In opened, and the morning turned into a pavilion, a still pond, and a red bridge with the mountains behind it.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="2024-10-18_12-49-25_124.jpeg" alt="Sarah in a white dress with red flowers, standing in the Byodo-In pavilion near the bell and a red umbrella.">
+            </button>
+            <figcaption>The pavilion at Byodo-In. White and red dress, the bell, the red umbrella, the morning finally behaving.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="2024-10-18_13-10-49_630.jpeg" alt="Four people posing beside the reflecting pond at Byodo-In, the temple mirrored in the water.">
+            </button>
+            <figcaption>The four of us by the pond, the temple sitting in its own reflection.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_14-26-42_924.jpeg" alt="Sarah and Nico on the red bridge at Byodo-In, koi pond below and green mountains behind them.">
+            </button>
+            <figcaption>The red bridge. This was the calm part, before I started counting strangers.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Kualoa, instead of Secret Island</p>
+        <div class="story-copy">
+          <p>I had a plan for Secret Island. It was full of people, and there was a private party, so we let it go and went to Kualoa Regional Park. Ironwoods along the bay, the little island offshore, the Koʻolau cliffs standing straight up behind the grass. We washed up there too, as much as a park and a bottle of water allow.</p>
+          <p>Behind the park there is a field. That was supposed to be the place. I had the ring. There were not even that many people, and I still could not do it. Too seen. Too nervous. We took the pictures and we moved on.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_14-27-41_091.jpeg" alt="Ironwood trees along the bay at Kualoa Regional Park, with Mokoliʻi offshore and the Koʻolau cliffs behind.">
+            </button>
+            <figcaption>Kualoa Regional Park. Secret Island was already packed, so this bay was the stop instead.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_14-29-32_433.jpeg" alt="Sarah walking across a green field in a white and red floral dress, the Koʻolau cliffs filling the background.">
+            </button>
+            <figcaption>The field behind the park. She is walking. I am still not asking.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_15-28-47_456.jpeg" alt="Sarah and Nico standing in the grass at Kualoa, looking at each other, the Koʻolau cliffs behind them.">
+            </button>
+            <figcaption>Still in that field. The cliffs, the dress, and not quite enough courage.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_15-29-09_348.jpeg" alt="Sarah and Nico embracing in the field at Kualoa, her hand on his shoulder, the mountains behind them.">
+            </button>
+            <figcaption>A little closer. Still not the moment. I knew it, and I walked us back to the car anyway.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_14-38-07_094.jpeg" alt="Sarah and Nico holding hands under the shade of a large tree at Kualoa, her white dress and his black shirt.">
+            </button>
+            <figcaption>Under the big tree, hands held. The ring was still in a pocket somewhere else.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Lāʻie Point</p>
+        <div class="story-copy">
+          <p>The backup in my head was the Polynesian Cultural Center, and I already knew that was wrong for this. She would have hated a crowd for it. On the drive east I was so wound up I could not get the words out at any of the pullouts. There was one stop left before the center.</p>
+          <p>Lāʻie Point State Wayside. The sun was right. The water was an impossible color. The waves stood up and broke like they meant it. We took a lot of pictures. I kept telling Mike to photograph Sarah, that we had time before the center. I was buying time. I was looking at her in that white and red dress and thinking that if I walked away from this rock I would regret it for the rest of my life.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_14-59-56_715.jpeg" alt="Turquoise water and tall white waves breaking on the rocks at Lāʻie Point.">
+            </button>
+            <figcaption>The water at Lāʻie Point, and the waves already tall before we had even walked out.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_15-29-44_980.jpeg" alt="A blowhole throwing white spray beside the rocks at Lāʻie Point, a person in black standing on the shelf.">
+            </button>
+            <figcaption>The blowhole going off beside the shelf. This is the part I told myself we were here for.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_15-30-37_000.jpeg" alt="Sarah sitting on the rocks at Lāʻie Point in the white and red dress and a black hat, the ocean behind her.">
+            </button>
+            <figcaption>Sarah on the rocks. White and red, the hat, the whole reason I kept saying we had time.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="2024-10-18_16-11-29_210.jpeg" alt="Sarah from behind in the floral dress, standing on the rock and looking out over turquoise water toward a distant beach.">
+            </button>
+            <figcaption>Looking out over that water. The dress was in the wind and I was still walking back and forth in my head.</figcaption>
+          </figure>
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="2024-10-18_18-57-41_000.jpeg" alt="Sarah and Nico from behind, holding hands above a natural rock arch as waves break through it.">
+            </button>
+            <figcaption>Above the natural arch, hands together, the water working the hole underneath us.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_18-55-10_000%20%282024-10-31T10_19_54.635%29.jpeg" alt="Sarah and Nico walking the dry headland at Lāʻie, the floral dress and black shirt, mountains across the water.">
+            </button>
+            <figcaption>Walking the headland. From here the car was a longer walk than it looked, which I was about to find out.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_19-14-40_000.jpeg" alt="Sarah and Nico sitting on the lava rocks while a wave explodes in white spray behind them.">
+            </button>
+            <figcaption>Sitting the shelf while a wave blew up behind us. I still had not gone to the car.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_19-16-03_000.jpeg" alt="Sarah seated on the rocks in the floral dress as a blowhole throws a tall curtain of spray beside her.">
+            </button>
+            <figcaption>Her and the blowhole. The spray went higher than I was ready for, and so did the afternoon.</figcaption>
+          </figure>
+        </div>
+        <div class="story-copy">
+          <p>I walked back to the car. Peter was in it with the air conditioning on, because it was hot, just sitting there. I got the ring. I gave Mike my phone and said, bro, pa-record.</p>
+          <p>On the walk back I tried to guess which would come first, the laugh or the cry. I know her. I knew she would laugh from the shock, hard, and then she would cry.</p>
+          <p>I got her attention. I knelt on rock that was sharper than I expected. I asked. She laughed exactly the way I thought she would. She said yes, quietly, and she cried, and she hugged me without really looking at the ring. I still cry when I think about it. I do not think that is going to stop.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_17-08-14_393.jpeg" alt="Nico kneeling on the sharp rock at Lāʻie Point, holding the ring toward Sarah in the white and red dress.">
+            </button>
+            <figcaption>On the sharp rock. Mike had the phone. She laughed first, the way I knew she would.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_19-27-35_000.jpeg" alt="A wide view of the proposal at Lāʻie Point, Nico kneeling and Sarah in the floral dress, a small island offshore.">
+            </button>
+            <figcaption>The same kneel, from farther down the point. The island sitting out there like it had been waiting too.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_17-21-24_000.jpeg" alt="Sarah and Nico hugging on the rocks right after the proposal, her dress against his black shirt.">
+            </button>
+            <figcaption>The hug. She said yes before she really looked at the ring.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_19-27-39_000%20%282026-08-03T20_46_55.500%29.jpeg" alt="Sarah and Nico embracing on the rocky point, turquoise water and a breaking wave beside them.">
+            </button>
+            <figcaption>Still holding on. A wave broke beside the rock and I did not care about anything else.</figcaption>
+          </figure>
+        </div>
+
+        <p class="scene">Polynesian Cultural Center</p>
+        <div class="story-copy">
+          <p>We went to the Polynesian Cultural Center after that, which turned out to be the right place to land. We went through the villages, took the canoe, sat for the temporary tattoos, and stayed for dinner and the evening show. The knowledge, the food, the noise, all of it. I could finally watch her smile without rehearsing a sentence in my head. She was happy. She was not going to forget it either. I had asked. Best day of my life.</p>
+          <p>We slept at a sketchy campsite and called that the start of the next chapter. I did not take a picture of the campsite.</p>
+        </div>
+        <div class="mosaic">
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_16-36-46_039.jpeg" alt="A friend standing between two large carved wooden figures at the Polynesian Cultural Center, white tent and palms behind him.">
+            </button>
+            <figcaption>Between the carved figures. The center was busy in the way I had been afraid of, and by then it did not matter.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_19-56-06_000%20%282024-10-31T09_43_15.477%29.jpeg" alt="Sarah and Nico holding hands in front of the Polynesian Cultural Center entrance, carved posts and palms around the sign.">
+            </button>
+            <figcaption>The entrance. Wristbands still on, the question already answered, the sign behind us like a souvenir.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_17-26-11_923.jpeg" alt="A canoe selfie at the Aotearoa village: Sarah, Nico, two friends, and a guide in a purple shirt making a shaka under the Kia Ora sign.">
+            </button>
+            <figcaption>The canoe at Aotearoa. Kia ora on the sign, a guide leaning in, and the first real exhale of the day.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_18-15-35_971.jpeg" alt="Four hands toasting with Hawaiian Sun pineapple orange cans and a Rockstar, neon Polynesian Cultural Center wristbands visible.">
+            </button>
+            <figcaption>A toast in the wristbands. Hawaiian Sun, a Rockstar, and the map of the center still in somebody’s hand.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-18_18-23-58_867.jpeg" alt="Forearms in a circle showing fresh temporary Polynesian tattoos and bright green Polynesian Cultural Center wristbands.">
+            </button>
+            <figcaption>The tattoos, still fresh. A band on every wrist that actually said where we were.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-18_19-28-15_017.jpeg" alt="Sarah, Nico, and two friends seated in the audience of the evening show, purple light and a crowded outdoor theater.">
+            </button>
+            <figcaption>Seats for the evening show. I spent most of it replaying the rock, and watching her smile like she was doing the same.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="day" id="oct19" hidden>
+        <p class="when">Saturday and Sunday</p>
+        <h2>Oct 19–20</h2>
+        <p class="pending">The writeup for these two days is still coming. Until then this is only what the photos show: a lagoon breakfast, the rocks, the ring in daylight, and a surf lesson in Waikiki.</p>
+        <p class="scene">October 19</p>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-19_07-56-42_711.jpeg" alt="Sarah and Nico on a long bench at a bright resort breakfast, takeout containers beside them and a palm-lined lagoon through the open windows.">
+            </button>
+            <figcaption>Breakfast on the bench, takeout boxes and coffee, the lagoon and the palms right outside the glass.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="2024-10-19_10-15-38_429.jpeg" alt="Nico standing in clear shallow tide pools among dark rocks, mountains on the horizon.">
+            </button>
+            <figcaption>In the tide pools. The water was clear enough to see the rock under his feet.</figcaption>
+          </figure>
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="2024-10-19_10-27-29_594.jpeg" alt="A hand held up to the sky wearing an engagement ring, ironwood needles overhead and the ocean behind.">
+            </button>
+            <figcaption>The ring, finally looked at, against the sky and the ironwood.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-19_10-30-07_343.jpeg" alt="A person sitting on dark lava rock as a large white wave breaks behind them, mountains across the water.">
+            </button>
+            <figcaption>The shore break. Someone small on the lava, and a wave that took the rest of the frame.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-19_19-00-39_790.jpeg" alt="Sarah and Nico standing inside a natural arch of ironwood branches, the ocean visible through the needles.">
+            </button>
+            <figcaption>The two of them inside an ironwood arch, the ocean showing through the needles.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="2024-10-19_19-51-59_000.jpeg" alt="Nico in sunglasses and a floral shirt, smiling under the red canopy of an open tram.">
+            </button>
+            <figcaption>On the covered tram, late in the day, the canopy throwing the whole seat into shade.</figcaption>
+          </figure>
+        </div>
+        <p class="scene">October 20</p>
+        <div class="mosaic">
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-20_11-49-22_179.jpeg" alt="Two friends on Waikiki beach holding long surfboards, orange towels around their necks, a rentals tent and towers behind them.">
+            </button>
+            <figcaption>Waikiki, before the lesson. Two boards, two towels, and the rental tent behind them.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-20_11-54-00_534.jpeg" alt="Sarah and Nico standing barefoot with surfboards on Waikiki beach, palms and hotel towers behind them.">
+            </button>
+            <figcaption>The other pair. Palms, the towers, and boards still taller than the morning.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="day" id="oct21" hidden>
+        <p class="when">Monday</p>
+        <h2>Oct 21</h2>
+        <p class="pending">The story of this day is still to be written. The pictures run from Pearl Harbor to the deck of the Missouri, then dinner, then one last escalator.</p>
+        <div class="mosaic">
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-21_13-11-21_493.jpeg" alt="Sarah and Nico standing in front of the blue Pearl Harbor National Memorial sign, palms and flags behind them.">
+            </button>
+            <figcaption>Pearl Harbor National Memorial. The sign names the Arizona, the Oklahoma, and the Utah.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-21_13-36-07_261.jpeg" alt="A sunny selfie of Nico and Sarah on the lawn at Pearl Harbor, the harbor and palms behind them.">
+            </button>
+            <figcaption>The lawn above the harbor, on the way through the grounds.</figcaption>
+          </figure>
+          <figure class="photo-card half">
+            <button type="button" class="shot">
+              <img src="2024-10-21_15-37-23_023.jpeg" alt="Sarah and Nico holding hands on the deck of the USS Missouri, rows of American flags leading toward the ship.">
+            </button>
+            <figcaption>On the deck of the USS Missouri, flags lined down both sides of the pier.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="2024-10-21_15-47-15_978.jpeg" alt="A group selfie on the USS Missouri, the superstructure and a Missouri banner behind four people.">
+            </button>
+            <figcaption>Under the superstructure. The banner behind us says Missouri, in case the guns did not.</figcaption>
+          </figure>
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="2024-10-21_15-51-12_361.jpeg" alt="Nico sitting on a practice shell in front of the USS Missouri’s three 16-inch gun barrels.">
+            </button>
+            <figcaption>The 16-inch guns, and a seat on the practice shell beneath them.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-21_16-17-45_128.jpeg" alt="Sarah at the rail of the USS Missouri in a white shirt, arms out, the bridge and a flag rising behind her.">
+            </button>
+            <figcaption>Sarah at the rail. The bridge, the flag, and the chain across the netting in front of her.</figcaption>
+          </figure>
+          <figure class="photo-card wide">
+            <button type="button" class="shot">
+              <img src="2024-10-21_17-31-27_891.jpeg" alt="Sarah and Nico at a table beside an open waterfront awning, fishing boats and a large ship in the harbor behind them.">
+            </button>
+            <figcaption>A table by the harbor after the ship. Fishing boats, a tanker, and the awning rolled most of the way up.</figcaption>
+          </figure>
+          <figure class="photo-card tall">
+            <button type="button" class="shot">
+              <img src="2024-10-21_18-14-39_659.jpeg" alt="Nico standing with arms out under a large black Nico’s sign on a restaurant wall.">
+            </button>
+            <figcaption>Nico’s. The sign is bigger than the pose, which was the idea.</figcaption>
+          </figure>
+          <figure class="photo-card full">
+            <button type="button" class="shot">
+              <img src="2024-10-21_19-47-23_703.jpeg" alt="Sarah and Nico on an escalator beneath a Mahalo sign, colorful wallpaper and welcome written in many languages.">
+            </button>
+            <figcaption>The escalator under Mahalo. Welcome, in every language the wall had room for.</figcaption>
+          </figure>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <div id="lightbox" hidden>
+    <button type="button" class="lb-close" aria-label="Close photo">×</button>
+    <figure class="lb-figure">
+      <img alt="">
+      <figcaption></figcaption>
+    </figure>
+  </div>
+
+  <div id="site-footer-placeholder"></div>
+
+  <script>
+    (function () {
+      const days = ["oct17", "oct18", "oct19", "oct21"];
+      const buttons = Array.from(document.querySelectorAll(".day-nav button"));
+      function activate(id, shouldScroll, behavior) {
+        const key = days.includes(id) ? id : "oct17";
+        days.forEach(function (day) {
+          const on = day === key;
+          document.getElementById(day).hidden = !on;
+          const btn = document.querySelector('[data-day="' + day + '"]');
+          btn.classList.toggle("is-on", on);
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        if (shouldScroll) {
+          const section = document.getElementById(key);
+          const nav = document.querySelector(".day-nav");
+          const y = section.getBoundingClientRect().top + window.scrollY - nav.offsetHeight - 8;
+          window.scrollTo({ top: Math.max(0, y), behavior: behavior || "smooth" });
+        }
+      }
+
+      function fromHash(shouldScroll, behavior) {
+        const id = location.hash.replace("#", "");
+        activate(id, shouldScroll, behavior);
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const id = btn.getAttribute("data-day");
+          if (location.hash === "#" + id) activate(id, true);
+          else location.hash = id;
+        });
+      });
+
+      window.addEventListener("hashchange", function () {
+        fromHash(true);
+      });
+
+      fromHash(location.hash.length > 1, "auto");
+
+      const lightbox = document.getElementById("lightbox");
+      const lbImg = lightbox.querySelector("img");
+      const lbCap = lightbox.querySelector("figcaption");
+      const lbClose = lightbox.querySelector(".lb-close");
+      let lastFocus = null;
+
+      function openLightbox(shot) {
+        const img = shot.querySelector("img");
+        const caption = shot.closest("figure").querySelector("figcaption");
+        lbImg.src = img.getAttribute("src");
+        lbImg.alt = img.alt;
+        lbCap.textContent = caption.textContent;
+        lastFocus = document.activeElement;
+        lightbox.hidden = false;
+        document.body.style.overflow = "hidden";
+        lbClose.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lbImg.removeAttribute("src");
+        document.body.style.overflow = "";
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      document.querySelectorAll(".shot").forEach(function (shot) {
+        const img = shot.querySelector("img");
+        if (img && img.alt) shot.setAttribute("aria-label", img.alt);
+        shot.addEventListener("click", function () {
+          openLightbox(shot);
+        });
+      });
+
+      lbClose.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", function (event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
+      });
+    })();
+  </script>
+
+  <script>
+    (function(){
+      const originalGet = document.getElementById.bind(document);
+      document.getElementById = function(id){
+        const safe = ['timelineWrap','prevBtn','nextBtn','timeline'];
+        const el = originalGet(id);
+        if (el) return el;
+        if (safe.includes(id)) {
+          return {
+            appendChild: function(){},
+            addEventListener: function(){},
+            disabled: false
+          };
+        }
+        return null;
+      };
+    })();
+  </script>
+  <script>(function(){const trips=[{slug:'2026-01-09-vegas-death-valley-mammoth.html',year:2026},{slug:'2026-05-24-iceland.html',year:2026},{slug:'2025-05-13-european-tour.html',year:2025},{slug:'2025-05-27-grand-teton-yellowstone.html',year:2025},{slug:'2025-09-26-sentinel-pass.html',year:2025},{slug:'2025-06-28-takakkaw-falls.html',year:2025},{slug:'2024-09-05-lake-ohara-takakkaw.html',year:2024},{slug:'2024-07-05-tonquin-valley.html',year:2024},{slug:'2024-10-17-hawaii.html',year:2024},{slug:'2024-10-01-south-korea-taiwan.html',year:2024},{slug:'2023-08-20-us-virgin-islands-cruise.html',year:2023},{slug:'2023-05-24-oregon-road-trip.html',year:2023},{slug:'2023-04-27-mexico.html',year:2023},{slug:'2022-11-10-san-francisco.html',year:2022},{slug:'2022-06-09-florida-orlando.html',year:2022},{slug:'2022-05-26-bc-road-trip.html',year:2022},{slug:'2022-02-18-whistler.html',year:2022},{slug:'2022-02-11-seattle.html',year:2022},{slug:'2022-01-20-whistler-cypress.html',year:2022},{slug:'2021-05-06-fairmont-bugaboo.html',year:2021},{slug:'2021-04-07-toronto.html',year:2021},{slug:'2021-03-26-revelstoke.html',year:2021},{slug:'2021-02-26-whistler.html',year:2021},{slug:'2021-01-14-vancouver.html',year:2021},{slug:'2021-11-19-rockies-ski-weekend.html',year:2021},{slug:'2023-07-29-bugaboo-provincial-park.html',year:2023}];const path=location.pathname.split('/').pop();const idx=trips.findIndex(t=>t.slug===path);const prev=document.getElementById('prevBtn');const next=document.getElementById('nextBtn');const yearsEl=document.getElementById('timeline');const years=Array.from(new Set(trips.map(t=>t.year))).sort((a,b)=>b-a);years.forEach(y=>{const b=document.createElement('button');b.textContent=y;b.addEventListener('click',()=>{const i=trips.findIndex(t=>t.year===y);if(i>=0)location.href='/diary/trips/'+trips[i].slug;});yearsEl.appendChild(b);});if(idx>0)prev.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx-1].slug);else prev.disabled=true;if(idx>=0&&idx<trips.length-1)next.addEventListener('click',()=>location.href='/diary/trips/'+trips[idx+1].slug);else next.disabled=true;document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'&&idx>0)location.href='/diary/trips/'+trips[idx-1].slug; if(e.key==='ArrowRight'&&idx<trips.length-1)location.href='/diary/trips/'+trips[idx+1].slug;});})();</script>
   <button id="bgm-toggle" type="button" style="position:fixed;right:16px;bottom:16px;z-index:9999;padding:10px 14px;border-radius:999px;border:0;background:#fff;color:#111;font-weight:700;cursor:pointer;box-shadow:0 10px 25px rgba(0,0,0,.18);">Play music</button>
   <audio id="bgm" src="./DWAS.mp3" loop playsinline></audio>
   <script>
@@ -46,4 +847,5 @@
     })();
   </script>
   <script src="/includes/loader.js"></script>
-</body></html>
+</body>
+</html>
