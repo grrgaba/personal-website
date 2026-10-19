@@ -11,7 +11,7 @@
 <div id="donateModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
   
   <!-- Modal Content Box -->
-  <div style="background-color:var(--bg, #ffffff); color:var(--text, #000000); margin:10vh auto; padding:30px; border-radius:12px; max-width:600px; width:90%; position:relative; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+  <div style="background-color:var(--bg, #ffffff); color:var(--text, #000000); margin:10vh auto; padding:30px; border-radius:12px; max-width:720px; width:90%; position:relative; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
     
     <!-- Close Button (Inline onclick to guarantee it closes) -->
     <span onclick="document.getElementById('donateModal').style.display='none'" style="position:absolute; right:20px; top:15px; font-size:28px; font-weight:bold; cursor:pointer; color:#888;">&times;</span>
@@ -19,8 +19,8 @@
     <h2 style="margin-top:0;">Support My Work</h2>
     <p style="margin-bottom:25px; opacity:0.8;">Choose your preferred way to support. Thank you!</p>
     
-    <!-- The Four Options Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+    <!-- Support options -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
       
       <!-- PayPal Option -->
       <a href="https://www.paypal.com/paypalme/NicoDimaanoAB" target="_blank" rel="noopener noreferrer" style="background:#0070BA; color:#FFFFFF; display:flex; flex-direction:column; align-items:center; text-align:center; text-decoration:none; padding: 20px 15px; border-radius: 8px; transition: transform 0.2s;">
@@ -33,6 +33,20 @@
         <h3 style="margin:0; font-size: 1.1rem;">Square</h3>
         <p style="color: rgba(0,0,0,0.7); margin: 8px 0 0 0; font-size: 0.85rem;">Credit Card</p>
       </a>
+
+      <!-- Interac e-Transfer: reveals the email. No public auto-send link exists. -->
+      <button type="button" id="interacToggle" aria-expanded="false" aria-controls="interacPanel" onclick="var p=document.getElementById('interacPanel'); if(p.hasAttribute('hidden')){ p.removeAttribute('hidden'); this.setAttribute('aria-expanded','true'); var f=document.getElementById('interacEmail'); if(f) f.focus(); } else { p.setAttribute('hidden',''); this.setAttribute('aria-expanded','false'); }" style="background:#FFCC00; color:#111111; border:none; font:inherit; cursor:pointer; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; padding: 20px 15px; border-radius: 8px;">
+        <h3 style="margin:0; font-size: 1.1rem;">Interac</h3>
+        <p style="color: rgba(0,0,0,0.7); margin: 8px 0 0 0; font-size: 0.85rem;">e-Transfer</p>
+      </button>
+
+      <div id="interacPanel" hidden style="grid-column: 1 / -1; background:#FFF8DC; border:1px solid #E6C200; border-radius:8px; padding:16px; text-align:center;">
+        <p style="margin:0 0 10px 0; font-size:0.95rem;">Send an Interac e-Transfer from your bank to this email.</p>
+        <input id="interacEmail" type="text" readonly value="dimaanonico@gmail.com" aria-label="Interac e-Transfer email" onclick="this.select()" style="width:100%; max-width:320px; box-sizing:border-box; text-align:center; font-size:1rem; padding:10px 12px; border-radius:6px; border:1px solid #E0C36A; background:#fff; color:#111;">
+        <div style="margin-top:12px;">
+          <button type="button" id="interacCopy" onclick="var email='dimaanonico@gmail.com'; var btn=this; var field=document.getElementById('interacEmail'); function mark(label){ btn.textContent=label; setTimeout(function(){ btn.textContent='Copy email'; }, 1600); } if(field){ field.focus(); field.select(); } var copied=false; try { copied=document.execCommand('copy'); } catch (err) {} if(copied){ mark('Copied'); } else if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(email).then(function(){ mark('Copied'); }).catch(function(){ mark('Email selected'); }); } else { mark('Email selected'); }" style="background:#111111; color:#ffffff; border:none; border-radius:6px; padding:8px 16px; font:inherit; font-weight:700; cursor:pointer;">Copy email</button>
+        </div>
+      </div>
 
       <!-- Stripe Option (Link pending) -->
       <!-- <a href="#" target="_blank" rel="noopener noreferrer" style="background:#635BFF; color:#FFFFFF; display:flex; flex-direction:column; align-items:center; text-align:center; text-decoration:none; padding: 20px 15px; border-radius: 8px; transition: transform 0.2s;">
