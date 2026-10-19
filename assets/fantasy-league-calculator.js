@@ -20,14 +20,9 @@
     exampleButton: document.getElementById("example-button"),
     clearButton: document.getElementById("clear-button"),
     status: document.getElementById("status-message"),
+    resultsNotice: document.getElementById("results-notice"),
     results: document.getElementById("results-section"),
     teamFilter: document.getElementById("team-filter"),
-    categoryFilter: document.getElementById("category-filter"),
-    winnerFilter: document.getElementById("winner-filter"),
-    minimumWinsFilter: document.getElementById("minimum-wins-filter"),
-    sortFilter: document.getElementById("sort-filter"),
-    orderFilter: document.getElementById("order-filter"),
-    searchFilter: document.getElementById("search-filter"),
     matchupHead: document.getElementById("matchup-head"),
     matchupBody: document.getElementById("matchup-body"),
     resultCount: document.getElementById("result-count"),
@@ -385,97 +380,19 @@
   }
 
   function updateFilterOptions(teams) {
-    const selectedTeam = page.teamFilter.value;
+    const selectedTeam = teams.some(function (team) {
+      return team.name === page.teamFilter.value;
+    }) ? page.teamFilter.value : teams[0].name;
     page.teamFilter.replaceChildren();
-    appendOption(page.teamFilter, "", "Any team");
     teams.forEach(function (team) {
       appendOption(page.teamFilter, team.name, team.name);
     });
-    if (teams.some(function (team) { return team.name === selectedTeam; })) {
-      page.teamFilter.value = selectedTeam;
-    }
-
-    const selectedCategory = page.categoryFilter.value;
-    page.categoryFilter.replaceChildren();
-    appendOption(page.categoryFilter, "", "Any category");
-    categories.forEach(function (category) {
-      appendOption(page.categoryFilter, category.key, category.label);
-    });
-    if (categories.some(function (category) { return category.key === selectedCategory; })) {
-      page.categoryFilter.value = selectedCategory;
-    }
-
-    const selectedSort = page.sortFilter.value;
-    page.sortFilter.replaceChildren();
-    appendOption(page.sortFilter, "overall", "Overall category edge");
-    appendOption(page.sortFilter, "team1", "Team 1 name");
-    appendOption(page.sortFilter, "team2", "Team 2 name");
-    categories.forEach(function (category) {
-      appendOption(page.sortFilter, category.key, category.label + " edge");
-    });
-    if (selectedSort === "overall" || selectedSort === "team1" || selectedSort === "team2" ||
-      categories.some(function (category) { return category.key === selectedSort; })) {
-      page.sortFilter.value = selectedSort;
-    }
+    page.teamFilter.value = selectedTeam;
   }
 
   function matchupPassesFilters(matchup) {
     const teamFilter = page.teamFilter.value;
-    const categoryFilter = page.categoryFilter.value;
-    const winnerFilter = page.winnerFilter.value;
-    const minimumWins = Number(page.minimumWinsFilter.value);
-    const search = page.searchFilter.value.trim().toLowerCase();
-
-    if (teamFilter && matchup.team1.name !== teamFilter && matchup.team2.name !== teamFilter) {
-      return false;
-    }
-    if (Math.max(matchup.wins1, matchup.wins2) < minimumWins) {
-      return false;
-    }
-    if (search) {
-      const searchable = [
-        matchup.team1.name,
-        matchup.team2.name,
-        matchup.team1.players.map(function (player) { return player.Player; }).join(" "),
-        matchup.team2.players.map(function (player) { return player.Player; }).join(" ")
-      ].join(" ").toLowerCase();
-      if (!searchable.includes(search)) {
-        return false;
-      }
-    }
-    if (categoryFilter) {
-      const category = matchup.categories.find(function (result) {
-        return result.key === categoryFilter;
-      });
-      return Boolean(category) && (!winnerFilter || category.winner === winnerFilter);
-    }
-    if (winnerFilter) {
-      return matchup.categories.some(function (result) {
-        return result.winner === winnerFilter;
-      });
-    }
-    return true;
-  }
-
-  function sortMatchups(matchups) {
-    const key = page.sortFilter.value;
-    const direction = page.orderFilter.value === "asc" ? 1 : -1;
-    return matchups.slice().sort(function (left, right) {
-      if (key === "team1" || key === "team2") {
-        const nameCompare = left[key].name.localeCompare(right[key].name);
-        if (nameCompare) {
-          return nameCompare * direction;
-        }
-        return left.team2.name.localeCompare(right.team2.name) * direction;
-      }
-      const leftValue = key === "overall" ? left.overallEdge :
-        left.categories.find(function (result) { return result.key === key; }).edge;
-      const rightValue = key === "overall" ? right.overallEdge :
-        right.categories.find(function (result) { return result.key === key; }).edge;
-      return (leftValue - rightValue) * direction ||
-        left.team1.name.localeCompare(right.team1.name) ||
-        left.team2.name.localeCompare(right.team2.name);
-    });
+    return matchup.team1.name === teamFilter || matchup.team2.name === teamFilter;
   }
 
   function displayWinner(result, matchup) {
@@ -512,7 +429,7 @@
   }
 
   function renderMatchups() {
-    const filtered = sortMatchups(currentMatchups.filter(matchupPassesFilters));
+    const filtered = currentMatchups.filter(matchupPassesFilters);
     page.matchupBody.replaceChildren();
     page.resultCount.textContent = "Showing " + filtered.length + " of " + currentMatchups.length + " matchups";
     page.noMatchups.hidden = filtered.length > 0;
@@ -554,12 +471,6 @@
     page.results.hidden = false;
     page.matchupHead.replaceChildren();
     page.teamFilter.value = "";
-    page.categoryFilter.value = "";
-    page.winnerFilter.value = "";
-    page.minimumWinsFilter.value = "0";
-    page.sortFilter.value = "overall";
-    page.orderFilter.value = "desc";
-    page.searchFilter.value = "";
 
     const headRow = document.createElement("tr");
     ["Team 1", "Team 2"].forEach(function (label) {
@@ -603,8 +514,11 @@
     const sourceSummary = projectionCount + " player(s) use 2026–27 projections; " +
       baselines + " use 2025–26 actual baselines.";
     notices.unshift(sourceSummary);
-    setMessage(notices.join(" "), parsed.unmatchedPlayers.length || parsed.overLimit.length ||
-      parsed.duplicatePlayers.length ? "warning" : "success");
+    page.status.className = "message";
+    page.status.textContent = "";
+    page.resultsNotice.className = "message visible " +
+      (parsed.unmatchedPlayers.length || parsed.overLimit.length || parsed.duplicatePlayers.length ? "warning" : "success");
+    page.resultsNotice.textContent = notices.join(" ");
   }
 
   function setMessage(text, type) {
@@ -642,6 +556,8 @@
     page.results.hidden = true;
     page.status.className = "message";
     page.status.textContent = "";
+    page.resultsNotice.className = "message";
+    page.resultsNotice.textContent = "";
     currentTeams = [];
     currentMatchups = [];
   }
@@ -649,17 +565,7 @@
   page.calculateButton.addEventListener("click", calculate);
   page.exampleButton.addEventListener("click", loadExample);
   page.clearButton.addEventListener("click", clear);
-  [
-    page.teamFilter,
-    page.categoryFilter,
-    page.winnerFilter,
-    page.minimumWinsFilter,
-    page.sortFilter,
-    page.orderFilter
-  ].forEach(function (control) {
-    control.addEventListener("change", renderMatchups);
-  });
-  page.searchFilter.addEventListener("input", renderMatchups);
+  page.teamFilter.addEventListener("change", renderMatchups);
 
   fetch("2026-2027_projected_stats.csv")
     .then(function (response) {

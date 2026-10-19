@@ -73,12 +73,6 @@
       <h1>Fantasy League Calculator</h1>
       <p class="intro">Paste your league rosters to compare every pair of teams across the standard 9-category format: PTS, 3PM, REB, AST, STL, BLK, FG%, FT%, and TO. Each team uses its first 13 distinct players.</p>
 
-      <div class="source-note">
-        <p><strong>Projection data:</strong> Hashtag Basketball currently lists 30 players with 2026–27 projections. For other listed players, the calculator uses 2025–26 per-game actuals from Basketball-Reference as a clearly labeled baseline, not as a 2026–27 projection. Players missing from both datasets are excluded and listed in the results notice.</p>
-        <p><a href="2026-2027_projected_stats.csv" download>Download the player stats CSV</a> · Sources: <a href="https://hashtagbasketball.com/fantasy-basketball-projections" target="_blank" rel="noopener noreferrer">Hashtag Basketball</a> and <a href="https://www.basketball-reference.com/leagues/NBA_2026_per_game.html" target="_blank" rel="noopener noreferrer">Basketball-Reference</a>.</p>
-        <p class="small-note">Counting stats are estimated by multiplying each player's per-game rate by projected/actual games played. FG% and FT% are weighted by attempts. Lower TO wins.</p>
-      </div>
-
       <label class="roster-label" for="roster-input">Paste rosters</label>
       <textarea id="roster-input" spellcheck="false" aria-describedby="roster-help" placeholder="Best supported: copy a spreadsheet with one player per row and columns such as Fantasy Team | Slot | Player | NBA Team. You can also paste one team per blank-separated block: team name on the first line, then one player per line."></textarea>
       <p id="roster-help" class="small-note">Pasted text stays in your browser. Duplicate players are counted only for the first team listed. More than 13 distinct players on a team are ignored after player 13.</p>
@@ -91,52 +85,16 @@
 
       <section id="results-section" hidden>
         <div class="filters-panel" aria-label="Matchup filters">
-          <h2>Filter and sort matchups</h2>
+          <h2>Team Filter</h2>
           <div class="filters">
             <label for="team-filter">Team
-              <select id="team-filter"><option value="">Any team</option></select>
-            </label>
-            <label for="category-filter">Category
-              <select id="category-filter"><option value="">Any category</option></select>
-            </label>
-            <label for="winner-filter">Category result
-              <select id="winner-filter">
-                <option value="">Any result</option>
-                <option value="team1">Team 1 wins</option>
-                <option value="team2">Team 2 wins</option>
-                <option value="tie">Tie</option>
-              </select>
-            </label>
-            <label for="minimum-wins-filter">Minimum categories won
-              <select id="minimum-wins-filter">
-                <option value="0">Any score</option>
-                <option value="1">At least 1</option>
-                <option value="3">At least 3</option>
-                <option value="5">At least 5</option>
-                <option value="7">At least 7</option>
-              </select>
-            </label>
-            <label for="sort-filter">Sort by
-              <select id="sort-filter">
-                <option value="overall">Overall category edge</option>
-                <option value="team1">Team 1 name</option>
-                <option value="team2">Team 2 name</option>
-              </select>
-            </label>
-            <label for="order-filter">Order
-              <select id="order-filter">
-                <option value="desc">Descending</option>
-                <option value="asc">Ascending</option>
-              </select>
-            </label>
-            <label for="search-filter">Search teams or players
-              <input id="search-filter" type="search" placeholder="Search">
+              <select id="team-filter"></select>
             </label>
           </div>
         </div>
 
         <div class="results-heading">
-          <h2>All team matchups</h2>
+          <h2>Matchups for selected team</h2>
           <span id="result-count"></span>
         </div>
         <div class="table-wrap">
@@ -146,6 +104,7 @@
           </table>
           <div id="no-matchups" class="empty-state" hidden>No matchups match those filters.</div>
         </div>
+        <div id="results-notice" class="message" role="status" aria-live="polite"></div>
 
         <h2 class="section-label">Team projected totals</h2>
         <p class="small-note">These full-season estimates use the same player-selection and data-source rules as the matchup table.</p>
@@ -165,6 +124,11 @@
       </section>
 
       <p class="privacy-note">This tool runs locally in your browser and does not upload your pasted rosters.</p>
+      <div class="source-note">
+        <p><strong>Projection data:</strong> 2026–27 projections are included for every player in the attached league roster, using availability-adjusted games played. Other players in the CSV without a current projection use clearly labeled 2025–26 per-game actuals as a baseline instead. Any players missing from the CSV are listed below the matchup table.</p>
+        <p><a href="2026-2027_projected_stats.csv" download>Download the player stats CSV</a> · Sources: <a href="https://stocksandbuckets.com/players" target="_blank" rel="noopener noreferrer">Stocks &amp; Buckets 2026–27 projections</a>, <a href="https://hashtagbasketball.com/fantasy-basketball-projections" target="_blank" rel="noopener noreferrer">Hashtag Basketball</a>, and <a href="https://www.basketball-reference.com/leagues/NBA_2026_per_game.html" target="_blank" rel="noopener noreferrer">Basketball-Reference</a>.</p>
+        <p class="small-note">Counting stats are estimated by multiplying each player's per-game rate by projected/actual games played. FG% and FT% are weighted by attempts. Lower TO wins.</p>
+      </div>
     </section>
   </main>
 
