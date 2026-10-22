@@ -14,7 +14,27 @@
     { key: "TO", label: "TO", inverse: true }
   ];
   const countingKeys = ["PTS", "3PM", "REB", "AST", "STL", "BLK", "TO"];
+  // default points-league scoring for each host site
+  const pointPresets = {
+    espn: {
+      label: "ESPN",
+      weights: { PTS: 1, "3PM": 1, REB: 1, AST: 2, STL: 4, BLK: 4, TO: -2, FGM: 2, FGA: -1, FTM: 1, FTA: -1 },
+      text: "PTS 1, 3PM 1, REB 1, AST 2, STL 4, BLK 4, TO −2, FGM 2, FGA −1, FTM 1, FTA −1"
+    },
+    yahoo: {
+      label: "Yahoo",
+      weights: { PTS: 1, REB: 1.2, AST: 1.5, STL: 3, BLK: 3, TO: -1 },
+      text: "PTS 1, REB 1.2, AST 1.5, STL 3, BLK 3, TO −1"
+    }
+  };
+  const SETTINGS_KEY = "fantasyCalculatorSettings";
+  const settings = loadSettings();
   const page = {
+    presetGroup: document.getElementById("preset-group"),
+    settingsButton: document.getElementById("settings-button"),
+    settingsPanel: document.getElementById("settings-panel"),
+    introText: document.getElementById("intro-text"),
+    fptsHead: document.getElementById("fpts-head"),
     rosterInput: document.getElementById("roster-input"),
     calculateButton: document.getElementById("calculate-button"),
     exampleButton: document.getElementById("example-button"),
@@ -32,7 +52,33 @@
   let playerIndex = new Map();
   let currentMatchups = [];
   let currentTeams = [];
+  let lastParsed = null;
 
+  function loadSettings() {
+    const defaults = { mode: "category", teams: 12, preset: "espn" };
+    try {
+      const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {};
+      return {
+        mode: saved.mode === "points" ? "points" : defaults.mode,
+        preset: saved.preset === "yahoo" ? "yahoo" : defaults.preset,
+        teams: [10, 12, 14].includes(Number(saved.teams)) ? Number(saved.teams) : defaults.teams
+      };
+    } catch (error) {
+      return defaults;
+    }
+  }
+
+  function saveSettings() {
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    } catch (error) {
+      /* storage unavailable; settings just won't persist */
+    }
+  }
+
+  function isPoints() {
+    return settings.mode === "points";
+  }
   function normalizeName(name) {
     return String(name || "")
       .normalize("NFD")
@@ -288,6 +334,7 @@
 
     totals["FG%"] = totals.FGA > 0 ? totals.FGM / totals.FGA : null;
     totals["FT%"] = totals.FTA > 0 ? totals.FTM / totals.FTA : null;
+    totals.FPTS = 0;
     return totals;
   }
 
@@ -331,6 +378,7 @@
         const wins2 = results.filter(function (result) {
           return result.winner === "team2";
         }).length;
+        const pointsDiff = team1.stats.FPTS - team2.stats.FPTS;
         matchups.push({
           team1: team1,
           team2: team2,
@@ -339,7 +387,8 @@
           wins2: wins2,
           ties: results.length - wins1 - wins2,
           overallWinner: wins1 === wins2 ? "tie" : (wins1 > wins2 ? "team1" : "team2"),
-          overallEdge: wins1 - wins2
+          overallEdge: wins1 - wins2,
+          pointsWinner: Math.abs(pointsDiff) < 0.05 ? "tie" : (pointsDiff > 0 ? "team1" : "team2")
         });
       }
     }
@@ -416,13 +465,16 @@
   function displayOverallWinner(matchup) {
     const cell = document.createElement("td");
     cell.className = "category-cell overall-cell";
+    const winnerKey = isPoints() ? matchup.pointsWinner : matchup.overallWinner;
     const winner = document.createElement("span");
-    winner.className = "winner winner-" + matchup.overallWinner;
-    winner.textContent = matchup.overallWinner === "team1" ? matchup.team1.name :
-      (matchup.overallWinner === "team2" ? matchup.team2.name : "Tie");
+    winner.className = "winner winner-" + winnerKey;
+    winner.textContent = winnerKey === "team1" ? matchup.team1.name :
+      (winnerKey === "team2" ? matchup.team2.name : "Tie");
     const score = document.createElement("span");
     score.className = "category-values";
-    score.textContent = matchup.wins1 + "–" + matchup.wins2 +
+    score.textContent = isPoints() ?
+      formatNumber(matchup.team1.stats.FPTS) + " – " + formatNumber(matchup.team2.stats.FPTS) + " points" :
+      matchup.wins1 + "–" + matchup.wins2 +
       (matchup.ties ? "–" + matchup.ties + " tied" : "") + " categories";
     cell.append(winner, score);
     return cell;
@@ -440,15 +492,18 @@
         makeCell(matchup.team1.name),
         makeCell(matchup.team2.name)
       );
-      matchup.categories.forEach(function (result) {
-        row.appendChild(displayWinner(result, matchup));
-      });
+      if (!isPoints()) {
+        matchup.categories.forEach(function (result) {
+          row.appendChild(displayWinner(result, matchup));
+        });
+      }
       row.appendChild(displayOverallWinner(matchup));
       page.matchupBody.appendChild(row);
     });
   }
 
   function renderTeamTotals(teams) {
+    page.fptsHead.hidden = !isPoints();
     page.teamTotalsBody.replaceChildren();
     teams.forEach(function (team) {
       const row = document.createElement("tr");
@@ -461,16 +516,27 @@
       row.appendChild(makeCell(formatCategoryValue(team.stats["FG%"], true), "numeric"));
       row.appendChild(makeCell(formatCategoryValue(team.stats["FT%"], true), "numeric"));
       row.appendChild(makeCell(formatNumber(team.stats.TO), "numeric"));
+      if (isPoints()) {
+        row.appendChild(makeCell(formatNumber(team.stats.FPTS), "numeric"));
+      }
       page.teamTotalsBody.appendChild(row);
     });
   }
 
-  function renderResults(parsed) {
+  function renderResults(parsed, keepFilter) {
+    const previousFilter = page.teamFilter.value;
+    lastParsed = parsed;
     currentTeams = parsed.teams;
+    const weights = pointPresets[settings.preset].weights;
+    currentTeams.forEach(function (team) {
+      team.stats.FPTS = Object.keys(weights).reduce(function (sum, key) {
+        return sum + team.stats[key] * weights[key];
+      }, 0);
+    });
     currentMatchups = createMatchups(currentTeams);
     page.results.hidden = false;
     page.matchupHead.replaceChildren();
-    page.teamFilter.value = "";
+    page.teamFilter.value = keepFilter ? previousFilter : "";
 
     const headRow = document.createElement("tr");
     ["Team 1", "Team 2"].forEach(function (label) {
@@ -478,13 +544,15 @@
       th.textContent = label;
       headRow.appendChild(th);
     });
-    categories.forEach(function (category) {
-      const th = document.createElement("th");
-      th.textContent = category.label + " Winner";
-      headRow.appendChild(th);
-    });
+    if (!isPoints()) {
+      categories.forEach(function (category) {
+        const th = document.createElement("th");
+        th.textContent = category.label + " Winner";
+        headRow.appendChild(th);
+      });
+    }
     const overallHeader = document.createElement("th");
-    overallHeader.textContent = "Overall Matchup Winner";
+    overallHeader.textContent = isPoints() ? "Winner (Total Points)" : "Overall Matchup Winner";
     headRow.appendChild(overallHeader);
     page.matchupHead.appendChild(headRow);
 
@@ -493,6 +561,9 @@
     renderTeamTotals(currentTeams);
 
     const notices = [];
+    if (currentTeams.length !== settings.teams) {
+      notices.push("Found " + currentTeams.length + " teams, but the league size is set to " + settings.teams + ".");
+    }
     if (parsed.duplicatePlayers.length) {
       notices.push(parsed.duplicatePlayers.length + " duplicate player claim(s) were skipped for the later team; the first team listed keeps that player.");
     }
@@ -517,7 +588,7 @@
     page.status.className = "message";
     page.status.textContent = "";
     page.resultsNotice.className = "message visible " +
-      (parsed.unmatchedPlayers.length || parsed.overLimit.length || parsed.duplicatePlayers.length ? "warning" : "success");
+      (currentTeams.length !== settings.teams || parsed.unmatchedPlayers.length || parsed.overLimit.length || parsed.duplicatePlayers.length ? "warning" : "success");
     page.resultsNotice.textContent = notices.join(" ");
   }
 
@@ -560,7 +631,54 @@
     page.resultsNotice.textContent = "";
     currentTeams = [];
     currentMatchups = [];
+    lastParsed = null;
   }
+
+  function applySettingsToUI() {
+    page.settingsPanel.querySelectorAll(".seg-btn").forEach(function (button) {
+      const active = String(settings[button.dataset.setting]) === button.dataset.value;
+      button.setAttribute("aria-pressed", String(active));
+    });
+    page.presetGroup.hidden = !isPoints();
+    const preset = pointPresets[settings.preset];
+    page.introText.textContent = isPoints() ?
+      "Paste your league rosters to compare every pair of teams by total fantasy points, using " + preset.label + "'s default points scoring (" + preset.text + "). Each team uses its first 13 distinct players." :
+      "Paste your league rosters to compare every pair of teams across the standard 9-category format: PTS, 3PM, REB, AST, STL, BLK, FG%, FT%, and TO. Each team uses its first 13 distinct players.";
+  }
+
+  function setPanelOpen(open) {
+    page.settingsPanel.hidden = !open;
+    page.settingsButton.setAttribute("aria-expanded", String(open));
+  }
+
+  page.settingsButton.addEventListener("click", function () {
+    setPanelOpen(page.settingsPanel.hidden);
+  });
+  document.addEventListener("click", function (event) {
+    if (!page.settingsPanel.hidden && !page.settingsPanel.contains(event.target) && !page.settingsButton.contains(event.target)) {
+      setPanelOpen(false);
+    }
+  });
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !page.settingsPanel.hidden) {
+      setPanelOpen(false);
+      page.settingsButton.focus();
+    }
+  });
+  page.settingsPanel.addEventListener("click", function (event) {
+    const button = event.target.closest(".seg-btn");
+    if (!button) {
+      return;
+    }
+    const key = button.dataset.setting;
+    settings[key] = key === "teams" ? Number(button.dataset.value) : button.dataset.value;
+    saveSettings();
+    applySettingsToUI();
+    if (lastParsed) {
+      renderResults(lastParsed, true);
+    }
+  });
+  applySettingsToUI();
 
   page.calculateButton.addEventListener("click", calculate);
   page.exampleButton.addEventListener("click", loadExample);

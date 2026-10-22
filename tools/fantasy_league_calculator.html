@@ -13,6 +13,26 @@
     .source-note,.privacy-note,.message{padding:.8rem 1rem;border:1px solid #dbe4ef;border-radius:8px;background:#f8fafc;margin:1rem 0}
     .source-note p,.privacy-note p{margin:.3rem 0}
     .source-note a{color:var(--accent)}
+    .notice-toggle{margin:1rem 0}
+    .notice-toggle summary{cursor:pointer;font-size:.92rem;font-weight:600;color:#475569;padding:.4rem 0}
+    .notice-toggle summary:hover{color:var(--accent)}
+    .toolbar{position:relative;display:flex;justify-content:flex-end}
+    .gear-btn{background:#f3f4f6;border:1px solid #e6eef7;border-radius:8px;cursor:pointer;font-size:1.05rem;padding:.25rem .5rem}
+    .gear-btn:hover{background:#e9eef2}
+    .gear-btn:focus-visible,.seg-btn:focus-visible{outline:3px solid rgba(11,95,255,.25);outline-offset:2px}
+    .settings-panel{position:absolute;top:100%;right:0;margin-top:.25rem;z-index:20;min-width:260px;background:#fff;border:1px solid #e6eef7;border-radius:8px;box-shadow:0 8px 24px rgba(11,17,32,.12);padding:.75rem}
+    .settings-panel[hidden]{display:none}
+    .setting-group[hidden]{display:none}
+    .setting-group+.setting-group{margin-top:.75rem}
+    .setting-label{display:block;font-size:.82rem;font-weight:700;color:#475569;margin-bottom:.3rem}
+    .segmented{display:flex}
+    .seg-btn{flex:1;padding:.4rem .6rem;border:1px solid #cbd5e1;background:#fff;color:var(--text);font:inherit;font-size:.9rem;cursor:pointer}
+    .seg-btn+.seg-btn{margin-left:-1px}
+    .seg-btn:first-child{border-radius:6px 0 0 6px}
+    .seg-btn:last-child{border-radius:0 6px 6px 0}
+    .seg-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;position:relative}
+    .source-note ol{margin:.3rem 0 .3rem 1.2rem;padding:0}
+    .roster-example{margin:.4rem 0;padding:.6rem .8rem;background:#fff;border:1px solid #e2e8f0;border-radius:6px;font-size:.88rem;overflow:auto}
     .roster-label{display:block;font-weight:700;margin:.75rem 0 .35rem}
     #roster-input{display:block;width:100%;min-height:260px;padding:.8rem;border:1px solid #cbd5e1;border-radius:8px;font:inherit;line-height:1.45;resize:vertical}
     .actions,.filters{display:flex;flex-wrap:wrap;align-items:end;gap:.75rem}
@@ -70,8 +90,35 @@
 
   <main>
     <section class="container fantasy-calculator">
+      <div class="toolbar">
+        <button type="button" id="settings-button" class="gear-btn" aria-haspopup="true" aria-expanded="false" aria-controls="settings-panel" aria-label="Open settings" title="Settings">⚙️</button>
+        <div id="settings-panel" class="settings-panel" hidden>
+          <div class="setting-group" role="group" aria-labelledby="mode-label">
+            <span id="mode-label" class="setting-label">Scoring</span>
+            <div class="segmented">
+              <button type="button" class="seg-btn" data-setting="mode" data-value="category" aria-pressed="true">Category</button>
+              <button type="button" class="seg-btn" data-setting="mode" data-value="points" aria-pressed="false">Points</button>
+            </div>
+          </div>
+          <div id="preset-group" class="setting-group" role="group" aria-labelledby="preset-label" hidden>
+            <span id="preset-label" class="setting-label">Points preset</span>
+            <div class="segmented">
+              <button type="button" class="seg-btn" data-setting="preset" data-value="espn" aria-pressed="true">ESPN</button>
+              <button type="button" class="seg-btn" data-setting="preset" data-value="yahoo" aria-pressed="false">Yahoo</button>
+            </div>
+          </div>
+          <div class="setting-group" role="group" aria-labelledby="teams-label">
+            <span id="teams-label" class="setting-label">League size</span>
+            <div class="segmented">
+              <button type="button" class="seg-btn" data-setting="teams" data-value="10" aria-pressed="false">10 teams</button>
+              <button type="button" class="seg-btn" data-setting="teams" data-value="12" aria-pressed="true">12 teams</button>
+              <button type="button" class="seg-btn" data-setting="teams" data-value="14" aria-pressed="false">14 teams</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <h1>Fantasy League Calculator</h1>
-      <p class="intro">Paste your league rosters to compare every pair of teams across the standard 9-category format: PTS, 3PM, REB, AST, STL, BLK, FG%, FT%, and TO. Each team uses its first 13 distinct players.</p>
+      <p id="intro-text" class="intro">Paste your league rosters to compare every pair of teams across the standard 9-category format: PTS, 3PM, REB, AST, STL, BLK, FG%, FT%, and TO. Each team uses its first 13 distinct players.</p>
 
       <label class="roster-label" for="roster-input">Paste rosters</label>
       <textarea id="roster-input" spellcheck="false" aria-describedby="roster-help" placeholder="Best supported: copy a spreadsheet with one player per row and columns such as Fantasy Team | Slot | Player | NBA Team. You can also paste one team per blank-separated block: team name on the first line, then one player per line."></textarea>
@@ -116,6 +163,7 @@
                 <th class="numeric">PTS</th><th class="numeric">3PM</th><th class="numeric">REB</th>
                 <th class="numeric">AST</th><th class="numeric">STL</th><th class="numeric">BLK</th>
                 <th class="numeric">FG%</th><th class="numeric">FT%</th><th class="numeric">TO</th>
+                <th id="fpts-head" class="numeric" hidden>Fantasy pts</th>
               </tr>
             </thead>
             <tbody id="team-totals-body"></tbody>
@@ -123,13 +171,38 @@
         </div>
       </section>
 
+      <details class="notice-toggle">
+      <summary>❓ How to get your rosters from Yahoo or ESPN</summary>
+      <div class="source-note">
+        <p>Both sites show each team's roster on its own page, so the simplest route is to copy the player names from each one:</p>
+        <ol>
+          <li>Open your league and click into each team's roster page.</li>
+          <li>Copy just the <strong>player names</strong>, not the stats columns.</li>
+          <li>In the box above, type the team name on its own line, then paste that team's players underneath, one per line.</li>
+          <li>Leave a blank line, then repeat for the next team.</li>
+        </ol>
+        <p>Example:</p>
+        <pre class="roster-example">Team Alpha
+Nikola Jokic
+Jayson Tatum
+
+Team Beta
+Luka Doncic
+Victor Wembanyama</pre>
+        <p class="small-note">You can also paste a spreadsheet with a team column and a player column, or write <code>Team Alpha: Nikola Jokic, Jayson Tatum</code> on one line. Slot prefixes like <code>PG:</code> or <code>BN -</code> are removed automatically. Each line should be only the player's name: extra text like <code>DEN - C</code> stops the match, and that player will show up as excluded in the results notice.</p>
+      </div>
+      </details>
+
+      <details class="notice-toggle">
+      <summary>ℹ️ Notes &amp; data sources</summary>
       <p class="privacy-note">This tool runs locally in your browser and does not upload your pasted rosters.</p>
       <div class="source-note">
         <p><strong>Projection data:</strong> 2026–27 projections are included for every player in the attached league roster, using availability-adjusted games played. Other players in the CSV without a current projection use clearly labeled 2025–26 per-game actuals as a baseline instead. Any players missing from the CSV are listed below the matchup table.</p>
         <p><a href="2026-2027_projected_stats.csv" download>Download the player stats CSV</a> · Sources: <a href="https://stocksandbuckets.com/players" target="_blank" rel="noopener noreferrer">Stocks &amp; Buckets 2026–27 projections</a>, <a href="https://hashtagbasketball.com/fantasy-basketball-projections" target="_blank" rel="noopener noreferrer">Hashtag Basketball</a>, and <a href="https://www.basketball-reference.com/leagues/NBA_2026_per_game.html" target="_blank" rel="noopener noreferrer">Basketball-Reference</a>.</p>
         <p class="small-note">Counting stats are estimated by multiplying each player's per-game rate by projected/actual games played. FG% and FT% are weighted by attempts. Lower TO wins.</p>
       </div>
-    </section>
+              </details>
+            </section>
   </main>
 
   <div id="site-footer-placeholder"></div>
