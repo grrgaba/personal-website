@@ -17,6 +17,15 @@
     </section>
 
     <section class="container">
+      <div class="toolbar">
+        <div id="changeLog" class="change-log" role="status" aria-live="polite" hidden></div>
+        <button type="button" id="settingsBtn" class="gear-btn" aria-haspopup="true" aria-expanded="false" aria-label="Open settings" title="Settings">⚙️</button>
+        <div id="settingsPanel" class="settings-panel" hidden>
+          <label><input type="checkbox" id="optArrows"> Arrow &amp; color change</label>
+          <label><input type="checkbox" id="optDiff"> Display number difference</label>
+          <label><input type="checkbox" id="optChanged"> Display changed value (keeps changes visible)</label>
+        </div>
+      </div>
       <div class="calc-grid">
         <div class="card">
           <h3>Mortgage Inputs</h3>
@@ -115,6 +124,18 @@
       @keyframes flashGreen{0%,30%{color:#16a34a}100%{color:inherit}}
       .val.flash-up{animation:flashRed 2.5s ease-out forwards}
       .val.flash-down{animation:flashGreen 2.5s ease-out forwards}
+      .toolbar{position:relative;display:flex;justify-content:space-between;align-items:center;gap:0.75rem;min-height:2.2rem}
+      .gear-btn{margin-left:auto;flex:0 0 auto;background:#f3f4f6;border:1px solid #e6eef7;border-radius:8px;cursor:pointer;font-size:1.05rem;padding:0.25rem 0.5rem}
+      .gear-btn:hover{background:#e9eef2}
+      .settings-panel{position:absolute;top:100%;right:0;margin-top:0.25rem;z-index:20;background:#fff;border:1px solid #e6eef7;border-radius:8px;box-shadow:0 8px 24px rgba(11,17,32,0.12);padding:0.5rem 0.75rem;max-width:280px}
+      .settings-panel[hidden]{display:none}
+      .settings-panel label{display:flex;gap:0.5rem;align-items:flex-start;margin:0.4rem 0;font-size:0.9rem;font-weight:400}
+      .change-log{flex:1;display:flex;flex-wrap:wrap;gap:0.25rem 1.25rem;padding:0.4rem 0.75rem;border-radius:6px;background:#eef6ff;border:1px solid #c7defa;color:#0b3d7a;font-size:0.9rem}
+      .change-log[hidden]{display:none}
+      .change-log span{white-space:nowrap}
+      #resultsCard.no-fade .trend{animation:none !important;opacity:1}
+      #resultsCard.no-fade .val.flash-up{animation:none !important;color:#dc2626}
+      #resultsCard.no-fade .val.flash-down{animation:none !important;color:#16a34a}
       #breakdownChart{max-height:150px;height:150px;display:block;width:100%;}
       @media(max-width:800px){.calc-grid{grid-template-columns:1fr}}
     </style>
@@ -241,17 +262,105 @@
         return n/26;
       }
 
+      // display settings (persisted)
+      const SETTINGS_KEY = 'mortgageSettings';
+      const settings = Object.assign({arrows:true, diff:false, changed:false}, (function(){
+        try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch(e){ return {}; }
+      })());
+      const trendKeys = ['down','loan','monthly','principal','interest','totalPay','grandTotal'];
+
+      function clearTrend(key){
+        const el = $('arrow-'+key);
+        if(!el) return;
+        el.textContent = '';
+        el.className = 'trend';
+        const num = el.previousElementSibling;
+        if(num) num.className = 'val';
+      }
+
+      function applySettings(){
+        $('optArrows').checked = settings.arrows;
+        $('optDiff').checked = settings.diff;
+        $('optChanged').checked = settings.changed;
+        $('resultsCard').classList.toggle('no-fade', settings.changed);
+        if(!settings.changed) $('changeLog').hidden = true;
+      }
+
+      [['optArrows','arrows'],['optDiff','diff'],['optChanged','changed']].forEach(function(pair){
+        $(pair[0]).addEventListener('change', function(){
+          settings[pair[1]] = this.checked;
+          try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch(e){ /* ignore */ }
+          trendKeys.forEach(clearTrend);
+          applySettings();
+        });
+      });
+
+      const settingsBtn = $('settingsBtn');
+      const settingsPanel = $('settingsPanel');
+      settingsBtn.addEventListener('click', function(){
+        settingsPanel.hidden = !settingsPanel.hidden;
+        settingsBtn.setAttribute('aria-expanded', String(!settingsPanel.hidden));
+      });
+      document.addEventListener('click', function(e){
+        if(!settingsPanel.hidden && !settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)){
+          settingsPanel.hidden = true;
+          settingsBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && !settingsPanel.hidden){
+          settingsPanel.hidden = true;
+          settingsBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      applySettings();
+
       function flashArrow(key, diff){
         const el = $('arrow-'+key);
-        if(!el || Math.abs(diff) < 0.005) return;
-        const cls = diff > 0 ? 'up' : 'down';
-        el.textContent = diff > 0 ? '▲' : '▼';
-        el.className = 'trend ' + cls;
+        if(!el) return;
+        if(Math.abs(diff) < 0.005){
+          if(settings.changed) clearTrend(key);
+          return;
+        }
+        const up = diff > 0;
+        const parts = [];
+        if(settings.arrows) parts.push(up ? '▲' : '▼');
+        if(settings.diff) parts.push((up ? '+' : '−') + formatCurrency(Math.abs(diff)));
+        if(!parts.length){ clearTrend(key); return; }
+        const cls = up ? 'up' : 'down';
+        el.textContent = parts.join(' ');
+        el.className = 'trend' + (settings.arrows ? ' ' + cls : '');
         const num = el.previousElementSibling;
-        if(num) num.className = 'val flash-' + cls;
+        if(num) num.className = 'val' + (settings.arrows ? ' flash-' + cls : '');
         [el, num].forEach(n=>{ if(n){ n.style.animation = 'none'; } });
         void el.offsetWidth;
         [el, num].forEach(n=>{ if(n){ n.style.animation = ''; } });
+      }
+
+      // describe which inputs changed since the previous calculation
+      let lastInputs = null;
+      function describeChanges(cur){
+        if(!lastInputs) return [];
+        const out = [];
+        const add = (label, from, to) => { if(from !== to) out.push(label + ' changed from ' + from + ' to ' + to); };
+        add('Home price', formatMoneyInput(lastInputs.price), formatMoneyInput(cur.price));
+        add('Down payment', lastInputs.pct + '%', cur.pct + '%');
+        add('Interest rate', lastInputs.annual + '%', cur.annual + '%');
+        add('Loan term', termText(lastInputs.years), termText(cur.years));
+        add('Payment interval', lastInputs.interval === 'biweekly' ? 'Bi-weekly' : 'Monthly', cur.interval === 'biweekly' ? 'Bi-weekly' : 'Monthly');
+        return out;
+      }
+
+      function showChanges(lines){
+        const box = $('changeLog');
+        if(!settings.changed || !lines.length) return;
+        box.innerHTML = '';
+        lines.forEach(function(t){
+          const d = document.createElement('span');
+          d.textContent = t;
+          box.appendChild(d);
+        });
+        box.hidden = false;
       }
 
       function calculate(){
@@ -302,6 +411,10 @@
           Object.keys(values).forEach(k=>flashArrow(k, values[k]-lastValues[k]));
         }
         lastValues = values;
+
+        const curInputs = {price: parseMoney(homePrice.value), pct: Number(downPercent.value) || 0, annual: annual, years: Math.round(years*10)/10, interval: interval};
+        showChanges(describeChanges(curInputs));
+        lastInputs = curInputs;
 
         const notice = $('termNotice');
         if(notice){
