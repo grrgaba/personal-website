@@ -13,7 +13,7 @@
   <main>
     <section class="hero container">
       <h1 class="name">Mortgage Calculator</h1>
-      <p class="bio">Placeholder page for the mortgage calculator. I'll add the calculator UI next.</p>
+      <p class="bio">Estimate your payments, total interest, and how the loan term affects the cost.</p>
     </section>
 
     <section class="container">
@@ -36,12 +36,6 @@
               <button type="button" class="increase" id="downPlus">+</button>
             </div>
           </label>
-          <div class="dp-row">
-            <input id="downDollar" type="text" readonly>
-            <input id="loanAmount" type="text" readonly>
-          </div>
-
-
 
           <label>Loan Term (<span id="termYearsText">25 yrs</span>)
             <div class="slider-controls">
@@ -57,16 +51,20 @@
             <label style="font-weight:400;margin-left:0.5rem"><input type="radio" name="interval" id="intervalBiweekly" value="biweekly"> Bi-weekly</label>
           </div>
 
+          <p id="termNotice" role="status" style="display:none;margin:0.5rem 0;padding:0.5rem 0.75rem;border-radius:6px;background:#fff7e0;border:1px solid #f5d57a;color:#7a5a00;font-size:0.9rem"></p>
+
           <button id="calcBtn" class="cta">Calculate Mortgage</button>
         </div>
 
         <div>
           <div class="card results" id="resultsCard">
             <h3>Results</h3>
-            <p><strong>Payment (<span id="intervalLabel">Monthly</span>):</strong> <span id="monthly">—</span></p>
-            <p><strong>Total Principal Paid:</strong> <span id="principal">—</span></p>
-            <p><strong>Total Interest Paid:</strong> <span id="interest">—</span></p>
-            <p><strong>Estimated Total Payment:</strong> <span id="totalPay">—</span></p>
+            <p><strong>Down Payment:</strong> <span id="downDollar" class="val">—</span><span class="trend" id="arrow-down"></span></p>
+            <p><strong>Loan Amount:</strong> <span id="loanAmount" class="val">—</span><span class="trend" id="arrow-loan"></span></p>
+            <p><strong>Payment (<span id="intervalLabel">Monthly</span>):</strong>             <span id="monthly">—</span><span class="trend" id="arrow-monthly"></span></p>
+                        <p><strong>Total Principal Paid:</strong> <span id="principal">—</span><span class="trend" id="arrow-principal"></span></p>
+                        <p><strong>Total Interest Paid:</strong> <span id="interest">—</span><span class="trend" id="arrow-interest"></span></p>
+                        <p><strong>Estimated Total Payment:</strong> <span id="totalPay">—</span><span class="trend" id="arrow-totalPay"></span></p>
           </div>
 
           <div class="card">
@@ -79,6 +77,8 @@
 
     <style>
       .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+      .calc-grid .card::before{display:none}
+      .calc-grid .card p{color:inherit}
       .calc-grid .card label{display:block;margin:0.5rem 0;font-weight:600}
       .calc-grid .card input[type=number],.calc-grid .card input[type=text]{width:100%;padding:0.5rem;border:1px solid #e6eef7;border-radius:6px}
       .dp-row{display:flex;gap:0.5rem;margin-bottom:0.5rem}
@@ -91,6 +91,14 @@
       .slider-controls button{width:32px;height:32px;border-radius:6px;border:1px solid #e6eef7;background:#fff;cursor:pointer}
       .slider-controls input[type=range]{flex:1}
       /* constrain chart size so it doesn't grow beyond the template */
+      @keyframes trendFade{0%,30%{opacity:1}100%{opacity:0}}
+      .trend{display:inline-block;margin-left:0.4rem;font-size:0.95rem;opacity:0;animation:trendFade 2.5s ease-out forwards}
+      .trend.up{color:#dc2626}
+      .trend.down{color:#16a34a}
+      @keyframes flashRed{0%,30%{color:#dc2626}100%{color:inherit}}
+      @keyframes flashGreen{0%,30%{color:#16a34a}100%{color:inherit}}
+      .val.flash-up{font-weight:700;animation:flashRed 2.5s ease-out forwards}
+      .val.flash-down{font-weight:700;animation:flashGreen 2.5s ease-out forwards}
       #breakdownChart{max-height:150px;height:150px;display:block;width:100%;}
       @media(max-width:800px){.calc-grid{grid-template-columns:1fr}}
     </style>
@@ -172,65 +180,79 @@
         const pct = Number(downPercent.value) || 0;
         dpPercentText.textContent = pct + '%';
         const down = Math.round(price * pct/100);
-        downDollar.value = formatCurrency(down);
+        downDollar.textContent = formatCurrency(down);
         const loan = Math.max(0, price - down);
-        loanAmount.value = formatCurrency(loan);
+        loanAmount.textContent = formatCurrency(loan);
         return {price,down,loan};
       }
 
       downPercent.addEventListener('input', updateDerived);
       homePrice.addEventListener('input', updateDerived);
       // update term text on slider change
-      if(termYearsText) termYearsText.textContent = termYears.value + ' yrs';
-      termYears.addEventListener('input', function(){ if(termYearsText) termYearsText.textContent = termYears.value + ' yrs'; });
+      function termText(v){ return (Math.round(v*10)/10) + ' yrs'; }
+      if(termYearsText) termYearsText.textContent = termText(termYears.value);
+      termYears.addEventListener('input', function(){ if(termYearsText) termYearsText.textContent = termText(termYears.value); });
       updateDerived();
-      // initial calculation
-      calculate();
+
+      // term (in yrs) the user chose in monthly mode; bi-weekly auto-adjusts from it
+      let baseYears = Number(termYears.value);
+      let lastInterval = getInterval();
+      let lastValues = null;
+
+      function setTerm(v){
+        termYears.value = v;
+        if(termYearsText) termYearsText.textContent = termText(v);
+      }
+
+      // years to pay off with an accelerated bi-weekly payment (half the monthly payment)
+      function adjustedYears(principal, annual, years){
+        const nominal = annual/100;
+        const rM = Math.pow(1 + nominal/2, 2/12) - 1;
+        const rB = Math.pow(1 + nominal/2, 2/26) - 1;
+        const months = Math.max(1, years*12);
+        if(principal <= 0) return years;
+        if(rM <= 0) return years;
+        const monthly = principal * rM / (1 - Math.pow(1 + rM, -months));
+        const pay = monthly/2;
+        const n = -Math.log(1 - principal*rB/pay) / Math.log(1 + rB);
+        return n/26;
+      }
+
+      function flashArrow(key, diff){
+        const el = $('arrow-'+key);
+        if(!el || Math.abs(diff) < 0.005) return;
+        const cls = diff > 0 ? 'up' : 'down';
+        el.textContent = diff > 0 ? '▲' : '▼';
+        el.className = 'trend ' + cls;
+        const num = el.previousElementSibling;
+        if(num) num.className = 'val flash-' + cls;
+        [el, num].forEach(n=>{ if(n){ n.style.animation = 'none'; } });
+        void el.offsetWidth;
+        [el, num].forEach(n=>{ if(n){ n.style.animation = ''; } });
+      }
 
       function calculate(){
-        const {loan} = updateDerived();
+        const {loan, down} = updateDerived();
         const principal = loan;
         const annual = parseFloat(annualRate.value) || 0;
         const interval = getInterval();
-        const years = Math.max(0, parseInt(termYears.value)||0);
+        const years = Math.max(0, parseFloat(termYears.value)||0);
         const periodsPerYear = interval === 'biweekly' ? 26 : 12;
-        const periods = Math.max(1, years * periodsPerYear);
-        // Convert nominal annual rate (semi-annual compounding) to effective rates
+        const periods = Math.max(1, Math.round(years * periodsPerYear));
+        // Convert nominal annual rate (semi-annual compounding) to effective periodic rate
         const nominal = annual/100;
-        const effAnnual = Math.pow(1 + nominal/2, 2) - 1; // effective annual rate
-        const r_month = Math.pow(1 + nominal/2, 2/12) - 1; // effective monthly rate
-        let r = 0; // periodic interest rate for simulation
+        const r = Math.pow(1 + nominal/2, 2/periodsPerYear) - 1;
         let payment = 0;
-        if(interval === 'biweekly'){
-          // accurate monthly payment using semi-annual compounding -> accelerated bi-weekly = monthly/2
-          const months = Math.max(1, years * 12);
-          let monthlyPayment = 0;
-          if(r_month > 0) monthlyPayment = principal * (r_month / (1 - Math.pow(1 + r_month, -months)));
-          else monthlyPayment = principal / months;
-          payment = monthlyPayment / 2; // accelerated bi-weekly payment
-          // derive bi-weekly periodic rate from effective annual rate
-          r = Math.pow(1 + effAnnual, 1/26) - 1;
-        } else {
-          // monthly case: use effective monthly rate
-          r = r_month;
-          if(r>0){ payment = principal * (r / (1 - Math.pow(1 + r, -periods))); }
-          else{ payment = principal / periods; }
-        }
-        const totalPayment = payment * periods;
-        const totalInterest = totalPayment - principal;
-
+        if(r>0){ payment = principal * (r / (1 - Math.pow(1 + r, -periods))); }
+        else{ payment = principal / periods; }
         if(intervalLabelElem) intervalLabelElem.textContent = interval === 'biweekly' ? 'Bi-weekly (accelerated)' : 'Monthly';
-        $('monthly').textContent = formatCurrency(payment);
-        $('principal').textContent = formatCurrency(principal);
-        $('interest').textContent = formatCurrency(totalInterest);
-        $('totalPay').textContent = formatCurrency(totalPayment);
-
         // build amortization schedule (labels = payment number)
         const labels = [];
         const principalOwed = [];
         const cumulativeInterest = [];
         let balance = principal;
         let cumInt = 0;
+        let finalPeriods = periods;
         for(let i=1;i<=periods;i++){
           const interestPayment = balance * r;
           let principalPayment = payment - interestPayment;
@@ -240,9 +262,33 @@
           labels.push(i.toString());
           principalOwed.push(balance);
           cumulativeInterest.push(cumInt);
-          if(balance <= 0) break;
+          if(balance <= 0.005){ finalPeriods = i; break; }
+        }
+        const totalInterest = cumInt;
+        const totalPayment = principal + totalInterest;
+
+        $('monthly').textContent = formatCurrency(payment);
+        $('principal').textContent = formatCurrency(principal);
+        $('interest').textContent = formatCurrency(totalInterest);
+        $('totalPay').textContent = formatCurrency(totalPayment);
+
+        const values = {down:down, loan:loan, monthly:payment, principal:principal, interest:totalInterest, totalPay:totalPayment};
+        if(lastValues){
+          Object.keys(values).forEach(k=>flashArrow(k, values[k]-lastValues[k]));
+        }
+        lastValues = values;
+
+        const notice = $('termNotice');
+        if(notice){
+          if(interval === 'biweekly' && principal > 0){
+            notice.textContent = 'Loan Term Adjusted for converting: ' + termText(baseYears) + ' → ' + termText(years) + ' (' + finalPeriods + ' bi-weekly payments)';
+            notice.style.display = 'block';
+          } else {
+            notice.style.display = 'none';
+          }
         }
 
+        if(typeof Chart === 'undefined') return;
         const ctx = document.getElementById('breakdownChart').getContext('2d');
         const data = {
           labels: labels,
@@ -270,9 +316,27 @@
       downPercent.addEventListener('input', calculate);
       homePrice.addEventListener('input', calculate);
       annualRate.addEventListener('input', calculate);
-      termYears.addEventListener('input', calculate);
+      termYears.addEventListener('input', function(){
+        if(getInterval() === 'monthly') baseYears = Number(termYears.value);
+        calculate();
+      });
       calcBtn.addEventListener('click', calculate);
-      document.querySelectorAll('input[name="interval"]').forEach(r=>r.addEventListener('change', calculate));
+      document.querySelectorAll('input[name="interval"]').forEach(r=>r.addEventListener('change', function(){
+        const interval = getInterval();
+        if(interval === lastInterval) return;
+        lastInterval = interval;
+        if(interval === 'biweekly'){
+          const {loan} = updateDerived();
+          baseYears = Number(termYears.value);
+          termYears.step = 0.1;
+          const adj = adjustedYears(loan, parseFloat(annualRate.value) || 0, baseYears);
+          setTerm(Math.min(Number(termYears.max), Math.max(Number(termYears.min), Math.round(adj*10)/10)));
+        } else {
+          termYears.step = 1;
+          setTerm(Math.round(baseYears));
+        }
+        calculate();
+      }));
       // slider +/- buttons
       if(downMinus) downMinus.addEventListener('click', function(){
         const min = Number(downPercent.min) || 0;
@@ -294,18 +358,21 @@
         const min = Number(termYears.min) || 1;
         let v = Number(termYears.value) || min;
         v = Math.max(min, v - 1);
-        termYears.value = v;
-        if(termYearsText) termYearsText.textContent = v + ' yrs';
+        setTerm(v);
+        if(getInterval() === 'monthly') baseYears = v;
         calculate();
       });
       if(termPlus) termPlus.addEventListener('click', function(){
         const max = Number(termYears.max) || 40;
         let v = Number(termYears.value) || 1;
         v = Math.min(max, v + 1);
-        termYears.value = v;
-        if(termYearsText) termYearsText.textContent = v + ' yrs';
+        setTerm(v);
+        if(getInterval() === 'monthly') baseYears = v;
         calculate();
       });
+
+      // initial calculation (after all listeners are attached)
+      calculate();
     </script>
   </main>
 
