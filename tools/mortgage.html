@@ -72,7 +72,9 @@
             <p><strong>Payment (<span id="intervalLabel">Monthly</span>):</strong>             <span id="monthly">—</span><span class="trend" id="arrow-monthly"></span></p>
                         <p><strong>Total Principal Paid:</strong> <span id="principal">—</span><span class="trend" id="arrow-principal"></span></p>
                         <p><strong>Total Interest Paid:</strong> <span id="interest">—</span><span class="trend" id="arrow-interest"></span></p>
-                        <p><strong>Estimated Total Payment:</strong> <span id="totalPay">—</span><span class="trend" id="arrow-totalPay"></span></p>
+                        <p><strong>Total Payments Over <span id="totalPayYears">25</span> Years:</strong> <span id="totalPay">—</span><span class="trend" id="arrow-totalPay"></span></p>
+            <hr class="total-sep">
+            <p class="grand-total"><strong>Grand Total Cost of Home:</strong> <span id="grandTotal" class="val">—</span><span class="trend" id="arrow-grandTotal"></span></p>
           </div>
 
           <div class="card">
@@ -103,6 +105,8 @@
       .slider-controls button{width:32px;height:32px;border-radius:6px;border:1px solid #e6eef7;background:#fff;cursor:pointer}
       .slider-controls input[type=range]{flex:1}
       /* constrain chart size so it doesn't grow beyond the template */
+      .total-sep{border:0;border-top:2px solid #94a3b8;margin:0.75rem 0}
+      .grand-total{font-size:1.05rem}
       @keyframes trendFade{0%,30%{opacity:1}100%{opacity:0}}
       .trend{display:inline-block;margin-left:0.4rem;font-size:0.95rem;opacity:0;animation:trendFade 2.5s ease-out forwards}
       .trend.up{color:#dc2626}
@@ -286,12 +290,14 @@
         const totalInterest = cumInt;
         const totalPayment = principal + totalInterest;
 
+        $('totalPayYears').textContent = Number(years.toFixed(1)).toString();
         $('monthly').textContent = formatCurrency(payment);
         $('principal').textContent = formatCurrency(principal);
         $('interest').textContent = formatCurrency(totalInterest);
         $('totalPay').textContent = formatCurrency(totalPayment);
+        $('grandTotal').textContent = formatCurrency(down + totalPayment);
 
-        const values = {down:down, loan:loan, monthly:payment, principal:principal, interest:totalInterest, totalPay:totalPayment};
+        const values = {down:down, loan:loan, monthly:payment, principal:principal, interest:totalInterest, totalPay:totalPayment, grandTotal:down + totalPayment};
         if(lastValues){
           Object.keys(values).forEach(k=>flashArrow(k, values[k]-lastValues[k]));
         }

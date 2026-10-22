@@ -13,10 +13,18 @@
 			gap: 16px;
 		}
 		.budget-box {
+			display: flex;
+			flex-direction: column;
 			border: 1px solid var(--border,#e6e6e6);
 			padding: 16px;
 			border-radius: 6px;
 			background: var(--card,#fff);
+		}
+
+		.box-footer {
+			margin-top: auto;
+			border-top: 1px solid #f1f1f1;
+			padding-top: 8px;
 		}
 		
 		/* Header flex container for the button */
@@ -128,7 +136,7 @@
 			display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #444;
 		}
 
-		.results-list { max-height: 320px; overflow: auto; }
+		.results-list { flex: 1; min-height: 0; max-height: 320px; overflow: auto; }
 		.result-item {
 			display: flex;
 			justify-content: space-between;
@@ -142,7 +150,7 @@
 		input.cost.invalid { border-color: #d9534f; background: #fff0f0; }
 		input.cost.invalid:focus { outline-color: #d9534f; }
 		.totals {
-			margin-top: 8px;
+			margin-top: auto;
 			padding-top: 8px;
 			border-top: 2px solid #eee;
 			font-weight: 600;
@@ -178,7 +186,7 @@
 							<button class="add-btn-small" id="addIncome">+ Add Income</button>
 						</h3>
 						<div id="incomeRows"></div>
-						<div style="margin-top:12px;border-top:1px solid #f1f1f1;padding-top:8px;" class="box-footer">
+						<div class="box-footer">
 							<div>Total Income (<span id="incomeViewLabel">monthly</span>): <span id="incomeBoxTotal" class="income">$0.00</span></div>
 							<div id="incomeInfo" style="margin-top:6px;font-size:13px;color:#666"></div>
 						</div>
@@ -190,7 +198,7 @@
 							<button class="add-btn-small" id="addBill">+ Add Bill</button>
 						</h3>
 						<div id="billRows"></div>
-						<div style="margin-top:12px;border-top:1px solid #f1f1f1;padding-top:8px;" class="box-footer">
+						<div class="box-footer">
 							<div>Total Bills (<span id="billsViewLabel">monthly</span>): <span id="billsBoxTotal" class="bill">-$0.00</span></div>
 							<div id="billsInfo" style="margin-top:6px;font-size:13px;color:#666"></div>
 						</div>
