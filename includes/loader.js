@@ -77,116 +77,41 @@
   };
   
   function ensurePageBackButtons() {
-    // Insert a small "Back" link aligned with h1.name on every page
     try {
-      // don't show on homepage
       var path = window.location.pathname.replace(/\\/g,'/');
       var isHome = (path === '/' || path === '' || path.endsWith('/index.html'));
       if (isHome) return;
+      if (document.querySelector('.page-back-wrap')) return;
 
-      if (!document.getElementById('page-back-button-style')) {
-        const style = document.createElement('style');
-        style.id = 'page-back-button-style';
-        style.textContent = [
-          '.page-back-wrap{display:block;margin:0.6rem 0 1rem 0.6rem;padding:0}',
-          '.page-back-button{display:inline-block;padding:.28rem .6rem;border-radius:6px;border:1px solid rgba(16,24,32,0.06);background:transparent;color:#334155;text-decoration:underline;font-weight:600;font-size:0.95rem;box-shadow:none;cursor:pointer}',
-          '.page-back-button:hover{background:#f8fafc}'
-        ].join('');
-        document.head.appendChild(style);
+      var target;
+      var label = 'Back';
+      if (isTripsDetailPage()) {
+        target = '/diary/trips/trips.html';
+        label = 'Back to Trips';
+      } else if (isTripsIndexPage()) {
+        target = '/diary/diary.html';
+        label = 'Back to Diary';
+      } else {
+        var parentPath = path.replace(/\/[^\/]+\/?$/,'/');
+        target = indexTargets[parentPath] || parentPath || '/';
+        if (target.replace(/\/+$/,'').toLowerCase() === path.replace(/\/+$/,'').toLowerCase()) {
+          target = '/';
+        }
       }
 
-      // If there are headings, add per-heading back button (avoiding duplicates)
-      const headings = document.querySelectorAll('h1.name');
-      if (headings.length) {
-        headings.forEach(function(h){
-          // Avoid adding duplicate
-          const prev = h.previousElementSibling;
-          if (prev && prev.classList && prev.classList.contains('page-back-wrap')) return;
+      var wrap = document.createElement('div');
+      wrap.className = 'page-back-wrap';
+      var link = document.createElement('a');
+      link.className = 'page-back-button';
+      link.href = target;
+      link.setAttribute('aria-label', label);
+      link.textContent = '\u2190 ' + label;
+      wrap.appendChild(link);
 
-          const wrap = document.createElement('div');
-          wrap.className = 'page-back-wrap';
-
-          const link = document.createElement('a');
-          link.className = 'page-back-button';
-          link.href = '#';
-          link.setAttribute('aria-label','Go back');
-          link.textContent = 'Back';
-          if (isTripsDetailPage()) {
-            // For trip detail pages, go to the trips index
-            link.href = '/diary/trips/trips.html';
-            link.setAttribute('aria-label','Back to Trips');
-            link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/trips/trips.html'; });
-          } else if (isTripsIndexPage()) {
-            // For trips index page, go to the diary index
-            link.href = '/diary/diary.html';
-            link.setAttribute('aria-label','Back to Diary');
-            link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/diary.html'; });
-          } else {
-            // Navigate up one directory level by default, but prefer a mapped index target when available.
-            var parentPath = window.location.pathname.replace(/\\/g,'/').replace(/\/[^\/]+\/?$/,'/');
-            var target = indexTargets[parentPath] || parentPath || '/';
-            // If the target is the current page (we're on the index), go to root instead
-            var currentPath = window.location.pathname.replace(/\\/g,'/');
-            // compare case-insensitively and ignore trailing slashes
-            function norm(p){ return (p||'').replace(/\\/g,'/').replace(/\/+$/,'').toLowerCase(); }
-            if (norm(target) === norm(currentPath)) target = '/';
-            link.href = target;
-            link.addEventListener('click', function(e){
-              e.preventDefault();
-              try {
-                window.location.href = target;
-              } catch (err) {
-                try { if (history.length > 1) history.back(); else window.location.href = '/'; } catch (err2) { window.location.href = '/'; }
-              }
-            });
-          }
-
-          wrap.appendChild(link);
-          // Try attach to hero (top-left of hero) first, otherwise insert before the heading
-          try { if (!isTripsDetailPage() && attachToHero(wrap)) return; } catch(e){}
-          h.parentNode.insertBefore(wrap, h);
-        });
-      } else {
-        // No h1.name on this page: insert a single back button at the top (before main), avoid duplicates
-        if (document.querySelector('.page-back-wrap')) return;
-        const wrap = document.createElement('div');
-        wrap.className = 'page-back-wrap';
-        const link = document.createElement('a');
-        link.className = 'page-back-button';
-        link.href = '#';
-        link.setAttribute('aria-label','Go back');
-        link.textContent = 'Back';
-        if (isTripsDetailPage()) {
-          link.href = '/diary/trips/trips.html';
-          link.setAttribute('aria-label','Back to Trips');
-          link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/trips/trips.html'; });
-        } else if (isTripsIndexPage()) {
-          link.href = '/diary/diary.html';
-          link.setAttribute('aria-label','Back to Diary');
-          link.addEventListener('click', function(e){ e.preventDefault(); window.location.href = '/diary/diary.html'; });
-        } else {
-          var parentPath = window.location.pathname.replace(/\\/g,'/').replace(/\/[^\/]+\/?$/,'/');
-          var target = indexTargets[parentPath] || parentPath || '/';
-          var currentPath = window.location.pathname.replace(/\\/g,'/');
-          function norm(p){ return (p||'').replace(/\\/g,'/').replace(/\/+$/,'').toLowerCase(); }
-          if (norm(target) === norm(currentPath)) target = '/';
-          link.href = target;
-          link.addEventListener('click', function(e){
-            e.preventDefault();
-            try {
-              window.location.href = target;
-            } catch (err) {
-              try { if (history.length > 1) history.back(); else window.location.href = '/'; } catch (err2) { window.location.href = '/'; }
-            }
-          });
-        }
-        wrap.appendChild(link);
-        // Try attach to hero (top-left) first, otherwise insert at top of body
-        if (!attachToHero(wrap)) {
-          const main = document.querySelector('main');
-          if (main && main.parentNode) main.parentNode.insertBefore(wrap, main);
-          else document.body.insertBefore(wrap, document.body.firstChild);
-        }
+      if (!attachToHero(wrap)) {
+        var main = document.querySelector('main');
+        if (main && main.parentNode) main.parentNode.insertBefore(wrap, main);
+        else document.body.insertBefore(wrap, document.body.firstChild);
       }
     } catch (e) { console.error('ensurePageBackButtons error', e); }
   }
@@ -200,10 +125,7 @@
       while (hero && hero.parentElement && hero.parentElement.classList && hero.parentElement.classList.contains('hero-inner')) {
         hero = hero.parentElement;
       }
-      // Mark hero as having a back button so CSS can position relative
-      hero.classList.add('has-back-button');
       wrap.classList.add('hero-attached');
-      // Insert the wrap as first child so it's top-left
       hero.insertBefore(wrap, hero.firstChild);
       return true;
     } catch (e) {
