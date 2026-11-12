@@ -1,16 +1,173 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>All Time Favorites</title>
-	<link rel="icon" type="image/png" href="/assets/favicon.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>All-Time Favorites — nicodimaano.com</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <style>
+    .alltime-main{width:100%;padding:0 1.25rem 3rem}
+    .alltime-hero{max-width:1480px;margin:0 auto;padding:3rem 0 1.75rem}
+    .alltime-eyebrow,.list-label{color:#0b5fff;font-size:.75rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+    .alltime-eyebrow{margin:0 0 .65rem}
+    .alltime-hero .name{font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.055em;line-height:1;margin-bottom:.75rem}
+    .alltime-hero .bio{max-width:650px;font-size:1.1rem;line-height:1.6;margin:0}
+    .opinion-note{display:inline-flex;align-items:flex-start;gap:.7rem;max-width:fit-content;margin-top:1.35rem;padding:.8rem 1rem;border:1px solid rgba(11,95,255,.2);border-radius:12px;background:rgba(239,246,255,.94);color:#16345f;font-size:.95rem;line-height:1.5}
+    .opinion-note strong{color:#0b5fff;white-space:nowrap}
+    .favorites-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:1rem;max-width:1480px;margin:0 auto;align-items:stretch}
+    .list-card{min-width:0;padding:1.35rem;border:1px solid rgba(226,232,240,.95);border-radius:18px;background:rgba(255,255,255,.96);box-shadow:0 12px 32px rgba(15,23,42,.08);color:#0b1220}
+    .list-card-header{display:flex;align-items:center;gap:.85rem;margin-bottom:1.1rem}
+    .list-icon{display:grid;place-items:center;flex:0 0 2.8rem;width:2.8rem;height:2.8rem;border-radius:12px;background:#eff6ff;color:#0b5fff;font-size:1.05rem;font-weight:800}
+    .list-label{margin:0 0 .2rem}
+    .list-card h2{margin:0;font-size:1.25rem;letter-spacing:-.02em}
+    .rank-list{display:grid;gap:.55rem;list-style:none;padding:0;margin:0;counter-reset:rank}
+    .rank-list li{counter-increment:rank;display:grid;grid-template-columns:2rem minmax(0,1fr);align-items:center;gap:.75rem;min-height:2.65rem;padding:.45rem .65rem;border-radius:10px;background:#f8fafc;font-weight:650;line-height:1.35}
+    .rank-list li::before{content:counter(rank,decimal-leading-zero);color:#64748b;font-size:.77rem;font-variant-numeric:tabular-nums;font-weight:800}
+    .rank-list li:first-child{background:#eff6ff}
+    .rank-list li:first-child::before{color:#0b5fff}
+    .rank-copy{display:grid;gap:.12rem}
+    .rank-note{color:#64748b;font-size:.84rem;font-weight:500}
+    .card-note{margin:.85rem 0 0;color:#64748b;font-size:.9rem;line-height:1.5}
+    .game-points{display:grid;gap:.7rem;margin:0;padding:0;list-style:none}
+    .game-points li{padding:.8rem .9rem;border-radius:12px;background:#f8fafc;line-height:1.5}
+    .game-points strong{color:#0b5fff}
+    @media(min-width:1200px){.favorites-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:600px){
+      .alltime-main{padding:0 1rem 2rem}
+      .alltime-hero{padding:2rem 0 1.35rem}
+      .alltime-hero .name{font-size:clamp(2.5rem,13vw,4rem)}
+      .opinion-note{display:block}
+      .opinion-note strong{display:block;margin-bottom:.15rem}
+      .favorites-grid{grid-template-columns:1fr}
+      .list-card{padding:1.1rem}
+    }
+  </style>
 </head>
 <body>
-	<h1>My All Time Favorites</h1>
-	<ol>
-		<li>Avatar: The Last Airbender</li>
-		<li>Fullmetal Alchemist: Brotherhood</li>
-	</ol>
+  <div id="site-header-placeholder"></div>
+
+  <main class="alltime-main">
+    <section class="alltime-hero hero">
+      <p class="alltime-eyebrow">The personal shortlist</p>
+      <h1 class="name">All-time favorites</h1>
+      <p class="bio">A few things I love, ranked when I can actually pick a favorite.</p>
+      <aside class="opinion-note" aria-label="Disclaimer">
+        <strong>Disclaimer</strong>
+        <span>These are my lists and my opinions. I don't care what everyone else thinks.</span>
+      </aside>
+    </section>
+
+    <section class="favorites-grid" aria-label="Favorite things">
+      <article class="list-card">
+        <header class="list-card-header">
+          <span class="list-icon" aria-hidden="true">01</span>
+          <div><p class="list-label">On repeat</p><h2>Anime</h2></div>
+        </header>
+        <ol class="rank-list">
+          <li>Avatar: The Last Airbender</li>
+          <li>Attack on Titan</li>
+          <li>Naruto <span class="rank-note">(maybe?)</span></li>
+        </ol>
+      </article>
+
+      <article class="list-card">
+        <header class="list-card-header">
+          <span class="list-icon" aria-hidden="true">02</span>
+          <div><p class="list-label">The court</p><h2>Basketball greats</h2></div>
+        </header>
+        <ol class="rank-list">
+          <li>Michael Jordan</li>
+          <li>LeBron James</li>
+          <li>Kareem Abdul-Jabbar</li>
+          <li>Tim Duncan</li>
+          <li>Stephen Curry</li>
+          <li>Magic Johnson</li>
+          <li>Larry Bird</li>
+          <li>Shaquille O'Neal</li>
+          <li>Bill Russell</li>
+          <li>Wilt Chamberlain</li>
+        </ol>
+      </article>
+
+      <article class="list-card">
+        <header class="list-card-header">
+          <span class="list-icon" aria-hidden="true">03</span>
+          <div><p class="list-label">Better together</p><h2>Games</h2></div>
+        </header>
+        <ul class="game-points">
+          <li><strong>The top three?</strong> It changes with whatever stage of life I'm in.</li>
+          <li><strong>The real ranking:</strong> They're all great when you play with friends. Friends make the game.</li>
+        </ul>
+      </article>
+
+      <article class="list-card">
+        <header class="list-card-header">
+          <span class="list-icon" aria-hidden="true">04</span>
+          <div><p class="list-label">Movie night</p><h2>Movies</h2></div>
+        </header>
+        <ol class="rank-list">
+          <li>Transformers</li>
+          <li>Coach Carter</li>
+          <li>Kung Fu Panda</li>
+        </ol>
+        <p class="card-note">I don't watch a lot of movies, so these are the picks that came to mind.</p>
+      </article>
+
+      <article class="list-card">
+        <header class="list-card-header">
+          <span class="list-icon" aria-hidden="true">05</span>
+          <div><p class="list-label">On the playlist</p><h2>Musicians</h2></div>
+        </header>
+        <ol class="rank-list">
+          <li>Bruno Mars</li>
+          <li>Chris Brown</li>
+          <li>Post Malone</li>
+          <li>Fetty Wap</li>
+          <li>More favorites to come</li>
+        </ol>
+      </article>
+
+      <article class="list-card">
+        <header class="list-card-header">
+          <span class="list-icon" aria-hidden="true">06</span>
+          <div><p class="list-label">Passport memories</p><h2>Places I've visited</h2></div>
+        </header>
+        <ol class="rank-list">
+          <li><span class="rank-copy">Iceland<span class="rank-note">Lol, I got married here.</span></span></li>
+          <li>Japan</li>
+          <li><span class="rank-copy">Singapore<span class="rank-note">Biased, but the experience was unbeatable.</span></span></li>
+          <li>Italy</li>
+          <li>Mykonos &amp; Santorini, Greece</li>
+          <li>USA</li>
+          <li>Canada</li>
+          <li>Paris</li>
+          <li>Boracay, Philippines</li>
+          <li>Sint Maarten</li>
+          <li>Hong Kong</li>
+          <li>Athens, Greece</li>
+          <li>Split, Croatia</li>
+          <li>St. Thomas</li>
+        </ol>
+        <p class="card-note">The rest of the places I've been are in the running, too. Plenty more countries still to visit.</p>
+      </article>
+
+      <article class="list-card">
+        <header class="list-card-header">
+          <span class="list-icon" aria-hidden="true">07</span>
+          <div><p class="list-label">Mountain days</p><h2>Ski resorts</h2></div>
+        </header>
+        <ol class="rank-list">
+          <li>Whistler</li>
+          <li>Sunshine Village <span class="rank-note">(biased)</span></li>
+          <li>Can't decide yet</li>
+        </ol>
+        <p class="card-note">Only resorts I've skied so far. The third spot is still up for grabs.</p>
+      </article>
+    </section>
+  </main>
+
+  <div id="site-footer-placeholder"></div>
+  <script src="/includes/loader.js"></script>
 </body>
 </html>
