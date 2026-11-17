@@ -256,3 +256,28 @@ main, .site-footer, .container{position:relative;z-index:1}
 
 /* Ensure the hero grid matches other pages */
 .hero .grid{margin-top:0}
+
+/* Homepage navigation groups */
+.home-primary-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.home-primary-links .grid-button{min-height:118px;padding:1rem}
+.home-primary-links .grid-button h3{margin-bottom:.35rem;font-size:1.1rem}
+.home-section-divider{height:1px;margin:1.5rem 0;border:0;background:#e6e9e7}
+.sarah-store-button{
+  min-height:130px;
+  padding:1.35rem 3.5rem 1.35rem 1.5rem;
+  border:1px solid #a9ddd2;
+  background:#d8f3ec;
+  color:#155f63;
+  box-shadow:0 6px 18px rgba(21,95,99,.12);
+}
+.sarah-store-button::before{display:none}
+.sarah-store-button h3{margin-bottom:.35rem;color:#155f63;font-size:1.35rem}
+.sarah-store-button p{color:#286e70}
+.sarah-store-button:hover{background:#c9eee5;box-shadow:0 10px 24px rgba(21,95,99,.18)}
+.sarah-store-button:focus-visible{outline:3px solid #72bbae;outline-offset:3px}
+.sarah-store-arrow{position:absolute;top:50%;right:1.5rem;color:#287a75;font-size:1.6rem;transform:translateY(-50%)}
+@media (max-width:600px){
+  .home-primary-links{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-primary-links .grid-button{min-height:110px;padding:.9rem}
+  .sarah-store-button{min-height:118px}
+}

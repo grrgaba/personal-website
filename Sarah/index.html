@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Design a one-of-a-kind flower keychain with Sarah's Flower Charms.">
+  <title>Sarah’s Flower Charms — Custom Flower Keychains</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/Sarah/store.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+</head>
+<body class="flower-shop-page">
+  <div id="site-header-placeholder"></div>
+
+  <main class="flower-shop">
+    <section class="flower-shop-hero container">
+      <p class="shop-eyebrow">Handmade with a little bit of sunshine</p>
+      <h1>Sarah’s Flower Charms</h1>
+      <p class="shop-intro">Tiny blooms, made personal. Dream up a custom flower keychain for your keys, bag, or someone you love.</p>
+      <a class="shop-cta" href="#customize">Make your own <span aria-hidden="true">↓</span></a>
+      <div class="shop-hero-art" aria-hidden="true">
+        <span class="hero-flower hero-flower-one">✿</span>
+        <span class="hero-flower hero-flower-two">✿</span>
+        <span class="hero-flower hero-flower-three">✿</span>
+        <span class="hero-charm">♡</span>
+      </div>
+    </section>
+
+    <section class="container shop-section" aria-labelledby="collection-title">
+      <div class="shop-section-heading">
+        <div>
+          <p class="shop-eyebrow">Made for you</p>
+          <h2 id="collection-title">The little things</h2>
+        </div>
+        <p>Every charm is a starting point. Pick a favorite, then make it yours.</p>
+      </div>
+
+      <div class="charm-grid">
+        <article class="charm-card">
+          <div class="charm-art charm-art-rose" aria-hidden="true"><span>✿</span></div>
+          <div class="charm-card-copy">
+            <p class="charm-category">A tiny keepsake</p>
+            <h3>Pressed Petal</h3>
+            <p>A delicate bloom-inspired charm with your choice of colors and a personal touch.</p>
+            <button class="charm-select" type="button" data-design="Pressed Petal">Customize this <span aria-hidden="true">↗</span></button>
+          </div>
+        </article>
+
+        <article class="charm-card">
+          <div class="charm-art charm-art-sun" aria-hidden="true"><span>✿</span></div>
+          <div class="charm-card-copy">
+            <p class="charm-category">A pocket-sized bouquet</p>
+            <h3>Mini Bloom Cluster</h3>
+            <p>A cheerful mix of miniature flowers, made to brighten a backpack or set of keys.</p>
+            <button class="charm-select" type="button" data-design="Mini Bloom Cluster">Customize this <span aria-hidden="true">↗</span></button>
+          </div>
+        </article>
+
+        <article class="charm-card">
+          <div class="charm-art charm-art-lilac" aria-hidden="true"><span>♡</span></div>
+          <div class="charm-card-copy">
+            <p class="charm-category">Made meaningful</p>
+            <h3>Initial &amp; Bloom</h3>
+            <p>Pair a favorite flower with an initial for a one-of-a-kind gift or everyday charm.</p>
+            <button class="charm-select" type="button" data-design="Initial & Bloom">Customize this <span aria-hidden="true">↗</span></button>
+          </div>
+        </article>
+
+        <article class="charm-card">
+          <div class="charm-art charm-art-peach" aria-hidden="true"><span>✿</span></div>
+          <div class="charm-card-copy">
+            <p class="charm-category">For more than keys</p>
+            <h3>Bag &amp; Phone Charms</h3>
+            <p>Bring your favorite flower colors along as a playful accent for a bag or phone.</p>
+            <button class="charm-select" type="button" data-design="Bag or Phone Charm">Customize this <span aria-hidden="true">↗</span></button>
+          </div>
+        </article>
+      </div>
+      <p class="shop-note">These are design ideas, not ready-to-ship listings. Sarah will confirm availability and pricing for each custom request.</p>
+    </section>
+
+    <section class="customize-section" id="customize">
+      <div class="container customize-layout">
+        <div class="customize-copy">
+          <p class="shop-eyebrow">Your idea, your charm</p>
+          <h2>Make it yours</h2>
+          <p>Choose a style and share the little details. You can copy your request to share with Sarah.</p>
+          <div class="customize-stamp" aria-hidden="true">made<br>with love <span>✿</span></div>
+        </div>
+        <form class="customize-form" id="custom-order-form">
+          <label for="design">Choose a style</label>
+          <select id="design" name="design" required>
+            <option value="">Select a design</option>
+            <option>Pressed Petal</option>
+            <option>Mini Bloom Cluster</option>
+            <option>Initial &amp; Bloom</option>
+            <option>Bag or Phone Charm</option>
+            <option>Something else</option>
+          </select>
+
+          <label for="flower">Favorite flower or bloom</label>
+          <input id="flower" name="flower" type="text" maxlength="60" placeholder="e.g. daisy, rose, wildflowers">
+
+          <label for="colors">Colors</label>
+          <input id="colors" name="colors" type="text" maxlength="80" placeholder="e.g. lilac and soft yellow">
+
+          <label for="personalization">Initial or short personalization <span>(optional)</span></label>
+          <input id="personalization" name="personalization" type="text" maxlength="24" placeholder="e.g. M">
+
+          <label for="details">Anything else Sarah should know? <span>(optional)</span></label>
+          <textarea id="details" name="details" rows="3" maxlength="300" placeholder="Tell us about your idea"></textarea>
+
+          <button class="shop-cta form-submit" type="submit">Prepare my request <span aria-hidden="true">→</span></button>
+          <p class="form-disclaimer">This opens an email to Sarah; it doesn’t place an order or take payment. Sarah will confirm availability and pricing.</p>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+
+          <section class="request-preview" id="request-preview" aria-labelledby="request-title" hidden tabindex="-1">
+            <h3 id="request-title">Your custom request</h3>
+            <textarea id="request-text" rows="7" readonly aria-label="Your request, ready to copy"></textarea>
+            <a class="shop-cta email-request" id="email-request" href="mailto:sarjlabrador@gmail.com">Email Sarah <span aria-hidden="true">↗</span></a>
+            <button class="copy-request" id="copy-request" type="button">Copy request</button>
+            <p class="request-note">Your email app will open with this request ready to send. You can also copy and share it another way.</p>
+          </section>
+        </form>
+      </div>
+    </section>
+
+    <section class="shop-contact container" aria-label="Contact Sarah">
+      <p>Have a question or a custom idea?</p>
+      <a href="https://www.instagram.com/sajista_productions/" target="_blank" rel="noopener noreferrer">Find Sarah on Instagram <span aria-hidden="true">↗</span></a>
+      <a href="mailto:sarjlabrador@gmail.com">Email Sarah <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+
+  <div id="site-footer-placeholder"></div>
+  <script src="/includes/loader.js"></script>
+  <script src="/Sarah/store.js"></script>
+</body>
+</html>
