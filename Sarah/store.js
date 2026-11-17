@@ -1,6 +1,5 @@
 (function () {
   const form = document.getElementById('custom-order-form');
-  const designSelect = document.getElementById('design');
   const preview = document.getElementById('request-preview');
   const requestText = document.getElementById('request-text');
   const status = document.getElementById('form-status');
@@ -8,7 +7,6 @@
   const emailLink = document.getElementById('email-request');
 
   if (!(form instanceof HTMLFormElement) ||
-      !(designSelect instanceof HTMLSelectElement) ||
       !(preview instanceof HTMLElement) ||
       !(requestText instanceof HTMLTextAreaElement) ||
       !(status instanceof HTMLElement) ||
@@ -28,7 +26,7 @@
     image.className = 'shop-header-logo';
     logo.replaceChildren(image);
     logo.href = '/Sarah/';
-    logo.setAttribute('aria-label', 'Sarah’s Flower Charms home');
+    logo.setAttribute('aria-label', 'Sarj’s Flower Charms home');
     return true;
   }
 
@@ -39,36 +37,27 @@
     headerObserver.observe(document.body, { childList: true, subtree: true });
   }
 
-  document.querySelectorAll('[data-design]').forEach(function (button) {
-    button.addEventListener('click', function () {
-      designSelect.value = button.getAttribute('data-design') || '';
-      document.getElementById('customize').scrollIntoView({ behavior: 'smooth' });
-      designSelect.focus({ preventScroll: true });
-    });
-  });
-
   form.addEventListener('submit', function (event) {
     event.preventDefault();
 
     const formData = new FormData(form);
     const details = [
-      'Hi Sarah! I’m interested in a custom flower charm.',
+      'Hi Sarj! I’m interested in a custom flower keychain.',
       '',
-      'Style: ' + formData.get('design'),
-      'Favorite flower: ' + (formData.get('flower') || 'No preference'),
+      'Fillers: ' + (formData.get('fillers') || 'Open to suggestions'),
+      'Big flower: ' + (formData.get('bigFlower') || 'Open to suggestions'),
+      'Four small flowers: ' + (formData.get('smallFlowers') || 'Open to suggestions'),
       'Colors: ' + (formData.get('colors') || 'Open to ideas'),
-      'Initial or personalization: ' + (formData.get('personalization') || 'None'),
-      'Additional details: ' + (formData.get('details') || 'None'),
       '',
-      'Could you let me know if this design is available and the price?'
+      'Could you let me know if this custom keychain is available and the price?'
     ];
 
     requestText.value = details.join('\n');
-    const subject = 'Custom flower charm request';
+    const subject = 'Custom flower keychain request';
     emailLink.href = 'mailto:sarjlabrador@gmail.com?subject=' +
       encodeURIComponent(subject) + '&body=' + encodeURIComponent(details.join('\n'));
     preview.hidden = false;
-    status.textContent = 'Your request is ready. Email Sarah to send it, or copy it to share another way.';
+    status.textContent = 'Your request is ready. Email Sarj to send it, or copy it to share another way.';
     preview.focus();
   });
 
@@ -76,16 +65,16 @@
     if (!navigator.clipboard || !navigator.clipboard.writeText) {
       requestText.focus();
       requestText.select();
-      status.textContent = 'Copy is unavailable here. Your request is selected; copy it to share with Sarah.';
+      status.textContent = 'Copy is unavailable here. Your request is selected; copy it to share with Sarj.';
       return;
     }
 
     navigator.clipboard.writeText(requestText.value).then(function () {
-      status.textContent = 'Request copied. Share it with Sarah to ask about availability and pricing.';
+      status.textContent = 'Request copied. Share it with Sarj to ask about availability and pricing.';
     }).catch(function () {
       requestText.focus();
       requestText.select();
-      status.textContent = 'Could not copy automatically. Your request is selected; copy it to share with Sarah.';
+      status.textContent = 'Could not copy automatically. Your request is selected; copy it to share with Sarj.';
     });
   });
 })();
