@@ -1,0 +1,27 @@
+.picker{padding-block:2rem 4rem}
+.picker-head h1{font-family:Georgia,"Times New Roman",serif;margin:.2rem 0}
+.picker-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2rem;align-items:start}
+.picker-stage{background:radial-gradient(circle at 50% 30%,#fffaf6,#f7e6df);border-radius:20px;padding:1rem;text-align:center}
+.picker-stage svg{width:100%;max-height:78vh;display:block}
+.picker-count{margin:.25rem 0 0;color:var(--shop-muted)}
+.picker-panel h2{font-size:1rem;margin:1.1rem 0 .5rem;font-family:Georgia,"Times New Roman",serif}
+.picker-actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.picker-actions button,.choices button{font:inherit;padding:.5rem .9rem;border:1px solid #d9c9bd;border-radius:999px;background:#fff;color:var(--shop-ink);cursor:pointer}
+.picker-actions button:disabled{opacity:.4;cursor:not-allowed}
+.picker-actions .shop-cta{background:var(--shop-rose);color:#fff;border-color:var(--shop-rose)}
+.choices{display:flex;flex-wrap:wrap;gap:.5rem}
+.choices button[aria-checked="true"]{background:var(--shop-green);border-color:var(--shop-green);color:#fff}
+.swatches{display:flex;flex-wrap:wrap;gap:.5rem}
+.swatches button{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #cdbfb4;cursor:pointer;padding:0}
+.swatches button[aria-checked="true"]{box-shadow:0 0 0 3px var(--shop-green)}
+.bouquet-list{margin:0 0 1rem;padding-left:1.2rem;color:var(--shop-muted);min-height:1.5rem}
+.picker button:focus-visible{outline:3px solid var(--shop-green);outline-offset:2px}
+
+.stem{fill:none;stroke:#5f8a5a;stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0}
+.flower.is-new .stem{animation:grow .5s ease-out}
+.flower.is-new .pop{animation:pop .5s .25s cubic-bezier(.3,1.6,.5,1) backwards}
+.pop{transform-box:fill-box;transform-origin:center}
+@keyframes grow{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.flower.is-new .stem,.flower.is-new .pop{animation:none}}
+@media (max-width:760px){.picker-layout{grid-template-columns:1fr}}

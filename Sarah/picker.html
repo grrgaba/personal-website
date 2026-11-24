@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Flower Picker — Sarj’s Flower Charms</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/Sarah/store.css">
+  <link rel="stylesheet" href="/Sarah/picker.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+</head>
+<body class="flower-shop-page">
+  <div id="site-header-placeholder"></div>
+
+  <main class="container picker">
+    <header class="picker-head">
+      <p class="shop-eyebrow">Design a bouquet</p>
+      <h1>Flower Picker</h1>
+      <p class="muted">Choose a color, choose a flower, and fill up the vase.</p>
+    </header>
+
+    <div class="picker-layout">
+      <div class="picker-stage">
+        <svg id="stage" viewBox="0 0 400 540" role="img" aria-label="Your bouquet in a vase"></svg>
+        <p class="picker-count" id="count" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="picker-panel">
+        <div class="picker-actions">
+          <button type="button" class="shop-cta" id="add">Add flower</button>
+          <button type="button" id="undo">Undo</button>
+          <button type="button" id="redo">Redo</button>
+          <button type="button" id="clear">Clear</button>
+        </div>
+
+        <h2>Color</h2>
+        <div class="swatches" id="colors" role="radiogroup" aria-label="Flower color"></div>
+
+        <h2>Flower</h2>
+        <div class="choices" id="types" role="radiogroup" aria-label="Flower type"></div>
+
+        <h2>Vial</h2>
+        <div class="choices" id="vases" role="radiogroup" aria-label="Vial type"></div>
+
+        <h2>Tint</h2>
+        <div class="swatches" id="glass" role="radiogroup" aria-label="Vial tint"></div>
+
+        <h2>Your keychain</h2>
+        <ol class="bouquet-list" id="list"></ol>
+        <a class="shop-cta" id="email" href="mailto:sarjlabrador@gmail.com">Send this idea to Sarj <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer-placeholder"></div>
+  <script src="/includes/loader.js"></script>
+  <script src="/Sarah/picker.js"></script>
+</body>
+</html>
